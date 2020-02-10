@@ -114,7 +114,7 @@
       </SplitPane>
    </center>
    <bottom>
-      <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0">
+      <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
         <buttons>
           <Button mnemonicParsing="false" text="Lisaa..." />
             <Button mnemonicParsing="false" text="Muokkaa..." />
