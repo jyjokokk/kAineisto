@@ -1,6 +1,5 @@
 package mainGUI;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
@@ -32,40 +31,93 @@ public class MainViewGUIController {
     // Navbarin elementit
     @FXML private MenuItem navClose;
     @FXML private MenuItem navDelete;
+    @FXML private MenuItem navMuokkaa;
     @FXML private MenuItem menuHelp;
     
     
     @FXML
-    private void hae() {
-        eiToimi();
+    private void handleHae() {
+        hae();
     }
 
     @FXML
+    private void handleHelp() {
+        help();
+    }
+
+    @FXML
+    private void handleLisaa() {
+        lisaa();
+    }
+
+    @FXML
+    private void handleMuokkaa() {
+        muokkaa();
+    }
+
+    @FXML
+    private void handlePoista() {
+        poista();
+    }
+
+    @FXML
+    private void handlePoistu() {
+        poistu();
+    }
+
+    /**
+     * Hakee tietokannasta kaikki teokset jotka vastaavat
+     * hakutermeja.
+     */
+    private void hae() {
+        eiToimi();
+        
+    }
+
+
+    /**
+     * Nayttaa tiedot ohjelmasta ja haettavasta tietokannasta.
+     */
     private void help() {
         eiToimi();
     }
+    
 
-    @FXML
+    /**
+     * Lisaa uuden teoksen tietokantaan.
+     */
     private void lisaa() {
         eiToimi();
     }
 
-    @FXML
+
+    /**
+     * Muokkaa valitun teoksen tietoja ja tallentaa muutokset tietokantaan.
+     */
     private void muokkaa() {
         eiToimi();
     }
 
-    @FXML
+
+    /**
+     * Poistaa valitun teoksen tietokannasta.
+     */
     private void poista() {
         eiToimi();
     }
 
-    @FXML
+
+    /**
+     * Poistuu ohjelmasta.
+     */
     private void poistu() {
         eiToimi();
     }
     
-    
+
+    /**
+     * Placeholder toiminalle.
+     */
     private void eiToimi() {
         //
         Alert alert = new Alert(AlertType.INFORMATION);

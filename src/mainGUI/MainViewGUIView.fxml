@@ -53,7 +53,7 @@
                               <TextField fx:id="hakuISBN" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
-                        <Button fx:id="hakuButton" mnemonicParsing="false" onAction="#hae" text="Hae" />
+                        <Button fx:id="hakuButton" mnemonicParsing="false" onAction="#handleHae" text="Hae" />
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <Label text="Tulokset">
@@ -115,9 +115,9 @@
    <bottom>
       <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
         <buttons>
-          <Button fx:id="bottomLisaa" mnemonicParsing="false" onAction="#lisaa" text="Lisaa..." />
-            <Button fx:id="bottomMuokkaa" mnemonicParsing="false" onAction="#muokkaa" text="Muokkaa..." />
-            <Button fx:id="bottomPoista" mnemonicParsing="false" onAction="#poista" text="Poista..." />
+          <Button fx:id="bottomLisaa" mnemonicParsing="false" onAction="#handleLisaa" text="Lisaa..." />
+            <Button fx:id="bottomMuokkaa" mnemonicParsing="false" onAction="#handleMuokkaa" text="Muokkaa..." />
+            <Button fx:id="bottomPoista" mnemonicParsing="false" onAction="#handlePoista" text="Poista..." />
         </buttons>
          <padding>
             <Insets left="5.0" right="5.0" />
@@ -129,17 +129,18 @@
         <menus>
           <Menu mnemonicParsing="false" text="Tiedosto">
             <items>
-              <MenuItem fx:id="navClose" mnemonicParsing="false" onAction="#poistu" text="Close" />
+              <MenuItem fx:id="navClose" mnemonicParsing="false" onAction="#handlePoistu" text="Poistu" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Muokkaa">
             <items>
-              <MenuItem fx:id="navDelete" mnemonicParsing="false" onAction="#poista" text="Delete" />
+              <MenuItem fx:id="navMuokkaa" mnemonicParsing="false" onAction="#handleMuokkaa" text="Muokkaa..." />
+              <MenuItem fx:id="navDelete" mnemonicParsing="false" onAction="#handlePoista" text="Poista..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">
             <items>
-              <MenuItem fx:id="menuHelp" mnemonicParsing="false" onAction="#help" text="About" />
+              <MenuItem fx:id="menuHelp" mnemonicParsing="false" onAction="#handleHelp" text="Tietoa" />
             </items>
           </Menu>
         </menus>
