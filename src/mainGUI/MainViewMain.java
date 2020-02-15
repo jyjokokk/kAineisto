@@ -18,7 +18,7 @@ public class MainViewMain extends Application {
         try {
             FXMLLoader ldr = new FXMLLoader(getClass().getResource("MainViewGUIView.fxml"));
             final Pane root = ldr.load();
-            //final MainViewGUIController mainviewCtrl = (MainViewGUIController) ldr.getController();
+//            final MainViewGUIController mainviewCtrl = (MainViewGUIController) ldr.getController();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("mainview.css").toExternalForm());
             primaryStage.setScene(scene);

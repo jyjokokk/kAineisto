@@ -18,8 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="mainGUI.MainViewGUIController">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainGUI.MainViewGUIController">
    <center>
       <SplitPane dividerPositions="0.32456140350877194" prefHeight="350.0" prefWidth="800.0" BorderPane.alignment="CENTER">
         <items>
@@ -49,12 +48,12 @@
                               <Label text="Nimi:" />
                               <Label text="Tekija:" GridPane.rowIndex="1" />
                               <Label text="ISBN:" GridPane.rowIndex="2" />
-                              <TextField GridPane.columnIndex="1" />
-                              <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="hakuNimi" GridPane.columnIndex="1" />
+                              <TextField fx:id="hakuTekija" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="hakuISBN" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
-                        <Button mnemonicParsing="false" text="Hae" />
+                        <Button fx:id="hakuButton" mnemonicParsing="false" onAction="#hae" text="Hae" />
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <Label text="Tulokset">
@@ -98,11 +97,11 @@
                         <Label text="ISBN:" GridPane.rowIndex="2" />
                         <Label text="Status:" GridPane.rowIndex="3" />
                         <Label text="Sijainti:" GridPane.rowIndex="4" />
-                        <TextField GridPane.columnIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="tietoTeos" GridPane.columnIndex="1" />
+                        <TextField fx:id="tietoTekija" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="tietoISBN" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="tietoStatus" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="tietoSijainti" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -116,9 +115,9 @@
    <bottom>
       <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Lisaa..." />
-            <Button mnemonicParsing="false" text="Muokkaa..." />
-            <Button mnemonicParsing="false" text="Poista..." />
+          <Button fx:id="bottomLisaa" mnemonicParsing="false" onAction="#lisaa" text="Lisaa..." />
+            <Button fx:id="bottomMuokkaa" mnemonicParsing="false" onAction="#muokkaa" text="Muokkaa..." />
+            <Button fx:id="bottomPoista" mnemonicParsing="false" onAction="#poista" text="Poista..." />
         </buttons>
          <padding>
             <Insets left="5.0" right="5.0" />
@@ -130,17 +129,17 @@
         <menus>
           <Menu mnemonicParsing="false" text="Tiedosto">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem fx:id="navClose" mnemonicParsing="false" onAction="#poistu" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Muokkaa">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem fx:id="navDelete" mnemonicParsing="false" onAction="#poista" text="Delete" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="menuHelp" mnemonicParsing="false" onAction="#help" text="About" />
             </items>
           </Menu>
         </menus>
