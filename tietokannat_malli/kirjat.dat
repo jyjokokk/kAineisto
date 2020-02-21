@@ -1,0 +1,8 @@
+# Lauritsalan kirjasto
+# Kenttien jarjestys tiedostossa on seuraava:
+# id |   ISBN      |        Teoksen nimi       |      Tekija         | Julkaisuvuosi 
+ 1 | 0-224-05278-0 |  Filth                    | Irvine Welsh        | 1998          
+ 2 | 0-7493-9606-7 |  Trainspotting            | Irvine Welsh        | 1993          
+ 3 | 951-1-15432-X |  Karamazovin veljekset    | Fjodor Dostojevski  | 1998          
+ 4 | 0-441-56956-0 |  Neuromancer              | William Gibson      | 1984          
+ 5 | 951-0-33337-2 |  Taru Sormusten Herrasta  | J.R.R. Tolkien      | 1955          
