@@ -1,0 +1,12 @@
+|--------------------------------------------------------+------------|
+| Luokan nimi:  Kirjasto                                 | Avustajat  |
+|--------------------------------------------------------+------------|
+| Vastuualueet:                                          | Kategoriat |
+|                                                        | Kategoria  |
+| - Huolehtii Aineisto, Kategoriat ja Teokset - luokkien | Teokset    |
+| valisesta yhteistyosta ja valittaa naita tietoja       | Teos       |
+| pyydettaessa                                           | Aineisto   |
+| - Lukee ja kirjoittaa aineiston tiedostoon pyytamalla  |            |
+| apua avustajiltaan.                                    |            |
+|                                                        |            |
+|--------------------------------------------------------+------------|

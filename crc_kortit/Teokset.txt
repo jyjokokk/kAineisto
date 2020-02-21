@@ -1,0 +1,9 @@
+|------------------------------------------------------------------+-----------|
+| Luokan nimi:  Teokset                                            | Avustajat |
+|------------------------------------------------------------------+-----------|
+| Vastuualueet:                                                    |           |
+|                                                                  |           |
+| - Pitaa ylla teosrekisteria, eli osaa lisata ja poistaa teoksia. | - Teos    |
+| - Lukee ja kirjoittaa teoksen tiedostoon                         |           |
+| - Osaa etsia ja lajitella                                        |           |
+|------------------------------------------------------------------+-----------|

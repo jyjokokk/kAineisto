@@ -1,0 +1,12 @@
+|------------------------------------------------------------+-----------|
+| Luokan nimi:  Teos                                         | Avustajat |
+|------------------------------------------------------------+-----------|
+| Vastuualueet:                                              |           |
+|                                                            |           |
+| (- Ei tieda Kirjastosta, eika kayttoliittymasta)           |           |
+| - Tietaa jasenen kentat (ISBN, tekija, julkaisuvuosi jne.) |           |
+| - Osaa tarkistaa kentan oikeellisuuden                     |           |
+| - Osaa muuttaa merkkijonon teoksen tiedoiksi               |           |
+| - Osaa antaa merkkijonona i:n kentan tiedot                |           |
+| - Osaa laittaa merkkijonon i:neksi kentaksi                |           |
+|------------------------------------------------------------+-----------|

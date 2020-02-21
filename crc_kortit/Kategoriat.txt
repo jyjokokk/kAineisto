@@ -1,0 +1,10 @@
+|----------------------------------------------------------------------------+-----------|
+| Luokan nimi:  Kategoriat                                                   | Avustajat |
+|----------------------------------------------------------------------------+-----------|
+| Vastuualueet:                                                              | Kategoria |
+|                                                                            |           |
+| - Pitaa ylla kategoriarekisteria, eli osaa lisata ja poistaa kategorioita. |           |
+| - Lukee ja kirjoittaa kategorian tiedostoon                                |           |
+| - Osaa etsia ja lajitella                                                  |           |
+|                                                                            |           |
+|----------------------------------------------------------------------------+-----------|

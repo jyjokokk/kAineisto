@@ -1,0 +1,12 @@
+|---------------------------------------------------------+-----------|
+| Luokan nimi:  Kategoria                                 | Avustajat |
+|---------------------------------------------------------+-----------|
+| Vastuualueet:                                           |           |
+|                                                         |           |
+| (-Ei tieda Kirjastosta, eika kayttoliittymasta)         |           |
+| - Tietaa kategorioiden kentat (kid, nimi, kuvaus)       |           |
+| - Osaa tarkistaa kentan oikeellisuuden                  |           |
+| - Osaa muuttaa annetun merkkijonon kategorian tiedoiksi |           |
+| - Osaa antaa i:n kentan tiedot merkkijonona             |           |
+| - Osaa laittaa merkkijonon i:neksi kentaksi             |           |
+|---------------------------------------------------------+-----------|

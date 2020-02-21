@@ -1,0 +1,11 @@
+|------------------------------------------------------------+------------|
+| Luokan nimi:  Aineisto                                     | Avustajat  |
+|------------------------------------------------------------+------------|
+| Vastuualueet:                                              | Kategoriat |
+|                                                            | Teokset    |
+| - Osaa lukea kategoriat ja teokset, ja liittaa nama yhteen | Kategoria  |
+| - Osaa muokata aineiston hyllypaikkaa                      | Teos       |
+| - Osaa lisata teoksen maaraa hyllyssa                      |            |
+| - Osaa poistaa tai lisata aineistoa hyllyyn                |            |
+|                                                            |            |
+|------------------------------------------------------------+------------|

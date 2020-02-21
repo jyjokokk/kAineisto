@@ -1,0 +1,11 @@
+|-----------------------------------------------------+-----------|
+| Luokan nimi:  Naytto                                | Avustajat |
+|-----------------------------------------------------+-----------|
+| Vastuualueet:                                       |           |
+|                                                     |           |
+| - Hoitaa kaiken nayttoon tulevan tekstin            | Kirjasto  |
+| - Hoitaa kaiken tiedon pyytamisen kayttajalta       | Teos      |
+| (- Ei tieda Teoksen eika Kategorian yksityiskohtia) | Kategoria |
+|                                                     |           |
+|-----------------------------------------------------+-----------|
+
