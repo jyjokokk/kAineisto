@@ -1,4 +1,4 @@
-package kirjastoGUI;
+package fxKirjasto;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
