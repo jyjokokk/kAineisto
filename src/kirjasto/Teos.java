@@ -2,6 +2,8 @@ package kirjasto;
 
 import java.io.*;
 
+import isbn.ISBNTarkistus;
+
 /**
  * Teos, joka sisaltaa kirjan tarkeimmat ominaisuudet,
  * ja tarvittaessa muuttaa ja tarkistaa niita itse.
@@ -22,10 +24,22 @@ public class Teos {
     /**
      * Apumetodi, jolla saadaan luotua testattava olio,
      * annetuilla arvoilla.
-     * TODO: Lisaa randomoitu ISBN.
      */
     public void vastaaLotr() {
         this.isbn = "978-0544003415";
+        this.nimi = "The Lord of the Rings";
+        this.tekija = "J.R.R. Tolkien";
+        this.julkaisuVuosi = 1954;
+    }
+    
+    
+    /**
+     * Apumetodi, jolla alustetaan olio annetuilla arvoilla
+     * ja randomoidulla ISBN-numerolla.
+     */
+    public void vastaaLotrRand() {
+        String randomIsbn = ISBNTarkistus.arvoIsbn();
+        this.isbn = randomIsbn;
         this.nimi = "The Lord of the Rings";
         this.tekija = "J.R.R. Tolkien";
         this.julkaisuVuosi = 1954;
@@ -111,14 +125,14 @@ public class Teos {
     public static void main(String[] args) {
         Teos t1 = new Teos();
         System.out.println(t1);
-        t1.vastaaLotr();
+        t1.vastaaLotrRand();
         t1.tulosta(System.out);
         t1.rekisteroi();
-        t1.tulosta(System.out);
+        System.out.println(t1);
         Teos t2 = new Teos();
+        t2.vastaaLotrRand();
         t2.rekisteroi();
         t2.tulosta(System.out);
-    
     }
 
 }
