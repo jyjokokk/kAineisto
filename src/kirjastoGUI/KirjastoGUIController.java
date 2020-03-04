@@ -1,4 +1,4 @@
-package mainGUI;
+package kirjastoGUI;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,7 +11,7 @@ import javafx.scene.control.Alert.AlertType;
  * @author jyrki
  * @version Feb 15, 2020
  */
-public class MainViewGUIController {
+public class KirjastoGUIController {
 
     // Hakukentant elementit
     @FXML private TextField hakuNimi;

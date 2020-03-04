@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainGUI.MainViewGUIController">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kirjastoGUI.KirjastoGUIController">
    <center>
       <SplitPane dividerPositions="0.32456140350877194" prefHeight="350.0" prefWidth="800.0" BorderPane.alignment="CENTER">
         <items>
