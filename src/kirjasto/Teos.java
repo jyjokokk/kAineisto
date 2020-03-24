@@ -25,10 +25,10 @@ public class Teos {
      * annetuilla arvoilla.
      */
     public void vastaaLotr() {
-        this.isbn = "978-0544003415";
-        this.nimi = "The Lord of the Rings";
-        this.tekija = "J.R.R. Tolkien";
-        this.julkaisuVuosi = 1954;
+        this.setIsbn("978-0544003415");
+        this.setNimi("The Lord of the Rings");
+        this.setTekija("J.R.R. Tolkien");
+        this.setJulkaisuVuosi(1954);
         this.rekisteroi();
     }
     
@@ -39,10 +39,10 @@ public class Teos {
      */
     public void vastaaLotrRand() {
         String randomIsbn = ISBNTarkistus.arvoIsbn();
-        this.isbn = randomIsbn;
-        this.nimi = "The Lord of the Rings";
-        this.tekija = "J.R.R. Tolkien";
-        this.julkaisuVuosi = 1954;
+        this.setIsbn(randomIsbn);
+        this.setNimi("The Lord of the Rings");
+        this.setTekija("J.R.R. Tolkien");
+        this.setJulkaisuVuosi(1954);
         this.rekisteroi();
     }
     
@@ -61,10 +61,10 @@ public class Teos {
     @Override
     public String toString() {
         return this.id + "|" +
-               this.isbn + "|" +
-               this.nimi + "|" +
-               this.tekija + "|" +
-               this.julkaisuVuosi;
+               this.getIsbn() + "|" +
+               this.getNimi() + "|" +
+               this.getTekija() + "|" +
+               this.getJulkaisuVuosi();
     }
     
     
@@ -134,6 +134,79 @@ public class Teos {
         Teos t3 = new Teos();
         t3.vastaaLotrRand();
         t3.tulosta(System.out);
+    }
+
+
+    /**
+     * Palauttaa teoksen ISBN:n
+     * @return isbn
+     */
+    public String getIsbn() {
+        return isbn;
+    }
+
+
+    /**
+     * Asettaa ISBN-numeron teokselle
+     * @param isbn joka asetetaan
+     * TODO: Kirjoita tarkastaja
+     */
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+
+    /**
+     * Palauttaa teoksen nimen
+     * @return nimi
+     */
+    public String getNimi() {
+        return nimi;
+    }
+
+
+    /**
+     * Asettaa nimen teokselle
+     * @param nimi teokselle
+     */
+    public void setNimi(String nimi) {
+        this.nimi = nimi;
+    }
+
+
+    /**
+     * Palauttaa teoksen tekijan
+     * @return tekija
+     */
+    public String getTekija() {
+        return tekija;
+    }
+
+
+    /**
+     * Asettaa tekijan teokselle.
+     * @param tekija joka asetetaan.
+     */
+    public void setTekija(String tekija) {
+        this.tekija = tekija;
+    }
+
+
+    /**
+     * Palauttaa teoksen julkaisuvuoden.
+     * @return julkaisuVuosi
+     */
+    public int getJulkaisuVuosi() {
+        return julkaisuVuosi;
+    }
+
+
+    /**
+     * Asettaa julkaisuvuoden
+     * @param julkaisuVuosi Mihin vuoteen asetetaan.
+     */
+    public void setJulkaisuVuosi(int julkaisuVuosi) {
+        this.julkaisuVuosi = julkaisuVuosi;
     }
 
 }

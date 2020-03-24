@@ -24,6 +24,7 @@ public class Teokset {
     /**
      * Lisaa uuden alkion tietorakenteeseen.
      * @param alkio joka lisataan.
+     * TODO: Tee dynaamisesti kasvavaksi.
      */
     public void lisaa(Teos alkio) {
         alkiot[lkm] = alkio;
@@ -59,10 +60,30 @@ public class Teokset {
     
     
     /**
+     * Palalauttaa viitteen i:teen teosluettelon olioon.
+     * @param i monennenko alkion viite halutaan
+     * @return viite alkioon, jonka indeksi on i
+     * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
+     */
+    public Teos getTeos(int i) throws IndexOutOfBoundsException {
+        if (i < 0 || lkm <= i)
+            throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
+        return alkiot[i];
+    }
+    
+    
+    /**
      * @param args ei kaytossa
      */
     public static void main(String[] args) {
-    // TODO Auto-generated method stub
+        
+        Teokset luettelo = new Teokset();
+
+        Teos kirja1 = new Teos();
+        luettelo.lisaa(kirja1);
+        luettelo.alkiot[0].vastaaLotr();
+        
+
     }
 
 }
