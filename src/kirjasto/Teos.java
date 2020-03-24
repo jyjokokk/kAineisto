@@ -1,7 +1,6 @@
 package kirjasto;
 
 import java.io.*;
-
 import isbn.ISBNTarkistus;
 
 /**
@@ -30,6 +29,7 @@ public class Teos {
         this.nimi = "The Lord of the Rings";
         this.tekija = "J.R.R. Tolkien";
         this.julkaisuVuosi = 1954;
+        this.rekisteroi();
     }
     
     
@@ -43,6 +43,7 @@ public class Teos {
         this.nimi = "The Lord of the Rings";
         this.tekija = "J.R.R. Tolkien";
         this.julkaisuVuosi = 1954;
+        this.rekisteroi();
     }
     
     
@@ -126,13 +127,13 @@ public class Teos {
         Teos t1 = new Teos();
         System.out.println(t1);
         t1.vastaaLotrRand();
-        t1.tulosta(System.out);
-        t1.rekisteroi();
         System.out.println(t1);
         Teos t2 = new Teos();
         t2.vastaaLotrRand();
-        t2.rekisteroi();
         t2.tulosta(System.out);
+        Teos t3 = new Teos();
+        t3.vastaaLotrRand();
+        t3.tulosta(System.out);
     }
 
 }
