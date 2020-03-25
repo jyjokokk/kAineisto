@@ -140,6 +140,15 @@ public class Aineisto {
         return teos.getId();
     }
     
+    
+    /**
+     * Palauttaa teoksen nimen.
+     * @return teoksen nimi
+     */
+    public String getNimi() {
+        return teos.getNimi();
+    }
+    
  
     /**
      * Asettaa tai muuttaa teoksen hyllypaikkaa.

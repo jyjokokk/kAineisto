@@ -130,7 +130,7 @@ public class KirjastoGUIController implements Initializable {
         hakuTulokset.clear();
         for (int i = 0; i < kirjasto.getLkm(); i++) {
             Aineisto kirja = kirjasto.annaKirja(i);
-            hakuTulokset.add(kirja);
+            hakuTulokset.add(kirja.getNimi(), kirja);
         }
         hakuTulokset.setSelectedIndex(id - 1);
     }
