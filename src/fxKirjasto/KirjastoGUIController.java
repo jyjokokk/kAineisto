@@ -1,21 +1,33 @@
 package fxKirjasto;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import fi.jyu.mit.fxgui.ListChooser;
 
+import java.io.PrintStream;
+import java.net.URL;
+import java.util.*;
+
+import fi.jyu.mit.fxgui.Chooser;
+import fi.jyu.mit.fxgui.Dialogs;
+import fi.jyu.mit.fxgui.ListChooser;
+import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import kirjasto.*;
 
 /**
  * @author jyrki
  * @version Feb 15, 2020
  */
-public class KirjastoGUIController {
+public class KirjastoGUIController implements Initializable {
 
     // Hakukentant elementit
     @FXML private TextField hakuNimi;
@@ -37,9 +49,20 @@ public class KirjastoGUIController {
     @FXML private MenuItem navDelete;
     @FXML private MenuItem navMuokkaa;
     @FXML private MenuItem menuHelp;
+    
+    @FXML private AnchorPane tiedotPanel;
+    @FXML private GridPane tiedotGrid;
     @FXML private ListChooser<Aineisto> hakuTulokset;
     
     
+    @Override
+    public void initialize(URL url, ResourceBundle bundle) {
+        alusta();
+    }
+    
+    
+
+
     @FXML
     private void handleHae() {
         hae();
@@ -69,6 +92,76 @@ public class KirjastoGUIController {
     private void handlePoistu() {
         poistu();
     }
+    
+    //==========================================================
+    // Alapuolella ei kayttomliittymaan suoraan liittyvia metodeja tai funktioita
+    
+    private Kirjasto kirjasto;
+    private Aineisto kirjaKohdalla;
+    private TextArea tiedotArea = new TextArea();
+    
+    private void alusta() {
+        // TODO Auto-generated method stub
+
+        tiedotPanel.getChildren().removeAll(tiedotGrid);
+        tiedotPanel.getChildren().add(tiedotArea);
+        hakuTulokset.clear();
+        hakuTulokset.addSelectionListener(e -> naytaJasen());
+//        tiedotGrid.add(tiedotArea, 0, 0);
+    }
+
+    private void naytaJasen() {
+        kirjaKohdalla = hakuTulokset.getSelectedObject();
+        if (kirjaKohdalla == null) return;
+        tiedotArea.setText("");
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tiedotArea)) {
+            kirjaKohdalla.tulosta(os);
+        }
+        // TODO Auto-generated method stub
+    }
+    
+    
+    /**
+     * Paivittaa kaikki listan teokset hakutuloksiin.
+     * TODO: kayta pohja 'hae' metodin tekemiseen.
+     */
+    private void listaa() {
+        hakuTulokset.clear();
+        for (int i = 0; i < kirjasto.getLkm(); i++) {
+            Aineisto kirja = kirjasto.annaKirja(i);
+            hakuTulokset.add(kirja);
+        }
+        hakuTulokset.setSelectedIndex(0);
+    }
+    
+    /**
+     * Lisaa uuden kirjan kokoelmaan, ja paivittaa listan.
+     * Lisaa toistaiseksi vain Lotrin.
+     */
+    private void uusiKirja() {
+//        try {
+//            kirjasto.lisaaLotr();
+//        } catch (TietoException e) {
+//            // TODO Auto-generated catch block
+//            Dialogs.showMessageDialog("Ongelma teoksen lisaamisessa " + e.getMessage());
+//            return;
+//        }
+//        listaa();
+        Aineisto kirja = new Aineisto();
+        kirja.vastaaLotr();
+//        try {
+//            kirjasto.lisaa(kirja);
+//        } catch (TietoException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+        hakuTulokset.add(kirja);
+    }
+    
+    
+
+
+
 
     /**
      * Hakee tietokannasta kaikki teokset jotka vastaavat
@@ -92,7 +185,8 @@ public class KirjastoGUIController {
      * Lisaa uuden teoksen tietokantaan.
      */
     private void lisaa() {
-        eiToimi();
+//        eiToimi();
+        uusiKirja();
     }
 
 
@@ -118,7 +212,6 @@ public class KirjastoGUIController {
     private void poistu() {
         eiToimi();
     }
-    
 
     /**
      * Placeholder toiminalle.
