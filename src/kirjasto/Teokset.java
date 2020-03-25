@@ -3,8 +3,9 @@ package kirjasto;
 /**
  * Teosten kokoelma, jokaa osaa mm lisata ja poistaa teoksen.
  * TODO: Selvita onnistuisiko yksittaiset sailomisluokat joka tyypille korvata <TYPE> tyylisella ratkaisulla.
+ * TODO: Toimisi varmaan todella paljon paremmin listalla toteutettuna.
  * @author jyrki
- * @version Mar 4, 2020
+ * @version Mar 25, 2020
  */
 public class Teokset {
 
@@ -24,9 +25,11 @@ public class Teokset {
     /**
      * Lisaa uuden alkion tietorakenteeseen.
      * @param alkio joka lisataan.
+     * @throws TietoException jos taulukossa ei tilaa.
      * TODO: Tee dynaamisesti kasvavaksi.
      */
-    public void lisaa(Teos alkio) {
+    public void lisaa(Teos alkio) throws TietoException {
+        if (lkm >= alkiot.length) throw new TietoException("Liikaa alkioita.");
         alkiot[lkm] = alkio;
         lkm++;
     }
@@ -80,8 +83,21 @@ public class Teokset {
         Teokset luettelo = new Teokset();
 
         Teos kirja1 = new Teos();
-        luettelo.lisaa(kirja1);
-        luettelo.alkiot[0].vastaaLotr();
+        Teos kirja2 = new Teos();
+        kirja1.vastaaLotr();
+        kirja2.vastaaLotrRand();
+        try {
+            luettelo.lisaa(kirja1);
+            luettelo.lisaa(kirja2);
+            for (int i = 0; i < luettelo.getLkm(); i++) {
+                Teos teos = luettelo.getTeos(i);
+                System.out.println("Teos nro: " + i);
+                teos.tulosta(System.out);
+            }
+            
+        } catch (TietoException e) {
+            System.out.println(e.getMessage());;
+        }
         
 
     }

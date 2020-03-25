@@ -55,7 +55,7 @@ public class Teos {
      *     Teos t1 = new Teos();
      *     t1.toString() === "0||||0";
      *     t1.vastaaLotr();
-     *     t1.toString() === "0|978-0544003415|The Lord of the Rings|J.R.R. Tolkien|1954";
+     *     t1.toString() === "3|978-0544003415|The Lord of the Rings|J.R.R. Tolkien|1954";
      * </pre>
      */
     @Override
@@ -118,24 +118,6 @@ public class Teos {
         tulosta(new PrintStream(os));
     }
     
-    
-
-    /**
-     * @param args ei kaytossa
-     */
-    public static void main(String[] args) {
-        Teos t1 = new Teos();
-        System.out.println(t1);
-        t1.vastaaLotrRand();
-        System.out.println(t1);
-        Teos t2 = new Teos();
-        t2.vastaaLotrRand();
-        t2.tulosta(System.out);
-        Teos t3 = new Teos();
-        t3.vastaaLotrRand();
-        t3.tulosta(System.out);
-    }
-
 
     /**
      * Palauttaa teoksen ISBN:n
@@ -207,6 +189,23 @@ public class Teos {
      */
     public void setJulkaisuVuosi(int julkaisuVuosi) {
         this.julkaisuVuosi = julkaisuVuosi;
+    }
+    
+
+    /**
+     * @param args ei kaytossa
+     */
+    public static void main(String[] args) {
+        Teos t1 = new Teos();
+        System.out.println(t1);
+        t1.vastaaLotrRand();
+        System.out.println(t1);
+        Teos t2 = new Teos();
+        t2.vastaaLotrRand();
+        t2.tulosta(System.out);
+        Teos t3 = new Teos();
+        t3.vastaaLotrRand();
+        t3.tulosta(System.out);
     }
 
 }
