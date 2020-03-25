@@ -106,6 +106,22 @@ public class Aineisto {
         return teos.toString() + "|" + kategoria.getNimi() + "|" + hyllypaikka + "|" + lkm;
     }
     
+    /**
+     * Tulostetaan aineiston tiedot
+     * @param out tietovirta johon tulostetaan. 
+     */
+    public void tulostaTiedot(PrintStream out) {
+        out.println(this.tiedot());
+    }
+    
+    
+    /**
+     * Tulostetaan aineiston tiedot
+     * @param os tietovirta johon tulostetaan.
+     */
+    public void tulostaTiedot(OutputStream os) {
+        tulosta(new PrintStream(os));
+    }
     
     /**
      * Palauttaa viitteen aineiston teokseen.
@@ -113,6 +129,15 @@ public class Aineisto {
      */
     public Teos getTeos() {
         return this.teos;
+    }
+    
+    
+    /**
+     * Palauttaa teoksen id:n
+     * @return teoksen id
+     */
+    public int getId() {
+        return teos.getId();
     }
     
  

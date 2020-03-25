@@ -60,8 +60,6 @@ public class KirjastoGUIController implements Initializable {
         alusta();
     }
     
-    
-
 
     @FXML
     private void handleHae() {
@@ -99,39 +97,42 @@ public class KirjastoGUIController implements Initializable {
     private Kirjasto kirjasto;
     private Aineisto kirjaKohdalla;
     private TextArea tiedotArea = new TextArea();
+
     
     private void alusta() {
-        // TODO Auto-generated method stub
-
+        kirjasto = new Kirjasto();
         tiedotPanel.getChildren().removeAll(tiedotGrid);
         tiedotPanel.getChildren().add(tiedotArea);
         hakuTulokset.clear();
-        hakuTulokset.addSelectionListener(e -> naytaJasen());
-//        tiedotGrid.add(tiedotArea, 0, 0);
+        hakuTulokset.addSelectionListener(e -> naytaTeos());
     }
 
-    private void naytaJasen() {
+
+    /**
+     * Tulostaa teoksen tiedot valittuun streamiin.
+     * Tulostaa toistaiseksi valiaikaiseen TextAreaan
+     */
+    private void naytaTeos() {
         kirjaKohdalla = hakuTulokset.getSelectedObject();
         if (kirjaKohdalla == null) return;
         tiedotArea.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tiedotArea)) {
-            kirjaKohdalla.tulosta(os);
+            kirjaKohdalla.tulostaTiedot(os);
         }
-        // TODO Auto-generated method stub
     }
     
     
     /**
-     * Paivittaa kaikki listan teokset hakutuloksiin.
-     * TODO: kayta pohja 'hae' metodin tekemiseen.
+     * Hakee ja valitsee id:lla teoksen listasta, ja paivittaa listan.
+     * Toimii talla hetkella vain jos lista on loogisesti nousevassa jarjestyksessa.
      */
-    private void listaa() {
+    private void hae(int id) {
         hakuTulokset.clear();
         for (int i = 0; i < kirjasto.getLkm(); i++) {
             Aineisto kirja = kirjasto.annaKirja(i);
             hakuTulokset.add(kirja);
         }
-        hakuTulokset.setSelectedIndex(0);
+        hakuTulokset.setSelectedIndex(id - 1);
     }
     
     /**
@@ -139,28 +140,15 @@ public class KirjastoGUIController implements Initializable {
      * Lisaa toistaiseksi vain Lotrin.
      */
     private void uusiKirja() {
-//        try {
-//            kirjasto.lisaaLotr();
-//        } catch (TietoException e) {
-//            // TODO Auto-generated catch block
-//            Dialogs.showMessageDialog("Ongelma teoksen lisaamisessa " + e.getMessage());
-//            return;
-//        }
-//        listaa();
         Aineisto kirja = new Aineisto();
         kirja.vastaaLotr();
-//        try {
-//            kirjasto.lisaa(kirja);
-//        } catch (TietoException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-        hakuTulokset.add(kirja);
+        try {
+            kirjasto.lisaa(kirja);
+            hae(kirja.getId());
+        } catch (TietoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
     }
-    
-    
-
-
 
 
     /**
@@ -168,7 +156,7 @@ public class KirjastoGUIController implements Initializable {
      * hakutermeja.
      */
     private void hae() {
-        eiToimi();
+        hae(1);
         
     }
 

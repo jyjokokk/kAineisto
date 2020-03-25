@@ -75,6 +75,7 @@ public class Aineistot implements Iterable<Aineisto> {
         return alkiot.size();
     }
     
+    
     /**
      * Tallentaa kokoelman tiedostoon.
      * @throws TietoException jos tallennus epaonnistuu.
