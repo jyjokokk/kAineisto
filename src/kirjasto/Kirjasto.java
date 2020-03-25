@@ -6,94 +6,99 @@ package kirjasto;
  */
 public class Kirjasto {
     
-    private final Teokset teokset = new Teokset();
-    private final Kategoriat kategoriat = new Kategoriat();
     private final Aineistot aineisto = new Aineistot();
-
     
     /**
-     * Lisaa teokset teoksiin.
-     * @param teos joka lisataan
-     * @throws TietoException jos ilmenee ongelmia
-     */
-    public void lisaa(Teos teos) throws TietoException {
-        teokset.lisaa(teos);
-    }
-    
-    /**
-     * Lisaa kategorian kategorioihin
-     * @param kat kategoria joka lisataan
-     * @throws TietoException jos ilmenee ongelmia
-     */
-    public void lisaa(Kategoria kat) throws TietoException {
-        kategoriat.lisaa(kat);
-    }
-    
-    /**
-     * Lisaa teoksen aineistoon.
+     * Lisaa uuden aineiston kokoelmaan.
      * @param a aineisto joka lisataan
-     * @throws TietoException jos ilmenee onglemia
+     * @throws TietoException jos ilmenee ongelmia
+     * @example
+     * <pre name="test">
+     *  #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  Aineisto k1 = new Aineisto(), k2 = new Aineisto();
+     *  k1.vastaaLotr(); k2.vastaaLotr();
+     *  kirjasto.getLkm() === 0;
+     *  kirjasto.lisaa(k1); kirjasto.lisaa(k2);
+     *  kirjasto.getLkm() === 2;
+     *  kirjasto.annaKirja(0) === k1;
+     *  kirjasto.annaKirja(1) === k2;
+     *  kirjasto.annaKirja(3); #THROWS IndexOutOfBoundsException
+     *  kirjasto.lisaaLotr();
+     *  kirjasto.getLkm() === 3;
+     * </pre>
      */
     public void lisaa(Aineisto a) throws TietoException {
         aineisto.lisaa(a);
-        teokset.lisaa(a.getTeos());
-        kategoriat.lisaa(a.getKategoria());
     }
     
+    
     /**
-     * Poistaa indeksissa olevan kirjan.
-     * @param nro Indeksi kirjalle
-     * @return montako poistettiin.
-     * TODO: kesken
+     * Lisaa aineiston kokoelmaan, parseamalla sen merkkijonosta.
+     * @param s merkkijono joka annetaan.
      */
-    public int poista(int nro) {
-        return nro;
+    public void lisaa(@SuppressWarnings("unused") String s) {
+        // TODO: Parserit alaspain
     }
     
+    
     /**
-     * Tallentaa tietoalueet tiedostoihinsa.
-     * @throws TietoException jos ilmenee ongelma tallentaessa.
+     * Lisaa uuden aineiston kokoelmaan.
+     * @throws TietoException jos ilmenee ongelmia
+     */
+    public void lisaaLotr() throws TietoException {
+        Aineisto lotr = new Aineisto();
+        lotr.vastaaLotr();
+        lisaa(lotr);
+    }
+    
+    
+    /**
+     * Tallentaa tietorakenteet tiedostoihinsa.
+     * @throws TietoException jos ongelmia 
      */
     public void tallenna() throws TietoException {
         aineisto.tallenna();
-        teokset.tallenna();
-        kategoriat.tallenna();
     }
     
     
     /**
-     * Lukee tietoalueet tiedostoistaan.
-     * @throws TietoException jos lukemisessa ilmenee ongelma.
+     * Lukee tietorakenteet tiedostoistaan
+     * @throws TietoException jos ongelma
      */
     public void lueTiedostosta() throws TietoException {
         aineisto.lueTiedostosta();
-        teokset.lueTiedostosta();
-        kategoriat.lueTiedostosta();
     }
     
     
     /**
-     * Palauttaa teosten lukumaaran.
-     * @return teosten lukumaara.
+     * Poistaa aineistosta ne teokset joiden id vastaa nro.
+     * @param nro Numero, jota vastaavaa id:ta etsitaan
+     * @return Boolean onnistuiko
+     * TODO: Kesken
      */
-    public int getTeosLkm() {
-        return teokset.getLkm();
+    public Boolean poista(@SuppressWarnings("unused") int nro) {
+        return false;
     }
     
-    /**
-     * Palauttaa kategorioiden lukumaaran.
-     * @return kategorioiden lukumaara.
-     */
-    public int getKategoriaLkm() {
-        return kategoriat.getLkm();
-    }
     
     /**
-     * Palauttaa aineiston lukumaaran.
-     * @return aineiston lukumaara.
+     * Palauttaa aineiston maaran kokoelmassa.
+     * @return kokoelman koko
      */
-    public int getAineistoLkm() {
+    public int getLkm() {
         return aineisto.getLkm();
+    }
+    
+    
+    /**
+     * Palauttaa i:n kirjan
+     * @param i monesto kirja palautetaan
+     * @return viite i:teen kirjaan
+     * @throws IndexOutOfBoundsException jos indeksi on laiton
+     */
+    public Aineisto annaKirja(int i) throws IndexOutOfBoundsException {
+        return aineisto.anna(i);
     }
     
     
@@ -101,24 +106,26 @@ public class Kirjasto {
      * @param args ei kaytossa.
      */
     public static void main(String[] args) {
-//        Teos lotr = new Teos();
-//        Kategoria fant = new Kategoria();
         Kirjasto kirjasto = new Kirjasto();
-        Aineisto uusi = new Aineisto();
-        Aineisto toka = new Aineisto();
-        uusi.vastaaLotr();
-        toka.vastaaLotr();
+        System.out.println("=========  getLkm  ===========");
+        System.out.println(kirjasto.getLkm());
         try {
-            kirjasto.lisaa(uusi);
-            kirjasto.lisaa(toka);
-            for (var k : kirjasto.aineisto) {
-                System.out.println(k.tiedot());
+            kirjasto.lisaaLotr();
+            kirjasto.lisaaLotr();
+            kirjasto.lisaaLotr();
+            kirjasto.lisaaLotr();
+            System.out.println(kirjasto.getLkm());
+            System.out.println("========= kirjasto ===========");
+            for (var kirja : kirjasto.aineisto) {
+//                System.out.println(kirja);
+                kirja.tulosta(System.out);
             }
+            System.out.println("========= annaKirja ==========");
+            System.out.println(kirjasto.annaKirja(2).tiedot());
         } catch (TietoException e) {
-            // TODO Auto-generated catch block
+//            System.err.println(e.getMessage());
             e.printStackTrace();
         }
-    
     }
 
 }

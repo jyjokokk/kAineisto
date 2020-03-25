@@ -68,7 +68,7 @@ public class Teokset {
      * @return viite alkioon, jonka indeksi on i
      * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
      */
-    public Teos getTeos(int i) throws IndexOutOfBoundsException {
+    public Teos anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || lkm <= i)
             throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
         return alkiot[i];
@@ -81,7 +81,6 @@ public class Teokset {
     public static void main(String[] args) {
         
         Teokset luettelo = new Teokset();
-
         Teos kirja1 = new Teos();
         Teos kirja2 = new Teos();
         kirja1.vastaaLotr();
@@ -90,13 +89,13 @@ public class Teokset {
             luettelo.lisaa(kirja1);
             luettelo.lisaa(kirja2);
             for (int i = 0; i < luettelo.getLkm(); i++) {
-                Teos teos = luettelo.getTeos(i);
+                Teos teos = luettelo.anna(i);
                 System.out.println("Teos nro: " + i);
                 teos.tulosta(System.out);
             }
-            
         } catch (TietoException e) {
-            System.out.println(e.getMessage());;
+//            System.out.println(e.getMessage());;
+            e.printStackTrace();
         }
         
 

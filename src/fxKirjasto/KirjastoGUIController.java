@@ -2,10 +2,14 @@ package fxKirjasto;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import fi.jyu.mit.fxgui.ListChooser;
+
+import kirjasto.*;
 
 /**
  * @author jyrki
@@ -33,6 +37,7 @@ public class KirjastoGUIController {
     @FXML private MenuItem navDelete;
     @FXML private MenuItem navMuokkaa;
     @FXML private MenuItem menuHelp;
+    @FXML private ListChooser<Aineisto> hakuTulokset;
     
     
     @FXML

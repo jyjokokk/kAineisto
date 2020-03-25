@@ -81,7 +81,7 @@ public class Aineisto {
     
     
     /**
-     * Tulostetaan kategorian tiedot.
+     * Tulostetaan aineiston tiedot
      * @param out tietovirta johon tulostetaan. 
      */
     public void tulosta(PrintStream out) {
@@ -90,7 +90,7 @@ public class Aineisto {
     
     
     /**
-     * Tulostetaan kategorian tiedot.
+     * Tulostetaan aineiston tiedot
      * @param os tietovirta johon tulostetaan.
      */
     public void tulosta(OutputStream os) {
