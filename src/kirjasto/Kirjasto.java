@@ -1,37 +1,18 @@
 package kirjasto;
 
+import java.io.PrintStream;
+
 /**
  * @author jyrki
  * @version Mar 25, 2020
  */
 public class Kirjasto {
     
-    private final Aineistot aineisto = new Aineistot();
+    private final Kategoriat kategoriat = new Kategoriat();
+    private final Teokset teokset = new Teokset();
+    private final Hyllyt hyllyt = new Hyllyt();
     
-    /**
-     * Lisaa uuden aineiston kokoelmaan.
-     * @param a aineisto joka lisataan
-     * @throws TietoException jos ilmenee ongelmia
-     * @example
-     * <pre name="test">
-     *  #THROWS TietoException
-     *  Kirjasto kirjasto = new Kirjasto();
-     *  Aineisto k1 = new Aineisto(), k2 = new Aineisto();
-     *  k1.vastaaLotr(); k2.vastaaLotr();
-     *  kirjasto.getLkm() === 0;
-     *  kirjasto.lisaa(k1); kirjasto.lisaa(k2);
-     *  kirjasto.getLkm() === 2;
-     *  kirjasto.annaKirja(0) === k1;
-     *  kirjasto.annaKirja(1) === k2;
-     *  kirjasto.annaKirja(3); #THROWS IndexOutOfBoundsException
-     *  kirjasto.lisaaLotr();
-     *  kirjasto.getLkm() === 3;
-     * </pre>
-     */
-    public void lisaa(Aineisto a) throws TietoException {
-        aineisto.lisaa(a);
-    }
-    
+
     
     /**
      * Lisaa aineiston kokoelmaan, parseamalla sen merkkijonosta.
@@ -47,9 +28,15 @@ public class Kirjasto {
      * @throws TietoException jos ilmenee ongelmia
      */
     public void lisaaLotr() throws TietoException {
-        Aineisto lotr = new Aineisto();
-        lotr.vastaaLotr();
-        lisaa(lotr);
+        Teos teos = new Teos();
+        Kategoria kat = new Kategoria();
+        Hylly paikka = new Hylly();
+        teos.vastaaLotrRand();
+        kat.vastaaFantasiaRek();
+        paikka = new Hylly(teos.getId(), kat.getKid(), "JAG", 0);
+        teokset.lisaa(teos);
+        kategoriat.lisaa(kat);
+        hyllyt.lisaa(paikka);
     }
     
     
@@ -58,7 +45,9 @@ public class Kirjasto {
      * @throws TietoException jos ongelmia 
      */
     public void tallenna() throws TietoException {
-        aineisto.tallenna();
+        kategoriat.tallenna();
+        teokset.tallenna();
+        hyllyt.tallenna();
     }
     
     
@@ -67,7 +56,9 @@ public class Kirjasto {
      * @throws TietoException jos ongelma
      */
     public void lueTiedostosta() throws TietoException {
-        aineisto.lueTiedostosta();
+        kategoriat.lueTiedostosta();
+        teokset.lueTiedostosta();
+        hyllyt.lueTiedostosta();
     }
     
     
@@ -75,7 +66,6 @@ public class Kirjasto {
      * Poistaa aineistosta ne teokset joiden id vastaa nro.
      * @param nro Numero, jota vastaavaa id:ta etsitaan
      * @return Boolean onnistuiko
-     * TODO: Kesken
      */
     public Boolean poista(@SuppressWarnings("unused") int nro) {
         return false;
@@ -83,22 +73,70 @@ public class Kirjasto {
     
     
     /**
-     * Palauttaa aineiston maaran kokoelmassa.
+     * Palauttaa teosten maaran tietokannassa
      * @return kokoelman koko
      */
-    public int getLkm() {
-        return aineisto.getLkm();
+    public int getTeosLkm() {
+        return teokset.getLkm();
+    }
+    
+    /**
+     * Antaa teokset indeksissa i olevassa paikassa
+     * @param i indeksi
+     * @return teos indeksissa i
+     */
+    public Teos getTeos(int i) {
+        return teokset.anna(i);
     }
     
     
     /**
-     * Palauttaa i:n kirjan
-     * @param i monesto kirja palautetaan
-     * @return viite i:teen kirjaan
-     * @throws IndexOutOfBoundsException jos indeksi on laiton
+     * Palauttaa hyllyssa olevien teosten maaran tietokannassa.
+     * @return hyllyssa olevien teosten lkm
      */
-    public Aineisto annaKirja(int i) throws IndexOutOfBoundsException {
-        return aineisto.anna(i);
+    public int getHyllyLkm() {
+        return hyllyt.getLkm();
+    }
+    
+    
+    /**
+     * Palauttaa hyllypaikassa h olevan teoksen nimen.
+     * @param h Hyllypaikka
+     * @return Teoksen nimi.
+     */
+    public String getTeosNimi(Hylly h) {
+        Teos t = teokset.anna(h.getId());
+        return t.getNimi();
+    }
+
+    /**
+     * Hakee hyllypaikkojen tietorakenteen indeksissa i olevan
+     * viitteen 
+     * @param i indeksi
+     * @return indeksissa i oleva teos
+     */
+    public Hylly anna(int i) {
+        return hyllyt.anna(i);
+    }
+
+    /**
+     * Antaa hyllypaikassa olevan teoksen kaikki tiedot.
+     * @param h hyllypaikassa oleva paikka
+     * @return Teoksen kaikki tiedot merkkijonona.
+     */
+    public String annaTiedot(Hylly h) {
+        StringBuilder sb = new StringBuilder();
+        Teos t = teokset.anna(h.getId());
+        Kategoria kat = kategoriat.anna(h.getKid());
+        sb.append(t.toString() + "\n");
+        sb.append(kat.getTiedot() + "\n");
+        sb.append(h.getTiedot());
+        return sb.toString();
+    }
+    
+    
+    public void tulostaTiedot(PrintStream os, Hylly h) {
+        os.println(annaTiedot(h));
     }
     
     
@@ -107,23 +145,15 @@ public class Kirjasto {
      */
     public static void main(String[] args) {
         Kirjasto kirjasto = new Kirjasto();
-        System.out.println("=========  getLkm  ===========");
-        System.out.println(kirjasto.getLkm());
         try {
             kirjasto.lisaaLotr();
             kirjasto.lisaaLotr();
             kirjasto.lisaaLotr();
-            kirjasto.lisaaLotr();
-            System.out.println(kirjasto.getLkm());
-            System.out.println("========= kirjasto ===========");
-            for (var kirja : kirjasto.aineisto) {
-//                System.out.println(kirja);
-                kirja.tulosta(System.out);
-            }
-            System.out.println("========= annaKirja ==========");
-            System.out.println(kirjasto.annaKirja(2).tiedot());
+            System.out.println(kirjasto.anna(1));
+            System.out.println(kirjasto.anna(2));
+            System.out.println(kirjasto.annaTiedot(kirjasto.anna(1)));
         } catch (TietoException e) {
-//            System.err.println(e.getMessage());
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

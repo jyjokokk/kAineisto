@@ -1,0 +1,12 @@
+|-------------------------------------------------------------+------------|
+| Luokan nimi: Aineistot                                      | Avustajat  |
+|-------------------------------------------------------------+------------|
+| Vastuualueet:                                               | Kategoriat |
+| - Osaa lukea kategoriat ja teokset tiedostoista             | Teokset    |
+| - Osaa lukea itsensa tiedostosta                            |            |
+| - Osaa kayttaa omaa tiedostaan, kategorioita ja teoksia     |            |
+| tietorakenteensa muodostamiseen                             |            |
+| - Osaa lisata uuden aineiston, ja sen myota valittaa tiedon |            |
+| alemmille tietorakenteille tallennettavaksi                 |            |
+|                                                             |            |
+|-------------------------------------------------------------+------------|

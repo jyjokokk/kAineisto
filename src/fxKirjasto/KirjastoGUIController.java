@@ -3,9 +3,7 @@ package fxKirjasto;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -17,7 +15,6 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.util.*;
 
-import fi.jyu.mit.fxgui.Chooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.TextAreaOutputStream;
@@ -52,7 +49,7 @@ public class KirjastoGUIController implements Initializable {
     
     @FXML private AnchorPane tiedotPanel;
     @FXML private GridPane tiedotGrid;
-    @FXML private ListChooser<Aineisto> hakuTulokset;
+    @FXML private ListChooser<Teos> hakuTulokset;
     
     
     @Override
@@ -95,7 +92,7 @@ public class KirjastoGUIController implements Initializable {
     // Alapuolella ei kayttomliittymaan suoraan liittyvia metodeja tai funktioita
     
     private Kirjasto kirjasto;
-    private Aineisto kirjaKohdalla;
+    private Teos kirjaKohdalla;
     private TextArea tiedotArea = new TextArea();
 
     
@@ -117,7 +114,7 @@ public class KirjastoGUIController implements Initializable {
         if (kirjaKohdalla == null) return;
         tiedotArea.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tiedotArea)) {
-            kirjaKohdalla.tulostaTiedot(os);
+            kirjasto.tulostaTiedot(os, kirjasto.anna(kirjaKohdalla.getId() - 1));
         }
     }
     
@@ -128,9 +125,11 @@ public class KirjastoGUIController implements Initializable {
      */
     private void hae(int id) {
         hakuTulokset.clear();
-        for (int i = 0; i < kirjasto.getLkm(); i++) {
-            Aineisto kirja = kirjasto.annaKirja(i);
-            hakuTulokset.add(kirja.getNimi(), kirja);
+        for (int i = 0; i < kirjasto.getTeosLkm(); i++) {
+            Hylly kirja = kirjasto.anna(i);
+            String nimi = kirjasto.getTeosNimi(kirja);
+            Teos teos = kirjasto.getTeos(kirja.getId());
+            hakuTulokset.add(nimi, teos);
         }
         hakuTulokset.setSelectedIndex(id - 1);
     }
@@ -140,11 +139,9 @@ public class KirjastoGUIController implements Initializable {
      * Lisaa toistaiseksi vain Lotrin.
      */
     private void uusiKirja() {
-        Aineisto kirja = new Aineisto();
-        kirja.vastaaLotr();
         try {
-            kirjasto.lisaa(kirja);
-            hae(kirja.getId());
+            kirjasto.lisaaLotr();
+            hae(0);
         } catch (TietoException e) {
             Dialogs.showMessageDialog(e.getMessage());
         }

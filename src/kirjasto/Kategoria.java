@@ -101,6 +101,15 @@ public class Kategoria {
     
     
     /**
+     * Palauttaa nimen ja kuvauksen merkkijonona.
+     * @return nimi ja kuvaus.
+     */
+    public String getTiedot() {
+        return this.nimi + "|" + this.kuvaus;
+    }
+    
+    
+    /**
      * Tulostetaan kategorian tiedot.
      * @param out tietovirta johon tulostetaan. 
      */
@@ -141,6 +150,14 @@ public class Kategoria {
      */
     public String getNimi() {
         return this.nimi;
+    }
+    
+    /**
+     * Palaauttaa kategoria-id:n.
+     * @return kategorian id
+     */
+    public int getKid() {
+        return this.kid;
     }
 
     /**

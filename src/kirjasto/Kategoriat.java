@@ -36,16 +36,6 @@ public class Kategoriat implements Iterable<Kategoria> {
      * TODO: korjaa yksilollisyystarkistaja.
      */
     public void lisaa(Kategoria k) {
-//        String uusiNimi = k.getNimi().toUpperCase();
-//        for (var a : alkiot) {
-//            String vanhaNimi = a.getNimi().toUpperCase();
-//            if (uusiNimi.equals(vanhaNimi)) System.out.println(uusiNimi + "==" + vanhaNimi);
-//        }
-//        if (this.getLkm() > 0) {
-//            for (int i = 0; i < this.getLkm(); i++) {
-//                if (k.getNimi().equals(alkiot.get(i).getNimi())) alkiot.add(k);
-//            }
-//        } else alkiot.add(k);
         alkiot.add(k);
     }
     
@@ -105,10 +95,6 @@ public class Kategoriat implements Iterable<Kategoria> {
         }
         Kategoria scifi2 = new Kategoria("Scifi", "Scifi on...");
         kategoriat.lisaa(scifi2);
-        for (var a : alkiot) {
-            if (scifi2.getNimi().toUpperCase().equals(a.getNimi().toUpperCase()))
-                System.out.println("Sama loytyi.");
-        }
         
     }
 
