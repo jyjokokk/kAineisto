@@ -36,6 +36,19 @@ public class Hyllyt {
     
     
     /**
+     * Lisaa taulukkoon uuden alkion, ja alustaa sen arvot syotetysta
+     * merkkijonosta.
+     * @param syote merkkijono, josta arvot alustetaan
+     * @throws TietoException jos taulukossa ei ole tilaa.
+     */
+    public void lisaa(String syote) throws TietoException {
+        if (lkm >= alkiot.length) throw new TietoException("Liikaa alkioita");
+        alkiot[lkm] = new Hylly(syote);
+        lkm++;
+    }
+    
+    
+    /**
      * Tallentaa teosluettelon tiedostoon.
      * @throws TietoException jos tallentaminen epaonnistuu.
      */
@@ -86,6 +99,7 @@ public class Hyllyt {
         try {
             luettelo.lisaa(kirja1);
             luettelo.lisaa(kirja2);
+            luettelo.lisaa("6|6|SATAN|6");
             for (int i = 0; i < luettelo.getLkm(); i++) {
                 Hylly teos = luettelo.anna(i);
                 System.out.println("Hylly nro: " + i);

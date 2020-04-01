@@ -2,6 +2,8 @@ package kirjasto;
 
 import java.io.*;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
  * @author jyrki
  * @version Mar 26, 2020
@@ -31,12 +33,55 @@ public class Hylly {
      * @param kid kategorian id
      * @param paikka paikka kirjahyllyssa
      * @param maara teosten maara
+     * @example
+     * <pre name="test">
+     *   Hylly uusi = new Hylly(2, 4, "GDA", 6);
+     *   uusi.toString() === "2|4|GDA|6";
+     * </pre>
      */
     public Hylly(int id, int kid, String paikka, int maara) {
         this.id = id;
         this.kid = kid;
         this.paikka = paikka;
         this.maara = maara;
+    }
+    
+    
+    /**
+     * Muodostaa uuden olion parseamalla merkkijonon.
+     * @param syote merkkijono, josta uudet arvot alustetaan.
+     * @example
+     * <pre name="test">
+     *  Hylly uusi = new Hylly("1|2|ABC|3");
+     *  uusi.toString() === "1|2|ABC|3";
+     * </pre>
+     */
+    public Hylly(String syote) {
+        this.parse(syote);
+    }
+    
+    
+    /**
+     * Asettaa olion arvoiksi merkkijonosta seilotut arvot.
+     * @param syote merkkijono, joka seulotaan
+     * @example
+     * <pre name="test">
+     *  Hylly uusi = new Hylly();
+     *  uusi.parse("1|2|ABC|3");
+     *  uusi.toString() === "1|2|ABC|3";
+     *  uusi.parse("4|2|DEF|0|");
+     *  uusi.getId() === 4;
+     * </pre>
+     * TODO: Kirjoita Regex tarkistaja syotteen oikeamuotoisuudelle.
+     */
+    public void parse(String syote) {
+        StringBuilder sb = new StringBuilder(syote);
+        this.id = Mjonot.erotaInt(sb, 0);
+        sb = sb.deleteCharAt(0);
+        this.kid = Mjonot.erotaInt(sb, 0);
+        sb = sb.deleteCharAt(0);
+        this.paikka = Mjonot.erota(sb, '|');
+        this.maara = Mjonot.erotaInt(sb, 0);
     }
     
     
@@ -192,7 +237,12 @@ public class Hylly {
      * @param args ei kaytossa
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+        Hylly uusi = new Hylly();
+        uusi.parse("1|2|ABC|3");
+        System.out.println(uusi);
+        uusi = new Hylly("6|6|SATAN|6");
+        System.out.println(uusi);
+        
     }
 
 }
