@@ -45,9 +45,9 @@ public class Kirjasto {
      * @throws TietoException jos ongelmia 
      */
     public void tallenna() throws TietoException {
-        kategoriat.tallenna();
-        teokset.tallenna();
-        hyllyt.tallenna();
+        kategoriat.tallenna("kategoriatUlos.txt");
+        teokset.tallenna("teoksetUlos.txt");
+        hyllyt.tallenna("hyllytUlos.txt");
     }
     
     

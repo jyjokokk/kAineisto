@@ -54,10 +54,17 @@ public class Hyllyt {
     
     /**
      * Tallentaa teosluettelon tiedostoon.
+     * @param tiedNimi Tiedoston nimi, johon tallenetaan.
      * @throws TietoException jos tallentaminen epaonnistuu.
      */
-    public void tallenna() throws TietoException {
-        throw new TietoException("Tallenusta ei ole viela ohjelmoitu." + tiedostonNimi);
+    public void tallenna(String tiedNimi) throws TietoException {
+        try (PrintStream fo = new PrintStream(new FileOutputStream(tiedNimi))) {
+            for (int i = 0; i < lkm; i++) {
+                fo.println(alkiot[i].toString());
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("Ongelma tiedostoon kirjoittaessa! " + ex.getMessage());
+        }
     }
     
     
@@ -71,6 +78,7 @@ public class Hyllyt {
         try (Scanner fi = new Scanner (new FileInputStream(new File(tiedNimi)))) {
             while (fi.hasNext()) {
                 String s = fi.nextLine();
+                if (s.length() == 0) continue;
                 if (s.charAt(0) == '#') continue;
                 this.lisaa(s);
             }
@@ -129,6 +137,7 @@ public class Hyllyt {
                 System.out.println("Hylly nro: " + i);
                 teos.tulosta(System.out);
             }
+            luettelo.tallenna("hyllytUlosTest.txt");
         } catch (TietoException e) {
 //            System.out.println(e.getMessage());;
             e.printStackTrace();

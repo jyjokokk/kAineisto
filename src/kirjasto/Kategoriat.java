@@ -74,10 +74,17 @@ public class Kategoriat implements Iterable<Kategoria> {
     
     /**
      * Tallentaa kokoelman tiedostoon.
+     * @param tiedNimi Tiedoston nimi, johon tallenetaan.
      * @throws TietoException jos tallennus epaonnistuu.
      */
-    public void tallenna() throws TietoException {
-        throw new TietoException("Tallennusta ei ole viela ohjelmoitu.");
+    public void tallenna(String tiedNimi) throws TietoException {
+        try (PrintStream fo = new PrintStream(new FileOutputStream(tiedNimi))) {
+            for (Kategoria kat : alkiot) {
+                fo.println(kat.toString());
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("Ongelma tallentaessa tiedostoon! " + ex.getMessage());
+        }
     }
     
     
@@ -104,17 +111,27 @@ public class Kategoriat implements Iterable<Kategoria> {
      */
     public static void main(String[] args) {
         Kategoriat kategoriat = new Kategoriat();
-        Kategoria fantasia = new Kategoria();
-        Kategoria scifi = new Kategoria("Scifi", "Scifi on...");
-        fantasia.vastaaFantasiaRek();
-        scifi.rekisteroi();
-        kategoriat.lisaa(fantasia);
-        kategoriat.lisaa(scifi);
-        for (Kategoria k: kategoriat) {
-            System.out.println(k);
+//        Kategoria fantasia = new Kategoria();
+//        Kategoria scifi = new Kategoria("Scifi", "Scifi on...");
+//        fantasia.vastaaFantasiaRek();
+//        scifi.rekisteroi();
+//        kategoriat.lisaa(fantasia);
+//        kategoriat.lisaa(scifi);
+        try {
+            kategoriat.lueTiedostosta("testKategoriat.txt");
+            for (Kategoria k: kategoriat) {
+                System.out.println(k);
+            }
+            System.out.println("=========");
+            System.out.println("Ulos");
+            System.out.println("=========");
+            kategoriat.tallenna("testKatUlos.txt");
+        } catch (TietoException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        Kategoria scifi2 = new Kategoria("Scifi", "Scifi on...");
-        kategoriat.lisaa(scifi2);
+//        Kategoria scifi2 = new Kategoria("Scifi", "Scifi on...");
+//        kategoriat.lisaa(scifi2);
         
     }
 

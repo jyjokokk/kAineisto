@@ -2,6 +2,7 @@ package kirjasto;
 
 import java.io.*;
 import java.util.Scanner;
+import fi.jyu.mit.ohj2.*;
 
 /**
  * Teosten kokoelma, jokaa osaa mm lisata ja poistaa teoksen.
@@ -53,10 +54,17 @@ public class Teokset {
     
     /**
      * Tallentaa teosluettelon tiedostoon.
+     * @param tiedNimi Tiedosto, johon tallenetaan
      * @throws TietoException jos tallentaminen epaonnistuu.
      */
-    public void tallenna() throws TietoException {
-        throw new TietoException("Tallenusta ei ole viela ohjelmoitu." + tiedostonNimi);
+    public void tallenna(String tiedNimi) throws TietoException {
+        try (PrintStream fo = new PrintStream(new FileOutputStream(tiedNimi))) {
+            for (int i = 0; i < lkm; i++) {
+                fo.println(alkiot[i].toString());
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("Ongelma tiedostoon kirjottaessa! " + ex.getMessage());
+        }
     }
     
     
@@ -123,6 +131,10 @@ public class Teokset {
                 System.out.println("Teos nro: " + i);
                 teos.tulosta(System.out);
             }
+            System.out.println("=============");
+            System.out.println("Ulos");
+            System.out.println("=============");
+            luettelo.tallenna("teoksetUlos2.txt");
         } catch (TietoException e) {
 //            System.out.println(e.getMessage());;
             e.printStackTrace();
