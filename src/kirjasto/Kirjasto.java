@@ -56,9 +56,9 @@ public class Kirjasto {
      * @throws TietoException jos ongelma
      */
     public void lueTiedostosta() throws TietoException {
-        kategoriat.lueTiedostosta();
-        teokset.lueTiedostosta();
-        hyllyt.lueTiedostosta();
+        kategoriat.lueTiedostosta("kategoriat.txt");
+        teokset.lueTiedostosta("teokset.txt");
+        hyllyt.lueTiedostosta("hyllyt.txt");
     }
     
     

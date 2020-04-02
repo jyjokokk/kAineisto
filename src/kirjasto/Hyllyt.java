@@ -1,5 +1,9 @@
 package kirjasto;
 
+import java.io.*;
+import java.util.Scanner;
+//import fi.jyu.mit.ohj2.*;
+
 /**
  * Hyllyten kokoelma, jokaa osaa mm lisata ja poistaa teoksen.
  * TODO: Selvita onnistuisiko yksittaiset sailomisluokat joka tyypille korvata <TYPE> tyylisella ratkaisulla.
@@ -59,10 +63,21 @@ public class Hyllyt {
     
     /**
      * Lukee teosluettelon tiedostosta.
-     * @throws TietoException jos tallentaminen epaonnistuu.
+     * @param tiedNimi tiedoston nimi, joka luetaan
+     * @throws TietoException jos lisaamissa ilmenee ongelmia
+     * TODO: Testit, valiaikaisella hakemistolla.
      */
-    public void lueTiedostosta() throws TietoException {
-        throw new TietoException("Lukemista ei ole viela ohjelmoitu.");
+    public void lueTiedostosta(String tiedNimi) throws TietoException {
+        try (Scanner fi = new Scanner (new FileInputStream(new File(tiedNimi)))) {
+            while (fi.hasNext()) {
+                String s = fi.nextLine();
+                if (s.charAt(0) == '#') continue;
+                this.lisaa(s);
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("Ongelma tiedostoa avatessa!" + ex.getMessage());
+        }
+        
     }
     
     
@@ -94,12 +109,21 @@ public class Hyllyt {
     public static void main(String[] args) {
         
         Hyllyt luettelo = new Hyllyt();
-        Hylly kirja1 = new Hylly();
-        Hylly kirja2 = new Hylly();
+//        Hylly kirja1 = new Hylly();
+//        Hylly kirja2 = new Hylly();
         try {
-            luettelo.lisaa(kirja1);
-            luettelo.lisaa(kirja2);
-            luettelo.lisaa("6|6|SATAN|6");
+//            luettelo.lisaa(kirja1);
+//            luettelo.lisaa(kirja2);
+//            for (int i = 0; i < luettelo.getLkm(); i++) {
+//                Hylly teos = luettelo.anna(i);
+//                System.out.println("Hylly nro: " + i);
+//                teos.tulosta(System.out);
+//            }
+            System.out.println("===================");
+            System.out.println("Luetaan tiedostosta");
+            System.out.println("===================");
+            luettelo.lueTiedostosta("hyllyt.txt");
+//            System.out.println(luettelo.anna(0));
             for (int i = 0; i < luettelo.getLkm(); i++) {
                 Hylly teos = luettelo.anna(i);
                 System.out.println("Hylly nro: " + i);

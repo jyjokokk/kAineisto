@@ -1,6 +1,7 @@
 package kirjasto;
 
 import java.util.*;
+import java.io.*;
 
 /**
  * Luokka kategorioille.
@@ -41,6 +42,16 @@ public class Kategoriat implements Iterable<Kategoria> {
     
     
     /**
+     * Lisaa uuden olion taulukkoon, ja alustaa sen arvot
+     * syotetysta merkkijonosta seulomalla
+     * @param syote Merkkijono, josta parsetaan.
+     */
+    public void lisaa(String syote) {
+        alkiot.add(new Kategoria(syote));
+    }
+    
+    
+    /**
      * Palauttaa alkoiden lukumaaran kokoelmassa.
      * @return alkoiden lukumaara.
      */
@@ -72,10 +83,19 @@ public class Kategoriat implements Iterable<Kategoria> {
     
     /**
      * Luetaan kokoelma tiedostosta.
+     * @param tiedNimi Tiedoston nimi, josta luetaan.
      * @throws TietoException jos lukeminen epaonnistuu.
      */
-    public void lueTiedostosta() throws TietoException {
-        throw new TietoException("Lukemista ei ole viela ohjelmoitu.");
+    public void lueTiedostosta(String tiedNimi) throws TietoException {
+        try (Scanner fi = new Scanner (new FileInputStream(new File(tiedNimi)))) {
+            while (fi.hasNext()) {
+                String s = fi.nextLine();
+                if (s.charAt(0) == '#') continue;
+                this.lisaa(s);
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("Ongelma tiedostoa avatessa!" + ex.getMessage());
+        }
     }
     
     

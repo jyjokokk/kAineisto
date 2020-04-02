@@ -1,6 +1,8 @@
 package kirjasto;
 
 import java.io.*;
+
+import fi.jyu.mit.ohj2.Mjonot;
 import isbn.ISBNTarkistus;
 
 /**
@@ -18,6 +20,49 @@ public class Teos {
     private int julkaisuVuosi = 0;
     
     private static int seuraavaId = 1;
+    
+    
+    /**
+     * Vakiomuodostaja.
+     */
+    public Teos() {
+        // Alustukset hoidettu esittelyssa.
+    }
+    
+    
+    /**
+     * Alustaa olion merkkijonosta parsetuista attribuuteista.
+     * @param syote Merkkijono, josta parsetaan.
+     * @example
+     * <pre name="test">
+     *  Teos uusi = new Teos("1|123-123-123-123|Uusi Kirja|Matti Meikalainen|1995");
+     *  uusi.toString() === "1|123-123-123-123|Uusi Kirja|Matti Meikalainen|1995";
+     * </pre>
+     */
+    public Teos(String syote) {
+        this.parse(syote);
+    }
+    
+    
+    /**
+     * Alustaa olion arvot merkkijonosta parsetuilla arvoilla.
+     * @param syote merkkijono, josta arvot parsetaan
+     * @example
+     * <pre name="test">
+     *  Teos uusi = new Teos();
+     *  uusi.parse("1|123-123-123-123|Uusi Kirja|Matti Meikalainen|1995");
+     *  uusi.toString() === "1|123-123-123-123|Uusi Kirja|Matti Meikalainen|1995";
+     * </pre>
+     */
+    public void parse(String syote) {
+        StringBuilder sb = new StringBuilder(syote);
+        this.id = Mjonot.erotaInt(sb, 0);
+        sb.deleteCharAt(0);
+        this.isbn = Mjonot.erota(sb, '|');
+        this.nimi = Mjonot.erota(sb, '|');
+        this.tekija = Mjonot.erota(sb, '|');
+        this.julkaisuVuosi = Mjonot.erotaInt(sb, 0);
+    }
     
 
     /**
@@ -55,7 +100,7 @@ public class Teos {
      *     Teos t1 = new Teos();
      *     t1.toString() === "0||||0";
      *     t1.vastaaLotr();
-     *     t1.toString() === "3|978-0544003415|The Lord of the Rings|J.R.R. Tolkien|1954";
+     *     t1.toString() === "1|978-0544003415|The Lord of the Rings|J.R.R. Tolkien|1954";
      * </pre>
      */
     @Override
@@ -76,10 +121,10 @@ public class Teos {
      *  Teos t1 = new Teos();
      *  t1.getId() === 0;
      *  t1.rekisteroi();
-     *  t1.getId() === 1;
+     *  t1.getId() === 2;
      *  Teos t2 = new Teos();
      *  t2.rekisteroi();
-     *  t2.getId() === 2;
+     *  t2.getId() === 3;
      *  int n1 = t1.getId();
      *  int n2 = t2.getId();
      *  n1 === n2 - 1;

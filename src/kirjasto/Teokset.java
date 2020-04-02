@@ -1,5 +1,8 @@
 package kirjasto;
 
+import java.io.*;
+import java.util.Scanner;
+
 /**
  * Teosten kokoelma, jokaa osaa mm lisata ja poistaa teoksen.
  * TODO: Selvita onnistuisiko yksittaiset sailomisluokat joka tyypille korvata <TYPE> tyylisella ratkaisulla.
@@ -36,6 +39,19 @@ public class Teokset {
     
     
     /**
+     * Lisaa uuden alkion taulukkoon, alustaen sen arvot annetusta merkkijonosta.
+     * @param syote Merkkijono, josta arvot alustetaan
+     * @throws TietoException jos taulukossa ei tilaa.
+     * TODO: Tee dynaamisesti kasvavaksi.
+     */
+    public void lisaa(String syote) throws TietoException {
+        if (lkm >= alkiot.length) throw new TietoException("Liikaa alkioita.");
+        alkiot[lkm] = new Teos(syote);
+        lkm++;
+    }
+
+    
+    /**
      * Tallentaa teosluettelon tiedostoon.
      * @throws TietoException jos tallentaminen epaonnistuu.
      */
@@ -46,10 +62,19 @@ public class Teokset {
     
     /**
      * Lukee teosluettelon tiedostosta.
+     * @param tiedNimi Tiedoston nimi, josta luetaan.
      * @throws TietoException jos tallentaminen epaonnistuu.
      */
-    public void lueTiedostosta() throws TietoException {
-        throw new TietoException("Lukemista ei ole viela ohjelmoitu.");
+    public void lueTiedostosta(String tiedNimi) throws TietoException {
+        try (Scanner fi = new Scanner (new FileInputStream(new File(tiedNimi)))) {
+            while (fi.hasNext()) {
+                String s = fi.nextLine();
+                if (s.charAt(0) == '#') continue;
+                this.lisaa(s);
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("Ongelma tiedostoa avatessa!" + ex.getMessage());
+        }
     }
     
     
@@ -85,15 +110,16 @@ public class Teokset {
     public static void main(String[] args) {
         
         Teokset luettelo = new Teokset();
-        Teos kirja1 = new Teos();
-        Teos kirja2 = new Teos();
-        kirja1.vastaaLotr();
-        kirja2.vastaaLotrRand();
+//        Teos kirja1 = new Teos();
+//        Teos kirja2 = new Teos();
+//        kirja1.vastaaLotr();
+//        kirja2.vastaaLotrRand();
         try {
-            luettelo.lisaa(kirja1);
-            luettelo.lisaa(kirja2);
+//            luettelo.lisaa(kirja1);
+//            luettelo.lisaa(kirja2);
+            luettelo.lueTiedostosta("testkirjat.txt");
             for (int i = 0; i < luettelo.getLkm(); i++) {
-                Teos teos = luettelo.anna(i);
+                Teos teos = luettelo.alkiot[i];
                 System.out.println("Teos nro: " + i);
                 teos.tulosta(System.out);
             }

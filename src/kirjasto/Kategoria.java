@@ -2,6 +2,8 @@ package kirjasto;
 
 import java.io.*;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
  * Luokka kategorialle.
  * @author jyrki
@@ -24,11 +26,11 @@ public class Kategoria {
     }
     
     /**
-     * Muodostaja nimella.
-     * @param nimi kategorialle
+     * Alustaa olion parseamalla sen arvot annetusta merkkijonosta
+     * @param syote annettu merkkijono
      */
-    public Kategoria(String nimi) {
-        this.nimi = nimi;
+    public Kategoria(String syote) {
+        this.parse(syote);
     }
     
     /**
@@ -40,6 +42,28 @@ public class Kategoria {
        this.nimi = nimi;
        this.kuvaus = kuvaus; 
     }
+    
+    
+    /**
+     * Alustaa olion attribuutit merkkijonosta seulotuilla arvoilla.
+     * @param syote merkkijonono, josta seulotaan.
+     * @example
+     * <pre name="test">
+     *  Kategoria uusi = new Kategoria();
+     *  uusi.parse("1|Fantasia|Fantasiakirjallisuus on...");
+     *  uusi.toString() === "1|Fantasia|Fantasiakirjallisuus on...";
+     *  uusi.parse("5|Scifi|BlaaBlaa");
+     *  uusi.toString() === "5|Scifi|BlaaBlaa";
+     * </pre>
+     */
+    public void parse(String syote) {
+        StringBuilder sb = new StringBuilder(syote);
+        this.kid = Mjonot.erotaInt(sb, 0);
+        sb.deleteCharAt(0);
+        this.nimi = Mjonot.erota(sb, '|');
+        this.kuvaus = sb.toString();
+    }
+    
     
     /**
      * Muodostaja kategoria idlla ja kuvauksella
@@ -90,8 +114,8 @@ public class Kategoria {
      * @return kategorian tiedot merkkijonona
      * @example
      * <pre name="test">
-     *  Kategoria k1 = new Kategoria(1, "Esimerkki kuvauksesta");
-     *  k1.toString() === "1|Esimerkki kuvauksesta";
+     *  Kategoria k1 = new Kategoria(1, "Kategoria", "Esimerkki kuvauksesta");
+     *  k1.toString() === "1|Kategoria|Esimerkki kuvauksesta";
      * </pre>
      */
     @Override
