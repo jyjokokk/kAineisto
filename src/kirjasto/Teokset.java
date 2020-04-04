@@ -105,7 +105,8 @@ public class Teokset implements Iterable<Teos> {
         
         try (PrintWriter fo = new PrintWriter(new FileWriter(saveFile.getCanonicalPath())) ) {
             fo.println("# Teosten tallenustiedosto");
-            for (var teos : alkiot) {
+            for (int i = 0; i < lkm; i++) {
+                Teos teos = alkiot[i];
                 fo.println(teos.toString());
             }
         } catch (FileNotFoundException ex) {

@@ -133,8 +133,9 @@ public class Hyllyt {
         
         try (PrintWriter fo = new PrintWriter(new FileWriter(saveFile.getCanonicalPath())) ) {
             fo.println("# Teosten tallenustiedosto");
-            for (var teos : alkiot) {
-                fo.println(teos.toString());
+            for (int i = 0; i < lkm; i++) {
+                Hylly hylly = alkiot[i];
+                fo.println(hylly.toString());
             }
         } catch (FileNotFoundException ex) {
             throw new TietoException("Ongelma tiedosta avatessa! " + ex.getMessage());
@@ -243,7 +244,6 @@ public class Hyllyt {
         try {
             hyl.lueTiedostosta("testFiles/Hyllyt.dat");
         } catch (TietoException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         for (var h : hyl.alkiot) {

@@ -24,7 +24,7 @@ public class KirjastoGUIMain extends Application {
             scene.getStylesheets().add(getClass()
                     .getResource("kirjastoview.css").toExternalForm());
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Kaineisto");
+            primaryStage.setTitle("kAineisto");
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();

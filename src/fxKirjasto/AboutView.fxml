@@ -13,7 +13,7 @@
    <center>
       <VBox alignment="CENTER" prefHeight="75.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="TOP_CENTER" text="Kaineisto">
+            <Label alignment="TOP_CENTER" text="kAineisto">
                <VBox.margin>
                   <Insets />
                </VBox.margin>

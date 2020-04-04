@@ -51,15 +51,12 @@ public class TeosDialogController
     @FXML
     private void handleOK() {
         for (var t : arvot) {
-            if (t.getText().trim().equals("") && t != editKuvaus
-                    && t != editMaara) {
+            if (t.getText().trim().equals("") && t != editKuvaus) {
                 t.setStyle("-fx-border-color:RED");
                 setVirhe("Tayta merkityt arvot!");
                 return;
             }
         }
-        if (editMaara.getText().length() == 0)
-            editMaara.setText("0");
         concat();
         ModalController.closeStage(labelVirhe);
     }
@@ -122,7 +119,7 @@ public class TeosDialogController
      * Yhdistaa eri tekstikentissa olleet arvot yhdeksi parsettavaksi merkkijonoksi.
      */
     private void concat() {
-        palaute = String.format("0|%s|%s|%s|%s#0|%s|%s#0|0|%s|%s",
+        palaute = String.format("0|%s|%s|%s|%s#0|%s|%s#%s|%s",
                 editISBN.getText(), editNimi.getText(), editTekija.getText(),
                 editJulkaisuvuosi.getText(), editKategoria.getText(),
                 editKuvaus.getText(), editHyllypaikka.getText(),

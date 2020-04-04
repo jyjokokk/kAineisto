@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-import java.awt.Dialog;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.net.URL;

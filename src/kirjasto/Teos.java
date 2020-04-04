@@ -41,7 +41,7 @@ public class Teos {
      */
     public Teos(String syote) {
         this.parse(syote);
-        this.rekisteroi();
+        if (this.getId() == 0) this.rekisteroi();
     }
     
     
