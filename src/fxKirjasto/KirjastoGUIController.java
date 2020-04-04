@@ -60,7 +60,7 @@ public class KirjastoGUIController implements Initializable {
 
     @FXML
     private void handleHae() {
-        hae();
+        hae(hakuNimi.getText());
     }
 
     @FXML
@@ -98,6 +98,11 @@ public class KirjastoGUIController implements Initializable {
     
     private void alusta() {
         kirjasto = new Kirjasto();
+        try {
+            kirjasto.lueTiedostosta();
+        } catch (TietoException e1) {
+            e1.printStackTrace();
+        }
         tiedotPanel.getChildren().removeAll(tiedotGrid);
         tiedotPanel.getChildren().add(tiedotArea);
         hakuTulokset.clear();
@@ -118,22 +123,6 @@ public class KirjastoGUIController implements Initializable {
         }
     }
     
-    
-    /**
-     * Hakee ja valitsee id:lla teoksen listasta, ja paivittaa listan.
-     * Toimii talla hetkella vain jos lista on loogisesti nousevassa jarjestyksessa.
-     */
-    private void hae(int id) {
-        hakuTulokset.clear();
-        for (int i = 0; i < kirjasto.getTeosLkm(); i++) {
-            Hylly kirja = kirjasto.anna(i);
-            String nimi = kirjasto.getTeosNimi(kirja);
-            Teos teos = kirjasto.getTeos(kirja.getId());
-            hakuTulokset.add(nimi, teos);
-        }
-        hakuTulokset.setSelectedIndex(id - 1);
-    }
-    
     /**
      * Lisaa uuden kirjan kokoelmaan, ja paivittaa listan.
      * Lisaa toistaiseksi vain Lotrin.
@@ -141,10 +130,26 @@ public class KirjastoGUIController implements Initializable {
     private void uusiKirja() {
         try {
             kirjasto.lisaaLotr();
-            hae(0);
+            haeId(0);
         } catch (TietoException e) {
             Dialogs.showMessageDialog(e.getMessage());
         }
+    }
+    
+    
+    /**
+     * Hakee ja valitsee id:lla teoksen listasta, ja paivittaa listan.
+     * Tarkoitettu ohjelman sisaiselle toiminalle, ei kayttajan kaytettavissa.
+     */
+    private void haeId(int id) {
+        hakuTulokset.clear();
+        for (int i = 0; i < kirjasto.getTeosLkm(); i++) {
+            Hylly kirja = kirjasto.anna(i);
+            String nimi = kirjasto.getTeosNimi(kirja);
+            Teos teos = kirjasto.getTeos(kirja.getId());
+            hakuTulokset.add(nimi, teos);
+        }
+        hakuTulokset.setSelectedIndex(id);
     }
 
 
@@ -153,8 +158,22 @@ public class KirjastoGUIController implements Initializable {
      * hakutermeja.
      */
     private void hae() {
-        hae(1);
-        
+        haeId(0);
+    }
+    
+    
+    /**
+     * Hakee kaikki teokset jotka vastaavat hakuehtoa, ja populoi
+     * tulokset hakutulos-containeriin.
+     * @param ehto Ehto, jolla haetaan.
+     */
+    private void hae(String ehto) {
+        hakuTulokset.clear();
+        ArrayList<Teos> tulokset = kirjasto.hae(ehto);
+        for (var t : tulokset) {
+            hakuTulokset.add(t.getNimi(), t);
+        }
+        hakuTulokset.setSelectedIndex(0);
     }
 
 

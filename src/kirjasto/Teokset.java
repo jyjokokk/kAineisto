@@ -1,6 +1,9 @@
 package kirjasto;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import fi.jyu.mit.ohj2.*;
 
@@ -11,7 +14,65 @@ import fi.jyu.mit.ohj2.*;
  * @author jyrki
  * @version Mar 25, 2020
  */
-public class Teokset {
+public class Teokset implements Iterable<Teos> {
+    
+    
+    /**
+     * @author jyrki
+     * @version Apr 4, 2020
+     */
+    public class TeosIterator implements Iterator<Teos> {
+        
+        private int kohdalla = 0;
+
+        /**
+         * Tarkistaa, onko seuraava alkiota olemassa.
+         * @see java.util.Iterator#hasNext()
+         * @return true, jos viela alkoita.
+         */
+        @Override
+        public boolean hasNext() {
+            // TODO Auto-generated method stub
+            return kohdalla < getLkm();
+        }
+        
+
+        /**
+         * Antaa viitteen seuraavaan alkioon.
+         * @return seuraava jasen
+         * @throws NoSuchElementException jos seuraavaa alkiota ei ole
+         * @see java.util.Iterator#next()
+         */
+        @Override
+        public Teos next() throws NoSuchElementException {
+            // TODO Auto-generated method stub
+            if (!hasNext()) throw new NoSuchElementException("Seuraavaa olioita ei ole.");
+            return anna(kohdalla++);
+        }
+        
+        
+        /**
+         * Poistamista ei viela toteutettu.
+         * @throws UnsupportedOperationException koittaessa
+         * @see java.util.Iterator#remove()
+         */
+        @Override
+        public void remove() throws UnsupportedOperationException {
+            throw new UnsupportedOperationException("Poistamista ei ole sallittu.");
+        }
+        
+    }
+    
+    
+    /**
+     * Palautetaan iteraattori
+     * @return Teos iteraattori
+     */
+    @Override
+    public Iterator<Teos> iterator() {
+        return new TeosIterator();
+    }
+    
 
     private static final int MAX_TEOKSIA = 5;
     private int lkm = 0;
@@ -158,11 +219,38 @@ public class Teokset {
     public Teos anna(int i) throws IndexOutOfBoundsException {
         if (i < 0)
             throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
-        for (var t : alkiot) {
-            if (t.getId() == i) return t;
+        return alkiot[i];
+    }
+    
+
+    /**
+     * Hakee viitteen olioon, jonka id on i. 
+     * @param i Id, jolla oliota haetaan
+     * @return Olio, jonka id on i.
+     * @throws IndexOutOfBoundsException jos id on laiton.
+     */
+    public Teos hae(int i) throws IndexOutOfBoundsException {
+        if (i < 0)
+            throw new IndexOutOfBoundsException("Laiton id: " + i);
+        for (var k : alkiot) {
+            if (k.getId() == i) return k;
         }
         return null;
-        
+    }
+    
+    
+    /**
+     * Hakee kaikki teoksen, jotka tayttavat hakuehdon.
+     * @param ehto Ehto, jolla haetaan
+     * @return Teos joka vastaa hakuehtoa.
+     */
+    public ArrayList<Teos> hae(String ehto) {
+        ArrayList<Teos> tulokset = new ArrayList<Teos>();
+        for (var k : alkiot) {
+            if (k.getNimi().contains(ehto) || k.getTekija().contains(ehto) || k.getIsbn().contains(ehto))
+                tulokset.add(k);
+        }
+        return tulokset;
     }
     
     
@@ -179,7 +267,7 @@ public class Teokset {
         try {
 //            luettelo.lisaa(kirja1);
 //            luettelo.lisaa(kirja2);
-            luettelo.lueTiedostosta("testkirjat.txt");
+            luettelo.lueTiedostosta("testFiles/Teokset.dat");
             for (int i = 0; i < luettelo.getLkm(); i++) {
                 Teos teos = luettelo.alkiot[i];
                 System.out.println("Teos nro: " + i);

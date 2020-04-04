@@ -98,7 +98,6 @@ public class Hyllyt {
      * </pre>
      */
     public void tallenna(String tiedNimi) throws TietoException {
-//        String kohde = "aineisto/" + tiedNimi;
         try (PrintStream fo = new PrintStream(new FileOutputStream(tiedNimi))) {
             for (int i = 0; i < lkm; i++) {
                 fo.println(alkiot[i].toString());

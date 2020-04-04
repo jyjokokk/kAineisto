@@ -19,8 +19,7 @@ pom.xml.versionsBackup
 pom.xml.next
 release.properties
 dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
+buildNumber.properties .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
 ##############################
@@ -72,3 +71,9 @@ nb-configuration.xml
 ## OS X
 ##############################
 .DS_Store
+
+
+##############################
+## Omat muutokset
+##############################
+src/sandbox

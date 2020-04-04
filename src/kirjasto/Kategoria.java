@@ -57,6 +57,7 @@ public class Kategoria {
      * </pre>
      */
     public void parse(String syote) {
+        if (syote.length() == 0) return;
         StringBuilder sb = new StringBuilder(syote);
         this.kid = Mjonot.erotaInt(sb, 0);
         sb.deleteCharAt(0);
@@ -95,6 +96,22 @@ public class Kategoria {
         this.setNimi("Fantasia");
         this.setKuvaus("Fantasiakirjallisuus on kirjallisuuden...");
         this.rekisteroi();
+    }
+    
+    
+    /**
+     * Muuttaa kategorian kuvausta.
+     * @param k Uusi kuvaus kategorialle.
+     * @example
+     * <pre name="test">
+     *  Kategoria uusi = new Kategoria("Fantasia", "Fantasiakirjallisuus on...");
+     *  uusi.toString() === "0|Fantasia|Fantasiakirjallisuus on...";
+     *  uusi.muutaKuvausta("Uusi kuvaus");
+     *  uusi.toString() === "0|Fantasia|Uusi kuvaus";
+     * </pre>
+     */
+    public void muutaKuvausta(String k) {
+        this.kuvaus = k;
     }
     
     
