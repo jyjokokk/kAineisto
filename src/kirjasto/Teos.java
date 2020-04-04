@@ -41,6 +41,7 @@ public class Teos {
      */
     public Teos(String syote) {
         this.parse(syote);
+        this.rekisteroi();
     }
     
     
@@ -56,8 +57,7 @@ public class Teos {
      */
     public void parse(String syote) {
         StringBuilder sb = new StringBuilder(syote);
-        this.id = Mjonot.erotaInt(sb, 0);
-        sb.deleteCharAt(0);
+        this.setId(Mjonot.erota(sb, '|', this.getId()));
         this.isbn = Mjonot.erota(sb, '|');
         this.nimi = Mjonot.erota(sb, '|');
         this.tekija = Mjonot.erota(sb, '|');
@@ -143,6 +143,18 @@ public class Teos {
      */
     public int getId() {
         return this.id;
+    }
+    
+    
+    /**
+     * Asettaa id:n, ja samalla varmistaa etta
+     * seuraavaId tulee pysymaan suurempana kuin
+     * suurin esiintyva id.
+     * @param id joka asetetaan.
+     */
+    private void setId(int id) {
+        this.id = id;
+        if (id >= seuraavaId) seuraavaId = id + 1;
     }
     
     

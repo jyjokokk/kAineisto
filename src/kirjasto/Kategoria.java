@@ -15,7 +15,7 @@ public class Kategoria {
     private String nimi = "";
     private String kuvaus = "";
 
-    private static int seuraavaKid = 0;
+    private static int seuraavaKid = 1;
 
     /**
      * Vakiomuodostaja.
@@ -62,7 +62,9 @@ public class Kategoria {
             return;
         StringBuilder sb = new StringBuilder(syote);
         this.kid = Mjonot.erotaInt(sb, 0);
-        sb.deleteCharAt(0);
+//        setKid(Mjonot.erotaInt(sb, getKid()));
+        setKid(Mjonot.erota(sb, '|', getKid()));
+//        sb.deleteCharAt(0);
         this.nimi = Mjonot.erota(sb, '|');
         this.kuvaus = sb.toString();
     }
@@ -207,6 +209,18 @@ public class Kategoria {
         return this.kid;
     }
 
+    
+    /**
+     * Asettaa kategoriatunnuksen, ja samalla varmistaa
+     * etta seuraava numero sailyy aina suurempi kuin tahan
+     * mennessa esiintyva kid.
+     * @param nr Asetettava kid.
+     */
+    private void setKid(int nr) {
+        this.kid = nr;
+        if (kid >= seuraavaKid) seuraavaKid = kid + 1;
+    }
+    
 
     /**
      * Asettaa kuvauksen kategorialle.
@@ -221,14 +235,19 @@ public class Kategoria {
      * @param args ei kaytossa.
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+
         Kategoria fantasia = new Kategoria();
         Kategoria scifi = new Kategoria("Scifi", "Scifi on...");
+        Kategoria hist = new Kategoria("0|Historia|Historiallinen...");
+        System.out.println(hist);
         fantasia.vastaaFantasia();
         fantasia.rekisteroi();
         scifi.rekisteroi();
+        hist.rekisteroi();
+        System.out.println("==== Rekisteroity ====");
         System.out.println(fantasia);
         System.out.println(scifi);
+        System.out.println(hist);
 
     }
 

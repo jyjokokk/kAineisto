@@ -11,8 +11,7 @@ import java.io.*;
  */
 public class Kategoriat implements Iterable<Kategoria> {
 
-    private static final ArrayList<Kategoria> alkiot = new ArrayList<Kategoria>(
-            0);
+    private static final ArrayList<Kategoria> alkiot = new ArrayList<Kategoria>(0);
 
     /**
      * Perusmuodostaja
@@ -40,12 +39,13 @@ public class Kategoriat implements Iterable<Kategoria> {
     public Kategoria tarkistaDuplikaatti(Kategoria k) {
         for (var a : alkiot) {
             if (k.getNimi().equals(a.getNimi())) {
-                if (k.getKuvaus() != "")
+                if (k.getKuvaus().length() != 0)
                     a.muutaKuvausta(k.getKuvaus());
                 return a;
             }
         }
         if (k.getKid() == 0) k.rekisteroi();
+        if (k.getKuvaus().length() == 0) k.setKuvaus("Placeholder Kuvaus");
         alkiot.add(k);
         return k;
     }
@@ -114,11 +114,11 @@ public class Kategoriat implements Iterable<Kategoria> {
 
 
     /**
-     * Hakee viitteen alkioon, jonka kategoria id on i.
+     * Hakee viitteen alkioon, jonka kategoria-id on i.
      * @param i id jota haetaan
      * @return Viite alkioon, jos loytyy. Null, jos ei.
      */
-    public Kategoria hae(int i) {
+    public Kategoria haeId(int i) {
         for (var k : alkiot) {
             if (k.getKid() == i)
                 return k;
@@ -146,13 +146,20 @@ public class Kategoriat implements Iterable<Kategoria> {
      * </pre>
      */
     public void tallenna(String tiedNimi) throws TietoException {
-        try (PrintStream fo = new PrintStream(new FileOutputStream(tiedNimi))) {
-            for (Kategoria kat : alkiot) {
+        File backupFile = new File("backup_" + tiedNimi);
+        File saveFile = new File(tiedNimi);
+        backupFile.delete();
+        saveFile.renameTo(backupFile);
+        
+        try (PrintWriter fo = new PrintWriter(new FileWriter(saveFile.getCanonicalPath())) ) {
+            fo.println("# Kategorioiden tallenustiedosto");
+            for (var kat : alkiot) {
                 fo.println(kat.toString());
             }
         } catch (FileNotFoundException ex) {
-            System.err.println(
-                    "Ongelma tallentaessa tiedostoon! " + ex.getMessage());
+            throw new TietoException("Ongelma tiedosta avatessa! " + ex.getMessage());
+        } catch (IOException ex) {
+            throw new TietoException("Tiedoston kirjoittamisessa on ongelmia." + ex.getMessage());
         }
     }
 
@@ -216,8 +223,14 @@ public class Kategoriat implements Iterable<Kategoria> {
         for (var k : alkiot) {
             System.out.println(k);
         }
+        Kategoria hist = new Kategoria("0|Historia|Historiallinen...");
+        hist.rekisteroi();
+        kat.lisaa(hist);
         System.out.println(alkiot.size());
         System.out.println(kat.getLkm());
+        for (var k : alkiot) {
+            System.out.println(k);
+        }
 
     }
 

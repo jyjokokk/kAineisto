@@ -25,7 +25,6 @@ public class Kirjasto {
         StringBuilder sb = new StringBuilder(s);
         String teosInfo = Mjonot.erota(sb, '#');
         String katInfo = Mjonot.erota(sb, '#');
-        // StringBuilder hyllyInfo = new StringBuilder();
         Teos teos = new Teos(teosInfo);
         Kategoria kat = kategoriat.lisaa(katInfo);
         String hyllyInfo = String.format("%d|%d|%s", teos.getId(), kat.getKid(),
@@ -33,9 +32,6 @@ public class Kirjasto {
         Hylly paikka = new Hylly(hyllyInfo);
         teokset.lisaa(teos);
         hyllyt.lisaa(paikka);
-        // hyllyInfo.append(teos.getId() + "|" + kat.getKid() + "|" +
-        // sb.toString());
-        // Hylly paikka = new Hylly(hyllyInfo.toString());
     }
 
 
@@ -91,8 +87,9 @@ public class Kirjasto {
     /**
      * Lukee tietorakenteet tiedostoistaan
      * @throws FileNotFoundException Jos tiedostoa ei loydy.
+     * @throws TietoException jos ongelmia
      */
-    public void lueTiedostosta() throws FileNotFoundException {
+    public void lueTiedostosta() throws FileNotFoundException, TietoException {
             kategoriat.lueTiedostosta("aineisto/kategoriat.dat");
             teokset.lueTiedostosta("aineisto/teokset.dat");
             hyllyt.lueTiedostosta("aineisto/hyllyt.dat");
@@ -162,8 +159,9 @@ public class Kirjasto {
      * Etsii ja palauttaa viitteen hyllypaikkaan, jolla on haettu id.
      * @param id Id, jota haetaan.
      * @return viite hyllypaikkaan, null jos ei loydy.
+     * @throws TietoException jos hyllypaikkaa ei loydy
      */
-    public Hylly haeId(int id) {
+    public Hylly haeId(int id) throws TietoException {
         return hyllyt.haeId(id);
     }
 
@@ -175,13 +173,12 @@ public class Kirjasto {
      */
     public String annaTiedot(Hylly h) {
         StringBuilder sb = new StringBuilder();
-        Teos t = teokset.hae(h.getId());
-        Kategoria kat = kategoriat.hae(h.getKid());
+        Teos t = teokset.haeId(h.getId());
+        Kategoria kat = kategoriat.haeId(h.getKid());
         sb.append(t.toString() + "\n");
         sb.append(kat.getTiedot() + "\n");
         sb.append(h.getTiedot());
-        return sb.toString().replaceAll("\\|", " \\| ");
-//        return sb.toString();
+        return sb.toString();
     }
 
 
@@ -210,7 +207,7 @@ public class Kirjasto {
             return;
         }
         for (int i = 0; i < this.getTeosLkm(); i++) {
-            os.println(this.anna(i));
+//            os.println(this.anna(i));
             tulostaTiedot(os, this.anna(i));
             os.println();
         }

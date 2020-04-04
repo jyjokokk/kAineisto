@@ -98,13 +98,20 @@ public class Teokset implements Iterable<Teos> {
      * </pre>
      */
     public void tallenna(String tiedNimi) throws TietoException {
-        try (PrintStream fo = new PrintStream(new FileOutputStream(tiedNimi))) {
-            for (int i = 0; i < lkm; i++) {
-                fo.println(alkiot[i].toString());
+        File backupFile = new File("backup_" + tiedNimi);
+        File saveFile = new File(tiedNimi);
+        backupFile.delete();
+        saveFile.renameTo(backupFile);
+        
+        try (PrintWriter fo = new PrintWriter(new FileWriter(saveFile.getCanonicalPath())) ) {
+            fo.println("# Teosten tallenustiedosto");
+            for (var teos : alkiot) {
+                fo.println(teos.toString());
             }
         } catch (FileNotFoundException ex) {
-            System.err.println(
-                    "Ongelma tiedostoon kirjottaessa! " + ex.getMessage());
+            throw new TietoException("Ongelma tiedosta avatessa! " + ex.getMessage());
+        } catch (IOException ex) {
+            throw new TietoException("Tiedoston kirjoittamisessa on ongelmia." + ex.getMessage());
         }
     }
 
@@ -286,14 +293,8 @@ public class Teokset implements Iterable<Teos> {
     public static void main(String[] args) {
 
         Teokset luettelo = new Teokset();
-        // Teos kirja1 = new Teos();
-        // Teos kirja2 = new Teos();
-        // kirja1.vastaaLotr();
-        // kirja2.vastaaLotrRand();
         try {
-            // luettelo.lisaa(kirja1);
-            // luettelo.lisaa(kirja2);
-            luettelo.lueTiedostosta("testFiles/Teokset.dat");
+            luettelo.lueTiedostosta("testFiles/teokset.dat");
             for (int i = 0; i < luettelo.getLkm(); i++) {
                 Teos teos = luettelo.alkiot[i];
                 System.out.println("Teos nro: " + i);

@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
+import java.awt.Dialog;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.net.URL;
@@ -112,14 +113,16 @@ public class KirjastoGUIController implements Initializable {
         ModalController.showModal(KirjastoGUIController.class.getResource("AboutView.fxml"), "Kirjasto", null, "");
     }
 
-    // ==========================================================
+    // ===============================================================
     // Alapuolella ei kayttomliittymaan suoraan liittyvia metodeja tai
     // funktioita
+    // ===============================================================
 
 
     private Kirjasto kirjasto;
     private Teos kirjaKohdalla;
     private TextArea tiedotArea = new TextArea();
+    private boolean saveStatus;
 
     private void alusta() {
         kirjasto = new Kirjasto();
@@ -127,7 +130,10 @@ public class KirjastoGUIController implements Initializable {
             kirjasto.lueTiedostosta();
         } catch (FileNotFoundException ex) {
             Dialogs.showMessageDialog(ex.getMessage());
+        } catch (TietoException ex) {
+            Dialogs.showMessageDialog(ex.getMessage());
         }
+        saveStatus = true;
         tiedotPanel.getChildren().removeAll(tiedotGrid);
         tiedotPanel.getChildren().add(tiedotArea);
         taytaLista();
@@ -146,6 +152,8 @@ public class KirjastoGUIController implements Initializable {
         tiedotArea.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tiedotArea)) {
             kirjasto.tulostaTiedot(os, kirjasto.haeId(kirjaKohdalla.getId()));
+        } catch (TietoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
         }
     }
 
@@ -232,11 +240,18 @@ public class KirjastoGUIController implements Initializable {
 
 
     /**
-     * Lisaa uuden teoksen tietokantaan.
+     * Avaa uuden dialogi-ikkunan uuden teoksen lisaamiseksi.
      */
     private void lisaa() {
-        ModalController.showModal(KirjastoGUIController.class.getResource("TeosDialogView.fxml"), "Lisaa teos", null, "");
-        // uusiKirja();
+        try {
+            String s = TeosDialogController.kysyArvot(null, "Syota uuden kirjan tiedot");
+            if (s == null) return;
+            kirjasto.lisaa(s);
+        } catch (TietoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
+        saveStatus = false;
+        taytaLista();
     }
 
 
@@ -264,7 +279,25 @@ public class KirjastoGUIController implements Initializable {
      *      tallentaessa false.
      */
     private void poistu() {
+        if (saveStatus == false) {
+            if (tallennusDialog()) {
+                tallenna();
+                Platform.exit();
+            } Platform.exit();
+        }
         Platform.exit();
+    }
+    
+    
+    /**
+     * Avaa dialogin, joka tarkistaa haluatko tallentaa tehdyt muutokset tiedostoon.
+     * @return true jos kylla, false jos ei
+     */
+    private boolean tallennusDialog() {
+        return Dialogs.showQuestionDialog("Tallentamattomia muutoksia!",
+                "Tallennetaanko tehdyt muutokset?",
+                "Tallenna",
+                "Jatka tallentamatta");
     }
 
 
