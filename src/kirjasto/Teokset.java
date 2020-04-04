@@ -56,6 +56,19 @@ public class Teokset {
      * Tallentaa teosluettelon tiedostoon.
      * @param tiedNimi Tiedosto, johon tallenetaan
      * @throws TietoException jos tallentaminen epaonnistuu.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Teokset uusi = new Teokset();
+     *  Teokset toka = new Teokset();
+     *  uusi.lueTiedostosta("testFiles/Teokset.dat");
+     *  uusi.tallenna("testFiles/TeoksetUlos.dat");
+     *  toka.lueTiedostosta("testFiles/TeoksetUlos.dat");
+     *  uusi.equals(toka) === true;
+     *  toka.lueTiedostosta("testFiles/TeoksetEri.dat");
+     *  System.out.println(uusi.equals(toka));
+     *  uusi.equals(toka) === false;
+     * </pre>
      */
     public void tallenna(String tiedNimi) throws TietoException {
         try (PrintStream fo = new PrintStream(new FileOutputStream(tiedNimi))) {
@@ -72,17 +85,58 @@ public class Teokset {
      * Lukee teosluettelon tiedostosta.
      * @param tiedNimi Tiedoston nimi, josta luetaan.
      * @throws TietoException jos tallentaminen epaonnistuu.
+     * <pre name="test">
+     *  #THROWS TietoException
+     *  Teokset uusi = new Teokset();
+     *  Teokset toka = new Teokset();
+     *  uusi.lueTiedostosta("testFiles/Teokset.dat");
+     *  toka.lueTiedostosta("testFiles/Teokset.dat");
+     *  uusi.equals(toka) === true;
+     *  toka.lueTiedostosta("testFiles/TeoksetEri.dat");
+     *  uusi.equals(toka) === false;
+     *  uusi.getLkm() === 3;
+     * </pre>
      */
     public void lueTiedostosta(String tiedNimi) throws TietoException {
         try (Scanner fi = new Scanner (new FileInputStream(new File(tiedNimi)))) {
             while (fi.hasNext()) {
                 String s = fi.nextLine();
+                if (s.length() == 0) continue;
                 if (s.charAt(0) == '#') continue;
                 this.lisaa(s);
             }
         } catch (FileNotFoundException ex) {
             System.err.println("Ongelma tiedostoa avatessa!" + ex.getMessage());
         }
+    }
+    
+    
+    /**
+     * Vertaa, onko olion sisaltamat tiedot samat kuin verratavan.
+     * @param toinen Olio, jonka tietoihin verrataan
+     * @return Oliko samat
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Teokset tama = new Teokset();
+     *  Teokset toinen = new Teokset();
+     *  tama.lueTiedostosta("testFiles/Teokset.dat");
+     *  toinen.lueTiedostosta("testFiles/Teokset.dat");
+     *  tama.equals(toinen) === true;
+     *  toinen.lueTiedostosta("testFiles/TeoksetEri.dat");
+     *  tama.equals(toinen) === false;
+     * </pre>
+     */
+    public boolean equals(Teokset toinen) {
+        String tama = "";
+        String toka = "";
+        for (int i = 0; i < this.lkm; i++) {
+            tama += this.alkiot[i].toString();
+        }
+        for (int i = 0; i < toinen.lkm; i++) {
+            toka += toinen.alkiot[i].toString();
+        }
+        return tama.equals(toka);
     }
     
     

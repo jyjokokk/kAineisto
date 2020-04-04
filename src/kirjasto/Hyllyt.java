@@ -53,11 +53,52 @@ public class Hyllyt {
     
     
     /**
+     * Vertaa onko taman olion tiedot samat kuin toisen.
+     * @param comp verrattava olio
+     * @return True jos sama, false jos ei.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Hyllyt tama = new Hyllyt();
+     *  Hyllyt toinen = new Hyllyt();
+     *  tama.lisaa(new Hylly("1|1|JAG|2")); toinen.lisaa(new Hylly("1|1|JAG|2"));
+     *  tama.equals(toinen) === true;
+     * </pre>
+     */
+    public boolean equals(Hyllyt comp) {
+        String tama = "";
+        for (int i = 0; i < lkm; i++) {
+            tama += alkiot[i].toString();
+        }
+        String toinen = "";
+        for (int i = 0; i < comp.getLkm(); i++) {
+            toinen += comp.anna(i).toString();
+        }
+        if (tama.equals(toinen)) return true;
+        return false;
+    }
+    
+    
+    /**
      * Tallentaa teosluettelon tiedostoon.
      * @param tiedNimi Tiedoston nimi, johon tallenetaan.
      * @throws TietoException jos tallentaminen epaonnistuu.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Hyllyt uusi = new Hyllyt();
+     *  Hyllyt toka = new Hyllyt();
+     *  uusi.lueTiedostosta("testFiles/testHyllyt.dat");
+     *  uusi.tallenna("testFiles/testHyllytUlos.dat");
+     *  toka.lueTiedostosta("testFiles/testHyllytUlos.dat");
+     *  uusi.equals(toka) === true;
+     *  toka.lueTiedostosta("testFiles/testHyllytEri.dat");
+     *  System.out.println(uusi.equals(toka));
+     *  uusi.equals(toka) === false;
+     * </pre>
      */
     public void tallenna(String tiedNimi) throws TietoException {
+//        String kohde = "aineisto/" + tiedNimi;
         try (PrintStream fo = new PrintStream(new FileOutputStream(tiedNimi))) {
             for (int i = 0; i < lkm; i++) {
                 fo.println(alkiot[i].toString());
@@ -72,7 +113,19 @@ public class Hyllyt {
      * Lukee teosluettelon tiedostosta.
      * @param tiedNimi tiedoston nimi, joka luetaan
      * @throws TietoException jos lisaamissa ilmenee ongelmia
-     * TODO: Testit, valiaikaisella hakemistolla.
+     * @example
+     * <pre name="test">
+     *  #THROWS TietoException
+     *  Hyllyt uusi = new Hyllyt();
+     *  Hyllyt toka = new Hyllyt();
+     *  uusi.lueTiedostosta("testFiles/testHyllyt.dat");
+     *  toka.lueTiedostosta("testFiles/testHyllyt.dat");
+     *  uusi.equals(toka) === true;
+     *  toka.lueTiedostosta("testFiles/testHyllytEri.dat");
+     *  uusi.equals(toka) === false;
+     *  uusi.getLkm() === 4;
+     *  uusi.anna(0).toString() === "1|1|JAG|2";
+     * </pre>
      */
     public void lueTiedostosta(String tiedNimi) throws TietoException {
         try (Scanner fi = new Scanner (new FileInputStream(new File(tiedNimi)))) {
@@ -142,6 +195,7 @@ public class Hyllyt {
 //            System.out.println(e.getMessage());;
             e.printStackTrace();
         }
+        
         
 
     }
