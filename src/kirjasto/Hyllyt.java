@@ -17,15 +17,15 @@ public class Hyllyt {
     private int lkm = 0;
     private String tiedostonNimi = "";
     private Hylly alkiot[] = new Hylly[MAX_PAIKKOJA];
-    
+
     /**
      * Vakiomuodostaja.
      */
     public Hyllyt() {
         // Alustettu esittelyssa.
     }
-    
-    
+
+
     /**
      * Lisaa uuden alkion tietorakenteeseen.
      * @param alkio joka lisataan.
@@ -33,12 +33,32 @@ public class Hyllyt {
      * TODO: Tee dynaamisesti kasvavaksi.
      */
     public void lisaa(Hylly alkio) throws TietoException {
-        if (lkm >= alkiot.length) throw new TietoException("Liikaa alkioita.");
+        if (lkm >= alkiot.length)
+            throw new TietoException("Liikaa alkioita.");
         alkiot[lkm] = alkio;
         lkm++;
     }
-    
-    
+
+
+    /**
+     * Tyhjentaa tietorakenteen alkioista.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Hyllyt hyl = new Hyllyt();
+     *  hyl.lueTiedostosta("testFiles/Hyllyt.dat");
+     *  hyl.getLkm() === 4;
+     *  hyl.tyhjenna();
+     *  hyl.getLkm() === 0;
+     *  hyl.anna(4); #THROWS IndexOutOfBoundsException
+     * </pre>
+     */
+    public void tyhjenna() {
+        this.alkiot = new Hylly[MAX_PAIKKOJA];
+        this.lkm = 0;
+    }
+
+
     /**
      * Lisaa taulukkoon uuden alkion, ja alustaa sen arvot syotetysta
      * merkkijonosta.
@@ -46,12 +66,13 @@ public class Hyllyt {
      * @throws TietoException jos taulukossa ei ole tilaa.
      */
     public void lisaa(String syote) throws TietoException {
-        if (lkm >= alkiot.length) throw new TietoException("Liikaa alkioita");
+        if (lkm >= alkiot.length)
+            throw new TietoException("Liikaa alkioita");
         alkiot[lkm] = new Hylly(syote);
         lkm++;
     }
-    
-    
+
+
     /**
      * Vertaa onko taman olion tiedot samat kuin toisen.
      * @param comp verrattava olio
@@ -74,11 +95,12 @@ public class Hyllyt {
         for (int i = 0; i < comp.getLkm(); i++) {
             toinen += comp.anna(i).toString();
         }
-        if (tama.equals(toinen)) return true;
+        if (tama.equals(toinen))
+            return true;
         return false;
     }
-    
-    
+
+
     /**
      * Tallentaa teosluettelon tiedostoon.
      * @param tiedNimi Tiedoston nimi, johon tallenetaan.
@@ -88,11 +110,11 @@ public class Hyllyt {
      * #THROWS TietoException
      *  Hyllyt uusi = new Hyllyt();
      *  Hyllyt toka = new Hyllyt();
-     *  uusi.lueTiedostosta("testFiles/testHyllyt.dat");
-     *  uusi.tallenna("testFiles/testHyllytUlos.dat");
-     *  toka.lueTiedostosta("testFiles/testHyllytUlos.dat");
+     *  uusi.lueTiedostosta("testFiles/Hyllyt.dat");
+     *  uusi.tallenna("testFiles/HyllytUlos.dat");
+     *  toka.lueTiedostosta("testFiles/HyllytUlos.dat");
      *  uusi.equals(toka) === true;
-     *  toka.lueTiedostosta("testFiles/testHyllytEri.dat");
+     *  toka.lueTiedostosta("testFiles/HyllytEri.dat");
      *  System.out.println(uusi.equals(toka));
      *  uusi.equals(toka) === false;
      * </pre>
@@ -103,11 +125,12 @@ public class Hyllyt {
                 fo.println(alkiot[i].toString());
             }
         } catch (FileNotFoundException ex) {
-            System.err.println("Ongelma tiedostoon kirjoittaessa! " + ex.getMessage());
+            System.err.println(
+                    "Ongelma tiedostoon kirjoittaessa! " + ex.getMessage());
         }
     }
-    
-    
+
+
     /**
      * Lukee teosluettelon tiedostosta.
      * @param tiedNimi tiedoston nimi, joka luetaan
@@ -117,30 +140,33 @@ public class Hyllyt {
      *  #THROWS TietoException
      *  Hyllyt uusi = new Hyllyt();
      *  Hyllyt toka = new Hyllyt();
-     *  uusi.lueTiedostosta("testFiles/testHyllyt.dat");
-     *  toka.lueTiedostosta("testFiles/testHyllyt.dat");
+     *  uusi.lueTiedostosta("testFiles/Hyllyt.dat");
+     *  toka.lueTiedostosta("testFiles/Hyllyt.dat");
      *  uusi.equals(toka) === true;
-     *  toka.lueTiedostosta("testFiles/testHyllytEri.dat");
+     *  toka.lueTiedostosta("testFiles/HyllytEri.dat");
      *  uusi.equals(toka) === false;
      *  uusi.getLkm() === 4;
      *  uusi.anna(0).toString() === "1|1|JAG|2";
      * </pre>
      */
     public void lueTiedostosta(String tiedNimi) throws TietoException {
-        try (Scanner fi = new Scanner (new FileInputStream(new File(tiedNimi)))) {
+        try (Scanner fi = new Scanner(
+                new FileInputStream(new File(tiedNimi)))) {
             while (fi.hasNext()) {
                 String s = fi.nextLine();
-                if (s.length() == 0) continue;
-                if (s.charAt(0) == '#') continue;
+                if (s.length() == 0)
+                    continue;
+                if (s.charAt(0) == '#')
+                    continue;
                 this.lisaa(s);
             }
         } catch (FileNotFoundException ex) {
             System.err.println("Ongelma tiedostoa avatessa!" + ex.getMessage());
         }
-        
+
     }
-    
-    
+
+
     /**
      * Palauttaa teosten lukumaaran.
      * @return Hyllyten lukumaara.
@@ -148,8 +174,8 @@ public class Hyllyt {
     public int getLkm() {
         return this.lkm;
     }
-    
-    
+
+
     /**
      * Palalauttaa viitteen i:teen teosluettelon olioon.
      * @param i monennenko alkion viite halutaan
@@ -157,47 +183,66 @@ public class Hyllyt {
      * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
      */
     public Hylly anna(int i) throws IndexOutOfBoundsException {
-        if (i < 0 || alkiot.length <= i)
+        if (i < 0 || lkm < i)
             throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
         return alkiot[i];
     }
-    
+
+
+    /**
+     * Etsii ja palauttaa viitteen hyllypaikkaan, jolla on haettu id.
+     * Palauttaa null, jos ei loydy teosta haetulla id:lla.
+     * @param id Id, jota haetaan.
+     * @return viite hyllypaikkaan, null jos ei loydy.
+     */
+    public Hylly haeId(int id) {
+        for (var k : alkiot) {
+            if (k.getId() == id) return k;
+        }
+        for (int i = 0; i < this.getLkm(); i++) {
+            Hylly temp = this.anna(i);
+            if (temp.getId() == id) return temp;
+        }
+        return null;
+    }
+
     
     /**
      * @param args ei kaytossa
      */
     public static void main(String[] args) {
         
-        Hyllyt luettelo = new Hyllyt();
-//        Hylly kirja1 = new Hylly();
-//        Hylly kirja2 = new Hylly();
+        Hyllyt hyl = new Hyllyt();
         try {
-//            luettelo.lisaa(kirja1);
-//            luettelo.lisaa(kirja2);
+            hyl.lueTiedostosta("testFiles/Hyllyt.dat");
+        } catch (TietoException e) {
+            e.printStackTrace();
+        }
+        for (var h : hyl.alkiot) {
+            System.out.println(h);
+        }
+        
+        for (int i = 0; i < hyl.getLkm(); i++) {
+            Hylly temp = hyl.anna(i);
+            if (temp.getId() == 4) System.out.println(temp);
+        }
+
+
+//        Hyllyt luettelo = new Hyllyt();
+//        try {
+//            System.out.println("===================");
+//            System.out.println("Luetaan tiedostosta");
+//            System.out.println("===================");
+//            luettelo.lueTiedostosta("hyllyt.txt");
 //            for (int i = 0; i < luettelo.getLkm(); i++) {
 //                Hylly teos = luettelo.anna(i);
 //                System.out.println("Hylly nro: " + i);
 //                teos.tulosta(System.out);
 //            }
-            System.out.println("===================");
-            System.out.println("Luetaan tiedostosta");
-            System.out.println("===================");
-            luettelo.lueTiedostosta("hyllyt.txt");
-//            System.out.println(luettelo.anna(0));
-            for (int i = 0; i < luettelo.getLkm(); i++) {
-                Hylly teos = luettelo.anna(i);
-                System.out.println("Hylly nro: " + i);
-                teos.tulosta(System.out);
-            }
-            luettelo.tallenna("hyllytUlosTest.txt");
-        } catch (TietoException e) {
-//            System.out.println(e.getMessage());;
-            e.printStackTrace();
-        }
-        
-        
+//            luettelo.tallenna("hyllytUlosTest.txt");
+//        } catch (TietoException e) {
+//            e.printStackTrace();
+//        }
 
     }
-
 }
-

@@ -1,5 +1,6 @@
 package kirjasto;
 
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,37 +12,45 @@ import fi.jyu.mit.ohj2.Mjonot;
  * @version Mar 25, 2020
  */
 public class Kirjasto {
-    
+
     private final Kategoriat kategoriat = new Kategoriat();
     private final Teokset teokset = new Teokset();
     private final Hyllyt hyllyt = new Hyllyt();
-    
 
-    
     /**
      * Lisaa aineiston kokoelmaan, parseamalla sen merkkijonosta.
      * @param s merkkijono joka annetaan.
+     * @throws TietoException jos ilmenee ongelma lisatessa
      */
-    public void lisaa(@SuppressWarnings("unused") String s) {
+    public void lisaa(String s) throws TietoException {
         StringBuilder sb = new StringBuilder(s);
         String teosInfo = Mjonot.erota(sb, '#');
         String katInfo = Mjonot.erota(sb, '#');
-        StringBuilder hyllyInfo = new StringBuilder();
-        try {
-            this.teokset.lisaa(teosInfo);
-            this.kategoriat.lisaa(katInfo);
-            hyllyInfo.append(Mjonot.erotaInt(teosInfo, 0) + "|");
-            hyllyInfo.append(Mjonot.erotaInt(katInfo, 0) + "|");
-            hyllyInfo.append(sb);
-            hyllyt.lisaa(hyllyInfo.toString());
-            
-        } catch (TietoException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // StringBuilder hyllyInfo = new StringBuilder();
+        Teos teos = new Teos(teosInfo);
+        Kategoria kat = kategoriat.lisaa(katInfo);
+        String hyllyInfo = String.format("%d|%d|%s", teos.getId(), kat.getKid(),
+                sb.toString());
+        Hylly paikka = new Hylly(hyllyInfo);
+        teokset.lisaa(teos);
+        hyllyt.lisaa(paikka);
+        // hyllyInfo.append(teos.getId() + "|" + kat.getKid() + "|" +
+        // sb.toString());
+        // Hylly paikka = new Hylly(hyllyInfo.toString());
     }
-    
-    
+
+
+    /**
+     * Tyhjentaa kaikki tietorakenteet, poistaen kaiken aineiston
+     * nykyisessa sessiossa.
+     */
+    public void tyhjenna() {
+        teokset.tyhjenna();
+        kategoriat.tyhjenna();
+        hyllyt.tyhjenna();
+    }
+
+
     /**
      * Hakee kaikki teokset jotka vastaavat hakutermia.
      * @param ehto Hakuehto, jolla haetaan.
@@ -50,8 +59,8 @@ public class Kirjasto {
     public ArrayList<Teos> hae(String ehto) {
         return teokset.hae(ehto);
     }
-    
-    
+
+
     /**
      * Lisaa uuden aineiston kokoelmaan.
      * @throws TietoException jos ilmenee ongelmia
@@ -59,7 +68,7 @@ public class Kirjasto {
     public void lisaaLotr() throws TietoException {
         Teos teos = new Teos();
         Kategoria kat = new Kategoria();
-        Hylly paikka = new Hylly();
+        Hylly paikka;
         teos.vastaaLotrRand();
         kat.vastaaFantasiaRek();
         kat = kategoriat.lisaa(kat);
@@ -67,30 +76,34 @@ public class Kirjasto {
         teokset.lisaa(teos);
         hyllyt.lisaa(paikka);
     }
-    
-    
+
+
     /**
      * Tallentaa tietorakenteet tiedostoihinsa.
      * @throws TietoException jos ongelmia 
      */
     public void tallenna() throws TietoException {
-        kategoriat.tallenna("aineisto/kategoriatUlos.dat");
-        teokset.tallenna("aineisto/teoksetUlos.dat");
-        hyllyt.tallenna("aineisto/hyllytUlos.dat");
+        kategoriat.tallenna("aineisto/kategoriat.dat");
+        teokset.tallenna("aineisto/teokset.dat");
+        hyllyt.tallenna("aineisto/hyllyt.dat");
     }
-    
-    
+
+
     /**
      * Lukee tietorakenteet tiedostoistaan
-     * @throws TietoException jos ongelma
      */
-    public void lueTiedostosta() throws TietoException {
-        kategoriat.lueTiedostosta("aineisto/kategoriat.dat");
-        teokset.lueTiedostosta("aineisto/teokset.dat");
-        hyllyt.lueTiedostosta("aineisto/hyllyt.dat");
+    public void lueTiedostosta() {
+        try {
+            kategoriat.lueTiedostosta("aineisto/kategoriat.dat");
+            teokset.lueTiedostosta("aineisto/teokset.dat");
+            hyllyt.lueTiedostosta("aineisto/hyllyt.dat");
+        } catch (TietoException ex) {
+            // System.err.println("Tiedosta ei loytynyt!" + ex.getMessage());
+            ex.printStackTrace();
+        }
     }
-    
-    
+
+
     /**
      * Poistaa aineistosta ne teokset joiden id vastaa nro.
      * @param nro Numero, jota vastaavaa id:ta etsitaan
@@ -99,8 +112,8 @@ public class Kirjasto {
     public Boolean poista(@SuppressWarnings("unused") int nro) {
         return false;
     }
-    
-    
+
+
     /**
      * Palauttaa teosten maaran tietokannassa
      * @return kokoelman koko
@@ -108,7 +121,8 @@ public class Kirjasto {
     public int getTeosLkm() {
         return teokset.getLkm();
     }
-    
+
+
     /**
      * Antaa teokset indeksissa i olevassa paikassa
      * @param i indeksi
@@ -117,8 +131,8 @@ public class Kirjasto {
     public Teos getTeos(int i) {
         return teokset.anna(i);
     }
-    
-    
+
+
     /**
      * Palauttaa hyllyssa olevien teosten maaran tietokannassa.
      * @return hyllyssa olevien teosten lkm
@@ -126,17 +140,18 @@ public class Kirjasto {
     public int getHyllyLkm() {
         return hyllyt.getLkm();
     }
-    
-    
+
+
     /**
-     * Palauttaa hyllypaikassa h olevan teoksen nimen.
+     * Etsii teoksen sen id:n avulla, ja palauttaa sen nimen.
      * @param h Hyllypaikka
      * @return Teoksen nimi.
      */
     public String getTeosNimi(Hylly h) {
-        Teos t = teokset.anna(h.getId());
+        Teos t = teokset.haeId(h.getId());
         return t.getNimi();
     }
+
 
     /**
      * Hakee hyllypaikkojen tietorakenteen indeksissa i olevan viitteen 
@@ -146,6 +161,17 @@ public class Kirjasto {
     public Hylly anna(int i) {
         return hyllyt.anna(i);
     }
+
+
+    /**
+     * Etsii ja palauttaa viitteen hyllypaikkaan, jolla on haettu id.
+     * @param id Id, jota haetaan.
+     * @return viite hyllypaikkaan, null jos ei loydy.
+     */
+    public Hylly haeId(int id) {
+        return hyllyt.haeId(id);
+    }
+
 
     /**
      * Antaa hyllypaikassa olevan teoksen kaikki tiedot.
@@ -161,8 +187,8 @@ public class Kirjasto {
         sb.append(h.getTiedot());
         return sb.toString();
     }
-    
-    
+
+
     /**
      * Tulostaa kirjan tiedot annettuun tulostusvirtaan.
      * @param os tulostusvirta
@@ -171,58 +197,56 @@ public class Kirjasto {
     public void tulostaTiedot(PrintStream os, Hylly h) {
         os.println(annaTiedot(h));
     }
-    
-    
+
+
+    /**
+     * Tulostaa kaikkien hyllyssa olevien teosten tiedot annettuun
+     * PrintStreamiin.
+     * @param os PrintSteam, johon tulostetaan.
+     */
+    public void tulostaKaikki(PrintStream os) {
+        os.println("============================================");
+        os.println("Kaikkien aineistoon kuuluvien teosten tiedot");
+        os.println("============================================\n");
+        // Nain voidaan suorittaa myos tyhjalla kirjastolla:
+        if (this.getTeosLkm() == 0 && this.getHyllyLkm() == 0) {
+            System.out.println("\nKirjasto on tyhja!");
+            return;
+        }
+        for (int i = 0; i < this.getTeosLkm(); i++) {
+            os.println(this.anna(i));
+            tulostaTiedot(os, this.anna(i));
+            os.println();
+        }
+    }
+
+
     /**
      * @param args ei kaytossa.
      */
     public static void main(String[] args) {
-//        Kirjasto kirjasto = new Kirjasto();
-//        try {
-//            kirjasto.lisaaLotr();
-//            kirjasto.lisaaLotr();
-//            kirjasto.lisaaLotr();
-//            System.out.println(kirjasto.anna(1));
-//            System.out.println(kirjasto.anna(2));
-//            System.out.println(kirjasto.annaTiedot(kirjasto.anna(1)));
-//        } catch (TietoException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        String s = "3|123-123-123-123|Neuromancer|William Gibson|1984#";
-//        s += "4|Scifi|Tieteiskirjallisuus on...#";
-//        s += "WGA|4";
-//        System.out.println(s);
-//        StringBuilder sb = new StringBuilder(s);
-//        String teosInfo = Mjonot.erota(sb, '#');
-//        String katInfo = Mjonot.erota(sb, '#');
-//        System.out.println(teosInfo);
-//        System.out.println(katInfo);
-//        System.out.println(sb.toString());
-//        StringBuilder hyllyInfo = new StringBuilder();
-//        hyllyInfo.append(Mjonot.erotaInt(teosInfo, 0) + "|");
-//        hyllyInfo.append(Mjonot.erotaInt(katInfo, 0) + "|");
-//        hyllyInfo.append(sb);
-//        System.out.println(hyllyInfo);
-//        Kirjasto kirjasto = new Kirjasto();
-//        String s = "31|123-123-123-123|Neuromancer|William Gibson|1984#";
-//        s += "4|Scifi|Tieteiskirjallisuus on...#";
-//        s += "WGA|4";
-//        String s1 = "8|123-123-123-123|Neuromancer|William Gibson|1984#";
-//        s1 += "4|Scifi|Tieteiskirjallisuus on...#";
-//        s1 += "WGA|4";
-//        try {
-//            kirjasto.lueTiedostosta();
-//            kirjasto.lisaa(s);
-//            kirjasto.lisaa(s1);
-//            ArrayList<Teos> tulokset = kirjasto.hae("William");
-//            for (var t : tulokset) {
-//                System.out.println(t);
-//            }
-//        } catch (TietoException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
+
+        Kirjasto kirjasto = new Kirjasto();
+        kirjasto.lueTiedostosta();
+        String s = "3|123-123-123-123|Neuromancer|William Gibson|1984#";
+        s += "4|Scifi|Tieteiskirjallisuus on...#";
+        s += "WGA|4";
+        String s1 = "5|666-666-666-666|Filth|Irvin Welsh|1995#3|Modernismi|Modernismin piirteita....#WEL|2";
+        String s2 = "2|021-6532-231-34|Mona Lisa Overdrive|William Gibson|1984#4|Scifi|Muuttunut kuvaus#WGA|4";
+        try {
+            kirjasto.lisaaLotr();
+            kirjasto.lisaaLotr();
+            kirjasto.lisaa(s1);
+            kirjasto.lisaa(s);
+            kirjasto.lisaa(s2);
+            // kirjasto.tyhjenna();
+            kirjasto.tulostaKaikki(System.out);
+            kirjasto.tallenna();
+        } catch (TietoException e) {
+            // System.err.println("Ilmeni ongelma!" + e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 
 }

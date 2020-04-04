@@ -56,56 +56,57 @@ public class KirjastoGUIController implements Initializable {
     public void initialize(URL url, ResourceBundle bundle) {
         alusta();
     }
-    
+
 
     @FXML
     private void handleHae() {
         hae(hakuNimi.getText());
     }
 
+
     @FXML
     private void handleHelp() {
         help();
     }
+
 
     @FXML
     private void handleLisaa() {
         lisaa();
     }
 
+
     @FXML
     private void handleMuokkaa() {
         muokkaa();
     }
+
 
     @FXML
     private void handlePoista() {
         poista();
     }
 
+
     @FXML
     private void handlePoistu() {
         poistu();
     }
-    
-    //==========================================================
-    // Alapuolella ei kayttomliittymaan suoraan liittyvia metodeja tai funktioita
-    
+
+    // ==========================================================
+    // Alapuolella ei kayttomliittymaan suoraan liittyvia metodeja tai
+    // funktioita
+
     private Kirjasto kirjasto;
     private Teos kirjaKohdalla;
     private TextArea tiedotArea = new TextArea();
 
-    
     private void alusta() {
         kirjasto = new Kirjasto();
-        try {
-            kirjasto.lueTiedostosta();
-        } catch (TietoException e1) {
-            e1.printStackTrace();
-        }
+        kirjasto.lueTiedostosta();
         tiedotPanel.getChildren().removeAll(tiedotGrid);
         tiedotPanel.getChildren().add(tiedotArea);
-        hakuTulokset.clear();
+        taytaLista();
         hakuTulokset.addSelectionListener(e -> naytaTeos());
     }
 
@@ -116,13 +117,28 @@ public class KirjastoGUIController implements Initializable {
      */
     private void naytaTeos() {
         kirjaKohdalla = hakuTulokset.getSelectedObject();
-        if (kirjaKohdalla == null) return;
+        if (kirjaKohdalla == null)
+            return;
         tiedotArea.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tiedotArea)) {
-            kirjasto.tulostaTiedot(os, kirjasto.anna(kirjaKohdalla.getId() - 1));
+            kirjasto.tulostaTiedot(os, kirjasto.haeId(kirjaKohdalla.getId()));
         }
     }
+
     
+    /**
+     * Populoi hakutulokset tietorakenteista.
+     */
+    private void taytaLista() {
+        hakuTulokset.clear();
+        for (int i = 0; i < kirjasto.getHyllyLkm(); i++) {
+            Teos temp = kirjasto.getTeos(i);
+            hakuTulokset.add(temp.getNimi(), temp);
+        }
+        hakuTulokset.setSelectedIndex(0);
+    }
+    
+
     /**
      * Lisaa uuden kirjan kokoelmaan, ja paivittaa listan.
      * Lisaa toistaiseksi vain Lotrin.
@@ -130,13 +146,14 @@ public class KirjastoGUIController implements Initializable {
     private void uusiKirja() {
         try {
             kirjasto.lisaaLotr();
-            haeId(0);
         } catch (TietoException e) {
             Dialogs.showMessageDialog(e.getMessage());
         }
+        taytaLista();
+        hakuTulokset.setSelectedIndex(0);
     }
-    
-    
+
+
     /**
      * Hakee ja valitsee id:lla teoksen listasta, ja paivittaa listan.
      * Tarkoitettu ohjelman sisaiselle toiminalle, ei kayttajan kaytettavissa.
@@ -160,8 +177,8 @@ public class KirjastoGUIController implements Initializable {
     private void hae() {
         haeId(0);
     }
-    
-    
+
+
     /**
      * Hakee kaikki teokset jotka vastaavat hakuehtoa, ja populoi
      * tulokset hakutulos-containeriin.
@@ -183,13 +200,13 @@ public class KirjastoGUIController implements Initializable {
     private void help() {
         eiToimi();
     }
-    
+
 
     /**
      * Lisaa uuden teoksen tietokantaan.
      */
     private void lisaa() {
-//        eiToimi();
+        // eiToimi();
         uusiKirja();
     }
 
@@ -217,6 +234,7 @@ public class KirjastoGUIController implements Initializable {
         eiToimi();
     }
 
+
     /**
      * Placeholder toiminalle.
      */
@@ -229,6 +247,5 @@ public class KirjastoGUIController implements Initializable {
         alert.showAndWait();
 
     }
-    
 
 }

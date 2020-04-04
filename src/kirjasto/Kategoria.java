@@ -14,17 +14,17 @@ public class Kategoria {
     private int kid;
     private String nimi = "";
     private String kuvaus = "";
-    
+
     private static int seuraavaKid = 0;
-    
-    
+
     /**
      * Vakiomuodostaja.
      */
     public Kategoria() {
         // Alustettu esittelyssa.
     }
-    
+
+
     /**
      * Alustaa olion parseamalla sen arvot annetusta merkkijonosta
      * @param syote annettu merkkijono
@@ -32,18 +32,19 @@ public class Kategoria {
     public Kategoria(String syote) {
         this.parse(syote);
     }
-    
+
+
     /**
      * Muodostaja kuvauksella
      * @param nimi kategorialle
      * @param kuvaus kategorialle
      */
     public Kategoria(String nimi, String kuvaus) {
-       this.nimi = nimi;
-       this.kuvaus = kuvaus; 
+        this.nimi = nimi;
+        this.kuvaus = kuvaus;
     }
-    
-    
+
+
     /**
      * Alustaa olion attribuutit merkkijonosta seulotuilla arvoilla.
      * @param syote merkkijonono, josta seulotaan.
@@ -57,15 +58,16 @@ public class Kategoria {
      * </pre>
      */
     public void parse(String syote) {
-        if (syote.length() == 0) return;
+        if (syote.length() == 0)
+            return;
         StringBuilder sb = new StringBuilder(syote);
         this.kid = Mjonot.erotaInt(sb, 0);
         sb.deleteCharAt(0);
         this.nimi = Mjonot.erota(sb, '|');
         this.kuvaus = sb.toString();
     }
-    
-    
+
+
     /**
      * Muodostaja kategoria idlla ja kuvauksella
      * @param kid kategoria id
@@ -77,8 +79,8 @@ public class Kategoria {
         this.nimi = nimi;
         this.kuvaus = kuvaus;
     }
-    
-    
+
+
     /**
      * Apumetodi, jolla saadaan luotua testattava olio,
      * annetuilla arvoilla.
@@ -87,7 +89,8 @@ public class Kategoria {
         this.setNimi("Fantasia");
         this.setKuvaus("Fantasiakirjallisuus on kirjallisuuden...");
     }
-    
+
+
     /**
      * Apumetodi, jolla saadaan luotua testattava olio,
      * annetuilla arvoilla, ja rekisteroi sen samalla.
@@ -97,8 +100,8 @@ public class Kategoria {
         this.setKuvaus("Fantasiakirjallisuus on kirjallisuuden...");
         this.rekisteroi();
     }
-    
-    
+
+
     /**
      * Muuttaa kategorian kuvausta.
      * @param k Uusi kuvaus kategorialle.
@@ -113,8 +116,8 @@ public class Kategoria {
     public void muutaKuvausta(String k) {
         this.kuvaus = k;
     }
-    
-    
+
+
     /**
      * Antaa teokselle seuraavan kid numeron.
      * @return Kategorian uusi id numero.
@@ -124,8 +127,8 @@ public class Kategoria {
         seuraavaKid++;
         return this.kid;
     }
-    
-    
+
+
     /**
      * Palauttaa kategorian tiedot merkkijonona, muodossa kid|kuvaus
      * @return kategorian tiedot merkkijonona
@@ -139,17 +142,18 @@ public class Kategoria {
     public String toString() {
         return this.kid + "|" + this.nimi + "|" + this.kuvaus;
     }
-    
-    
+
+
     /**
      * Palauttaa nimen ja kuvauksen merkkijonona.
      * @return nimi ja kuvaus.
      */
     public String getTiedot() {
-        return this.nimi + "|" + this.kuvaus;
+        return String.format("%d|%s|%s", kid, nimi, kuvaus);
+        // return this.kid + "|" + this.nimi + "|" + this.kuvaus;
     }
-    
-    
+
+
     /**
      * Tulostetaan kategorian tiedot.
      * @param out tietovirta johon tulostetaan. 
@@ -157,8 +161,8 @@ public class Kategoria {
     public void tulosta(PrintStream out) {
         out.println(this.toString());
     }
-    
-    
+
+
     /**
      * Tulostetaan kategorian tiedot.
      * @param os tietovirta johon tulostetaan.
@@ -166,7 +170,7 @@ public class Kategoria {
     public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
     }
-    
+
 
     /**
      * Palauttaa kategorian kuvauksen.
@@ -176,7 +180,7 @@ public class Kategoria {
         return this.kuvaus;
     }
 
-    
+
     /**
      * Asettaa nimen
      * @param nimi kategorialle
@@ -184,7 +188,8 @@ public class Kategoria {
     public void setNimi(String nimi) {
         this.nimi = nimi;
     }
-    
+
+
     /**
      * Palauttaa nimen
      * @return nimi
@@ -192,7 +197,8 @@ public class Kategoria {
     public String getNimi() {
         return this.nimi;
     }
-    
+
+
     /**
      * Palaauttaa kategoria-id:n.
      * @return kategorian id
@@ -200,6 +206,7 @@ public class Kategoria {
     public int getKid() {
         return this.kid;
     }
+
 
     /**
      * Asettaa kuvauksen kategorialle.
@@ -214,7 +221,7 @@ public class Kategoria {
      * @param args ei kaytossa.
      */
     public static void main(String[] args) {
-    // TODO Auto-generated method stub
+        // TODO Auto-generated method stub
         Kategoria fantasia = new Kategoria();
         Kategoria scifi = new Kategoria("Scifi", "Scifi on...");
         fantasia.vastaaFantasia();
@@ -222,9 +229,7 @@ public class Kategoria {
         scifi.rekisteroi();
         System.out.println(fantasia);
         System.out.println(scifi);
-        
-    
+
     }
-    
-    
+
 }
