@@ -222,18 +222,16 @@ public class Kirjasto {
      */
     public static void main(String[] args) {
 
-        Kirjasto kirjasto = new Kirjasto();
-        try {
-            kirjasto.lueTiedostosta();
-        } catch (TietoException e1) {
-            e1.printStackTrace();
-        }
         String s = "3|123-123-123-123|Neuromancer|William Gibson|1984#";
         s += "4|Scifi|Tieteiskirjallisuus on...#";
         s += "WGA|4";
         String s1 = "5|666-666-666-666|Filth|Irvin Welsh|1995#3|Modernismi|Modernismin piirteita....#WEL|2";
         String s2 = "2|021-6532-231-34|Mona Lisa Overdrive|William Gibson|1984#4|Scifi|Muuttunut kuvaus#WGA|4";
+
+        Kirjasto kirjasto = new Kirjasto();
+
         try {
+            kirjasto.lueTiedostosta();
             kirjasto.lisaaLotr();
             kirjasto.lisaaLotr();
             kirjasto.lisaa(s1);
@@ -243,8 +241,9 @@ public class Kirjasto {
             kirjasto.tulostaKaikki(System.out);
             kirjasto.tallenna();
         } catch (TietoException e) {
-            // System.err.println("Ilmeni ongelma!" + e.getMessage());
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
         }
 
     }

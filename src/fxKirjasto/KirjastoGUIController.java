@@ -32,6 +32,7 @@ public class KirjastoGUIController implements Initializable {
     @FXML private TextField hakuTekija;
     @FXML private TextField hakuISBN;
     @FXML private Button hakuButton;
+    @FXML private ListChooser<Teos> hakuTulokset;
     // Paanakyman elementit
     @FXML private TextField tietoTeos;
     @FXML private TextField tietoTekija;
@@ -49,10 +50,13 @@ public class KirjastoGUIController implements Initializable {
     @FXML private MenuItem navMuokkaa;
     @FXML private MenuItem navHelp;
     @FXML private MenuItem navTietoa;
+    // Lisaysdialogin elementit
+    @FXML private Button teosPeruuta;
+    @FXML private Button toesLisaa;
     
+    // Valia-aikainen TextField tulostukselle.
     @FXML private AnchorPane tiedotPanel;
     @FXML private GridPane tiedotGrid;
-    @FXML private ListChooser<Teos> hakuTulokset;
     
     
     @Override
@@ -163,6 +167,7 @@ public class KirjastoGUIController implements Initializable {
      * Lisaa uuden kirjan kokoelmaan, ja paivittaa listan.
      * Lisaa toistaiseksi vain Lotrin.
      */
+    @SuppressWarnings("unused")
     private void uusiKirja() {
         try {
             kirjasto.lisaaLotr();
@@ -230,8 +235,8 @@ public class KirjastoGUIController implements Initializable {
      * Lisaa uuden teoksen tietokantaan.
      */
     private void lisaa() {
-        // eiToimi();
-        uusiKirja();
+        ModalController.showModal(KirjastoGUIController.class.getResource("TeosDialogView.fxml"), "Lisaa teos", null, "");
+        // uusiKirja();
     }
 
 
