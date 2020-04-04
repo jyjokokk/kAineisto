@@ -15,7 +15,6 @@ public class Hyllyt {
 
     private static final int MAX_PAIKKOJA = 10;
     private int lkm = 0;
-    private String tiedostonNimi = "";
     private Hylly alkiot[] = new Hylly[MAX_PAIKKOJA];
 
     /**
@@ -30,11 +29,15 @@ public class Hyllyt {
      * Lisaa uuden alkion tietorakenteeseen.
      * @param alkio joka lisataan.
      * @throws TietoException jos taulukossa ei tilaa.
-     * TODO: Tee dynaamisesti kasvavaksi.
      */
     public void lisaa(Hylly alkio) throws TietoException {
-        if (lkm >= alkiot.length)
-            throw new TietoException("Liikaa alkioita.");
+        if (lkm >= alkiot.length) {
+            Hylly temp[] = new Hylly[alkiot.length + MAX_PAIKKOJA];
+            for (int i = 0; i < lkm; i++) {
+                temp[i] = alkiot[i];
+            }
+            alkiot = temp;
+        }
         alkiot[lkm] = alkio;
         lkm++;
     }
@@ -63,11 +66,15 @@ public class Hyllyt {
      * Lisaa taulukkoon uuden alkion, ja alustaa sen arvot syotetysta
      * merkkijonosta.
      * @param syote merkkijono, josta arvot alustetaan
-     * @throws TietoException jos taulukossa ei ole tilaa.
      */
-    public void lisaa(String syote) throws TietoException {
-        if (lkm >= alkiot.length)
-            throw new TietoException("Liikaa alkioita");
+    public void lisaa(String syote) {
+        if (lkm >= alkiot.length) {
+            Hylly temp[] = new Hylly[alkiot.length + 5];
+            for (int i = 0; i < lkm; i++) {
+                temp[i] = alkiot[i];
+            }
+            alkiot = temp;
+        }
         alkiot[lkm] = new Hylly(syote);
         lkm++;
     }
@@ -134,7 +141,6 @@ public class Hyllyt {
     /**
      * Lukee teosluettelon tiedostosta.
      * @param tiedNimi tiedoston nimi, joka luetaan
-     * @throws TietoException jos lisaamissa ilmenee ongelmia
      * @example
      * <pre name="test">
      *  #THROWS TietoException
@@ -149,15 +155,12 @@ public class Hyllyt {
      *  uusi.anna(0).toString() === "1|1|JAG|2";
      * </pre>
      */
-    public void lueTiedostosta(String tiedNimi) throws TietoException {
-        try (Scanner fi = new Scanner(
-                new FileInputStream(new File(tiedNimi)))) {
+    public void lueTiedostosta(String tiedNimi) {
+        try (Scanner fi = new Scanner(new FileInputStream(new File(tiedNimi)))) {
             while (fi.hasNext()) {
                 String s = fi.nextLine();
-                if (s.length() == 0)
-                    continue;
-                if (s.charAt(0) == '#')
-                    continue;
+                if (s.length() == 0) continue;
+                if (s.charAt(0) == '#') continue;
                 this.lisaa(s);
             }
         } catch (FileNotFoundException ex) {
@@ -213,11 +216,7 @@ public class Hyllyt {
     public static void main(String[] args) {
         
         Hyllyt hyl = new Hyllyt();
-        try {
-            hyl.lueTiedostosta("testFiles/Hyllyt.dat");
-        } catch (TietoException e) {
-            e.printStackTrace();
-        }
+        hyl.lueTiedostosta("testFiles/Hyllyt.dat");
         for (var h : hyl.alkiot) {
             System.out.println(h);
         }

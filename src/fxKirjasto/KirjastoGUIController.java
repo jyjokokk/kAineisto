@@ -1,5 +1,6 @@
 package fxKirjasto;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -8,15 +9,15 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.*;
 
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
+import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import kirjasto.*;
 
@@ -43,9 +44,11 @@ public class KirjastoGUIController implements Initializable {
     @FXML private Button bottomPoista;
     // Navbarin elementit
     @FXML private MenuItem navClose;
+    @FXML private MenuItem navSave;
     @FXML private MenuItem navDelete;
     @FXML private MenuItem navMuokkaa;
-    @FXML private MenuItem menuHelp;
+    @FXML private MenuItem navHelp;
+    @FXML private MenuItem navTietoa;
     
     @FXML private AnchorPane tiedotPanel;
     @FXML private GridPane tiedotGrid;
@@ -92,10 +95,23 @@ public class KirjastoGUIController implements Initializable {
     private void handlePoistu() {
         poistu();
     }
+    
+
+    @FXML
+    private void handleTallenna() {
+        tallenna();
+    }
+    
+    
+    @FXML
+    private void handleTietoa() {
+        ModalController.showModal(KirjastoGUIController.class.getResource("AboutView.fxml"), "Kirjasto", null, "");
+    }
 
     // ==========================================================
     // Alapuolella ei kayttomliittymaan suoraan liittyvia metodeja tai
     // funktioita
+
 
     private Kirjasto kirjasto;
     private Teos kirjaKohdalla;
@@ -103,7 +119,11 @@ public class KirjastoGUIController implements Initializable {
 
     private void alusta() {
         kirjasto = new Kirjasto();
-        kirjasto.lueTiedostosta();
+        try {
+            kirjasto.lueTiedostosta();
+        } catch (FileNotFoundException ex) {
+            Dialogs.showMessageDialog(ex.getMessage());
+        }
         tiedotPanel.getChildren().removeAll(tiedotGrid);
         tiedotPanel.getChildren().add(tiedotArea);
         taytaLista();
@@ -158,6 +178,7 @@ public class KirjastoGUIController implements Initializable {
      * Hakee ja valitsee id:lla teoksen listasta, ja paivittaa listan.
      * Tarkoitettu ohjelman sisaiselle toiminalle, ei kayttajan kaytettavissa.
      */
+    @SuppressWarnings("unused")
     private void haeId(int id) {
         hakuTulokset.clear();
         for (int i = 0; i < kirjasto.getTeosLkm(); i++) {
@@ -167,15 +188,6 @@ public class KirjastoGUIController implements Initializable {
             hakuTulokset.add(nimi, teos);
         }
         hakuTulokset.setSelectedIndex(id);
-    }
-
-
-    /**
-     * Hakee tietokannasta kaikki teokset jotka vastaavat
-     * hakutermeja.
-     */
-    private void hae() {
-        haeId(0);
     }
 
 
@@ -191,6 +203,18 @@ public class KirjastoGUIController implements Initializable {
             hakuTulokset.add(t.getNimi(), t);
         }
         hakuTulokset.setSelectedIndex(0);
+    }
+    
+    
+    /**
+     * Tallentaa muutokset tiedostoihin.
+     */
+    private void tallenna() {
+        try {
+            kirjasto.tallenna();
+        } catch (TietoException ex) {
+            Dialogs.showMessageDialog(ex.getMessage());
+        }
     }
 
 
@@ -229,9 +253,13 @@ public class KirjastoGUIController implements Initializable {
 
     /**
      * Poistuu ohjelmasta.
+     * TODO: Kysy, halutaanko tallentaa jos on tehty muutoksia.
+     *      Taman saisi tehtya tekemalla "muutotettu" bool flagin,
+     *      joka aina lisattaessa tai poistaessa asettuisi true, ja
+     *      tallentaessa false.
      */
     private void poistu() {
-        eiToimi();
+        Platform.exit();
     }
 
 
@@ -239,13 +267,7 @@ public class KirjastoGUIController implements Initializable {
      * Placeholder toiminalle.
      */
     private void eiToimi() {
-        //
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Ei toimi");
-        alert.setHeaderText(null);
-        alert.setContentText("Ei toimi!");
-        alert.showAndWait();
-
+        Dialogs.showMessageDialog("Ei toimi viela!");
     }
 
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import fi.jyu.mit.ohj2.*;
 
 /**
  * Teosten kokoelma, jokaa osaa mm lisata ja poistaa teoksen.
@@ -17,7 +16,6 @@ public class Teokset implements Iterable<Teos> {
 
     private static final int MAX_TEOKSIA = 5;
     private int lkm = 0;
-    private String tiedostonNimi = "";
     private Teos alkiot[] = new Teos[MAX_TEOKSIA];
 
     /**
@@ -32,11 +30,15 @@ public class Teokset implements Iterable<Teos> {
      * Lisaa uuden alkion tietorakenteeseen.
      * @param alkio joka lisataan.
      * @throws TietoException jos taulukossa ei tilaa.
-     * TODO: Tee dynaamisesti kasvavaksi.
      */
     public void lisaa(Teos alkio) throws TietoException {
-        if (lkm >= alkiot.length)
-            throw new TietoException("Liikaa alkioita.");
+        if (lkm >= alkiot.length) {
+            Teos temp[] = new Teos[alkiot.length + 5];
+            for (int i = 0; i < lkm; i++) {
+                temp[i] = alkiot[i];
+            }
+            alkiot = temp;
+        }
         alkiot[lkm] = alkio;
         lkm++;
     }
@@ -45,12 +47,15 @@ public class Teokset implements Iterable<Teos> {
     /**
      * Lisaa uuden alkion taulukkoon, alustaen sen arvot annetusta merkkijonosta.
      * @param syote Merkkijono, josta arvot alustetaan
-     * @throws TietoException jos taulukossa ei tilaa.
-     * TODO: Tee dynaamisesti kasvavaksi.
      */
-    public void lisaa(String syote) throws TietoException {
-        if (lkm >= alkiot.length)
-            throw new TietoException("Liikaa alkioita.");
+    public void lisaa(String syote) {
+        if (lkm >= alkiot.length) {
+            Teos temp[] = new Teos[alkiot.length + 5];
+            for (int i = 0; i < lkm; i++) {
+                temp[i] = alkiot[i];
+            }
+            alkiot = temp;
+        }
         alkiot[lkm] = new Teos(syote);
         lkm++;
     }
@@ -107,7 +112,6 @@ public class Teokset implements Iterable<Teos> {
     /**
      * Lukee teosluettelon tiedostosta.
      * @param tiedNimi Tiedoston nimi, josta luetaan.
-     * @throws TietoException jos tallentaminen epaonnistuu.
      * <pre name="test">
      *  #THROWS TietoException
      *  Teokset uusi = new Teokset();
@@ -120,7 +124,7 @@ public class Teokset implements Iterable<Teos> {
      *  uusi.getLkm() === 3;
      * </pre>
      */
-    public void lueTiedostosta(String tiedNimi) throws TietoException {
+    public void lueTiedostosta(String tiedNimi) {
         try (Scanner fi = new Scanner(
                 new FileInputStream(new File(tiedNimi)))) {
             while (fi.hasNext()) {
@@ -212,10 +216,10 @@ public class Teokset implements Iterable<Teos> {
      */
     public ArrayList<Teos> hae(String ehto) {
         ArrayList<Teos> tulokset = new ArrayList<Teos>();
-        for (var k : alkiot) {
-            if (k.getNimi().contains(ehto) || k.getTekija().contains(ehto)
-                    || k.getIsbn().contains(ehto))
-                tulokset.add(k);
+        for (int i = 0; i < lkm; i++) {
+            Teos temp = alkiot[i];
+            if (temp.getTekija().contains(ehto))
+                tulokset.add(temp);
         }
         return tulokset;
     }
@@ -235,7 +239,6 @@ public class Teokset implements Iterable<Teos> {
          */
         @Override
         public boolean hasNext() {
-            // TODO Auto-generated method stub
             return kohdalla < getLkm();
         }
 
@@ -248,7 +251,6 @@ public class Teokset implements Iterable<Teos> {
          */
         @Override
         public Teos next() throws NoSuchElementException {
-            // TODO Auto-generated method stub
             if (!hasNext())
                 throw new NoSuchElementException("Seuraavaa olioita ei ole.");
             return anna(kohdalla++);
@@ -317,7 +319,8 @@ public class Teokset implements Iterable<Teos> {
     public Teos haeId(int id) {
         for (int i = 0; i < this.getLkm(); i++) {
             Teos temp = alkiot[i];
-            if (temp.getId() == id) return temp;
+            if (temp.getId() == id)
+                return temp;
         }
         return null;
     }

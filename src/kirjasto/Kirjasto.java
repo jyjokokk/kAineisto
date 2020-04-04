@@ -3,7 +3,6 @@ package kirjasto;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import fi.jyu.mit.ohj2.Mjonot;
 
@@ -91,16 +90,12 @@ public class Kirjasto {
 
     /**
      * Lukee tietorakenteet tiedostoistaan
+     * @throws FileNotFoundException Jos tiedostoa ei loydy.
      */
-    public void lueTiedostosta() {
-        try {
+    public void lueTiedostosta() throws FileNotFoundException {
             kategoriat.lueTiedostosta("aineisto/kategoriat.dat");
             teokset.lueTiedostosta("aineisto/teokset.dat");
             hyllyt.lueTiedostosta("aineisto/hyllyt.dat");
-        } catch (TietoException ex) {
-            // System.err.println("Tiedosta ei loytynyt!" + ex.getMessage());
-            ex.printStackTrace();
-        }
     }
 
 
@@ -185,7 +180,8 @@ public class Kirjasto {
         sb.append(t.toString() + "\n");
         sb.append(kat.getTiedot() + "\n");
         sb.append(h.getTiedot());
-        return sb.toString();
+        return sb.toString().replaceAll("\\|", " \\| ");
+//        return sb.toString();
     }
 
 
@@ -227,7 +223,11 @@ public class Kirjasto {
     public static void main(String[] args) {
 
         Kirjasto kirjasto = new Kirjasto();
-        kirjasto.lueTiedostosta();
+        try {
+            kirjasto.lueTiedostosta();
+        } catch (TietoException e1) {
+            e1.printStackTrace();
+        }
         String s = "3|123-123-123-123|Neuromancer|William Gibson|1984#";
         s += "4|Scifi|Tieteiskirjallisuus on...#";
         s += "WGA|4";

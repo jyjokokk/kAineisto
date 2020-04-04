@@ -32,34 +32,6 @@ public class Kategoriat implements Iterable<Kategoria> {
 
 
     /**
-     * Lisaa uuden kategorian tietokantaan, ja palauttaa sen kid:n.
-     * @param k lisattava alkio
-     * @return Lisatyn alkion id
-     */
-    public Kategoria lisaa(Kategoria k) {
-        Kategoria lisatty = tarkistaDuplikaatti(k);
-        return lisatty;
-    }
-
-
-    /**
-     * Tyhjentaa tietorakenteen.
-     * @example
-     * <pre name="test">
-     *  #THROWS TietoException
-     *  Kategoriat kat = new Kategoriat();
-     *  kat.lueTiedostosta("testFiles/Kategoriat.dat");
-     *  kat.getLkm() === 5;
-     *  kat.tyhjenna();
-     *  kat.getLkm() === 0;
-     * </pre>
-     */
-    public void tyhjenna() {
-        alkiot.clear();
-    }
-
-
-    /**
      * Etsii, onko kategoria jo olemassa tietokannassa. Jos loytyy, palauttaa
      * viitteen tahan olioon. Jos ei, palauttaa viitteen annettuun olioon.
      * @param k Kategoria, jota etsitaan
@@ -80,6 +52,17 @@ public class Kategoriat implements Iterable<Kategoria> {
 
 
     /**
+     * Lisaa uuden kategorian tietokantaan, ja palauttaa sen kid:n.
+     * @param k lisattava alkio
+     * @return Lisatyn alkion id
+     */
+    public Kategoria lisaa(Kategoria k) {
+        Kategoria lisatty = tarkistaDuplikaatti(k);
+        return lisatty;
+    }
+
+
+    /**
      * Alustaa uuden kategorian, ja tarkistaa onko se duplikaatti, ja lopulta
      * palauttaa joko viitteen uuteen lisattyyn kategoriaan, tai alkuperaiseen
      * duplikaattitapauksessa.
@@ -88,6 +71,23 @@ public class Kategoriat implements Iterable<Kategoria> {
      */
     public Kategoria lisaa(String syote) {
         return tarkistaDuplikaatti(new Kategoria(syote));
+    }
+
+
+    /**
+     * Tyhjentaa tietorakenteen.
+     * @example
+     * <pre name="test">
+     *  #THROWS TietoException
+     *  Kategoriat kat = new Kategoriat();
+     *  kat.lueTiedostosta("testFiles/Kategoriat.dat");
+     *  kat.getLkm() === 5;
+     *  kat.tyhjenna();
+     *  kat.getLkm() === 0;
+     * </pre>
+     */
+    public void tyhjenna() {
+        alkiot.clear();
     }
 
 
@@ -210,6 +210,7 @@ public class Kategoriat implements Iterable<Kategoria> {
      * @param args ei kaytossa
      */
     public static void main(String[] args) {
+
         Kategoriat kat = new Kategoriat();
         kat.lueTiedostosta("testFiles/Kategoriat.dat");
         for (var k : alkiot) {
@@ -217,48 +218,6 @@ public class Kategoriat implements Iterable<Kategoria> {
         }
         System.out.println(alkiot.size());
         System.out.println(kat.getLkm());
-        // Kategoria fantasia = new Kategoria();
-        // Kategoria fantasia2 = new Kategoria("Fantasia", "Duplikaatti");
-        // Kategoria scifi = new Kategoria("Scifi", "Scifi on...");
-        // fantasia.vastaaFantasiaRek();
-        // scifi.rekisteroi();
-        // fantasia2.rekisteroi();
-        // Kategoriat.lisaa(fantasia);
-        // System.out.println(Kategoriat.anna(0));
-        // Kategoria viite = Kategoriat.lisaa(fantasia2);
-        // System.out.println(viite);
-        // Kategoriat.lisaa(scifi);
-        // System.out.println(Kategoriat.tarkistaDuplikaatti(new
-        // Kategoria("Scifi", "Duplikaatti...")));
-        //
-        // try {
-        // // Luetaan tiedostosta
-        // Kategoriat.lueTiedostosta("testFiles/Kategoriat.dat");
-        // for (Kategoria k: Kategoriat) {
-        // System.out.println(k);
-        // }
-        // // Tallenetaan tiedostoon
-        // Kategoriat.tallenna("testFiles/KategoriatUlos.dat");
-        // } catch (TietoException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // Kategoriat uusi = new Kategoriat();
-        // Kategoriat toka = new Kategoriat();
-        // try {
-        // uusi.lueTiedostosta("testFiles/Kategoriat.dat");
-        // uusi.tallenna("testFiles/KategoriatUlos.dat");
-        // toka.lueTiedostosta("testFiles/KategoriatUlos.dat");
-        // System.out.println(uusi.equals(toka));
-        //// toka.lueTiedostosta("testFiles/KategoriatEri.dat");
-        // toka.lueTiedostosta("testFiles/KategoriatEri.dat");
-        // System.out.println(uusi.equals(toka));
-        // } catch (TietoException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // // Kategoria scifi2 = new Kategoria("Scifi", "Scifi on...");
-        // // Kategoriat.lisaa(scifi2);
 
     }
 

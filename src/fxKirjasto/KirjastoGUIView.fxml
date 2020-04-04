@@ -132,18 +132,21 @@
         <menus>
           <Menu mnemonicParsing="false" text="Tiedosto">
             <items>
+              <MenuItem fx:id="navSave" mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna"/>
               <MenuItem fx:id="navClose" mnemonicParsing="false" onAction="#handlePoistu" text="Poistu" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Muokkaa">
             <items>
+              <MenuItem fx:id="navLisaa" mnemonicParsing="false" onAction="#handleLisaa" text="Lisaa..." />
               <MenuItem fx:id="navMuokkaa" mnemonicParsing="false" onAction="#handleMuokkaa" text="Muokkaa..." />
               <MenuItem fx:id="navDelete" mnemonicParsing="false" onAction="#handlePoista" text="Poista..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">
             <items>
-              <MenuItem fx:id="menuHelp" mnemonicParsing="false" onAction="#handleHelp" text="Tietoa" />
+              <MenuItem fx:id="navApua" mnemonicParsing="false" onAction="#handleHelp" text="Apua" />
+              <MenuItem fx:id="navTietoja" mnemonicParsing="false" onAction="#handleTietoa" text="Tietoa" />
             </items>
           </Menu>
         </menus>
