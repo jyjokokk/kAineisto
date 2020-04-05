@@ -139,6 +139,7 @@ public class Hylly {
         return maara;
     }
 
+
     /**
      * @param maara to set
      */
@@ -162,7 +163,6 @@ public class Hylly {
     public int getKid() {
         return this.kid;
     }
-    
     
     
     /**

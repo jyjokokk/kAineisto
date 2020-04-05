@@ -186,25 +186,9 @@ public class Hyllyt {
                 paikka.parse(rivi);
                 lisaa(paikka);
             }
+        } catch (IOException e) {
+            throw new TietoException(e.getMessage());
         }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-//        try (Scanner fi = new Scanner(
-//                new FileInputStream(new File(tiedNimi)))) {
-//            while (fi.hasNext()) {
-//                String s = fi.nextLine();
-//                if (s.length() == 0)
-//                    continue;
-//                if (s.charAt(0) == '#')
-//                    continue;
-//                this.lisaa(s);
-//            }
-//        } catch (FileNotFoundException ex) {
-//            System.err.println("Ongelma tiedostoa avatessa!" + ex.getMessage());
-//        }
-
     }
 
 
@@ -268,22 +252,6 @@ public class Hyllyt {
             if (temp.getId() == 4)
                 System.out.println(temp);
         }
-
-        // Hyllyt luettelo = new Hyllyt();
-        // try {
-        // System.out.println("===================");
-        // System.out.println("Luetaan tiedostosta");
-        // System.out.println("===================");
-        // luettelo.lueTiedostosta("hyllyt.txt");
-        // for (int i = 0; i < luettelo.getLkm(); i++) {
-        // Hylly teos = luettelo.anna(i);
-        // System.out.println("Hylly nro: " + i);
-        // teos.tulosta(System.out);
-        // }
-        // luettelo.tallenna("hyllytUlosTest.txt");
-        // } catch (TietoException e) {
-        // e.printStackTrace();
-        // }
 
     }
 }

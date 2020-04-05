@@ -133,6 +133,7 @@
           <Menu mnemonicParsing="false" text="Tiedosto">
             <items>
               <MenuItem fx:id="navSave" mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna"/>
+              <MenuItem fx:id="navPrint" mnemonicParsing="false" onAction="#handleTulosta" text="Tulosta"/>
               <MenuItem fx:id="navClose" mnemonicParsing="false" onAction="#handlePoistu" text="Poistu" />
             </items>
           </Menu>

@@ -45,6 +45,7 @@ public class KirjastoGUIController implements Initializable {
     @FXML private Button bottomPoista;
     // Navbarin elementit
     @FXML private MenuItem navClose;
+    @FXML private MenuItem navPrint;
     @FXML private MenuItem navSave;
     @FXML private MenuItem navDelete;
     @FXML private MenuItem navMuokkaa;
@@ -106,7 +107,13 @@ public class KirjastoGUIController implements Initializable {
         tallenna();
     }
     
-    
+
+    @FXML
+    private void handleTulosta() {
+        tulosta();
+    }
+
+
     @FXML
     private void handleTietoa() {
         ModalController.showModal(KirjastoGUIController.class.getResource("AboutView.fxml"), "Kirjasto", null, "");
@@ -298,6 +305,14 @@ public class KirjastoGUIController implements Initializable {
                 "Tallennetaanko tehdyt muutokset?",
                 "Tallenna",
                 "Jatka tallentamatta");
+    }
+    
+
+    /**
+     * Kaynnistaa ikkunanakyman tulostuksen mahdollisuudelle.
+     */
+    private void tulosta() {
+        eiToimi();
     }
 
 
