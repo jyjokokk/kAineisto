@@ -139,8 +139,11 @@ public class TeosDialogController
                 TeosDialogController.class.getResource("TeosDialogView.fxml"),
                 "Lisaa teos", modalityStage, oletus);
     }
-
-
+    
+    
+    /**
+     * @param args ei kaytossa
+     */
     public static void main(String[] args) {
         System.out.println(String.format("0|%s|%s|%s|%s#0|%s|%s#0|0|%s|%s",
                 "123-123-123-123", "Neuromancer", "William Gibson", "1984",

@@ -58,17 +58,13 @@ public class Kategoria {
      * </pre>
      */
     public void parse(String syote) {
-        if (syote.length() == 0)
-            return;
+        if (syote.length() == 0) return;
         StringBuilder sb = new StringBuilder(syote);
-        this.kid = Mjonot.erotaInt(sb, 0);
-//        setKid(Mjonot.erotaInt(sb, getKid()));
         setKid(Mjonot.erota(sb, '|', getKid()));
-//        sb.deleteCharAt(0);
         this.nimi = Mjonot.erota(sb, '|');
         this.kuvaus = sb.toString();
     }
-
+    
 
     /**
      * Muodostaja kategoria idlla ja kuvauksella
@@ -123,6 +119,17 @@ public class Kategoria {
     /**
      * Antaa teokselle seuraavan kid numeron.
      * @return Kategorian uusi id numero.
+     * @example
+     * <pre name="test">
+     *  Kategoria kat1 = new Kategoria();
+     *  Kategoria kat2 = new Kategoria();
+     *  Kategoria kat3 = new Kategoria();
+     *  kat1.rekisteroi(); kat2.rekisteroi(); kat3.rekisteroi();
+     *  int kid1 = kat1.getId();
+     *  kat1.getId() === kid1;
+     *  kat2.getId() === kid1 + 1;
+     *  kat3.getId() === kid1 + 2;
+     * </pre>
      */
     public int rekisteroi() {
         this.kid = seuraavaKid;
@@ -142,7 +149,7 @@ public class Kategoria {
      */
     @Override
     public String toString() {
-        return this.kid + "|" + this.nimi + "|" + this.kuvaus;
+        return String.format("%d|%s|%s", kid, nimi, kuvaus);
     }
 
 
@@ -152,7 +159,6 @@ public class Kategoria {
      */
     public String getTiedot() {
         return String.format("%d|%s|%s", kid, nimi, kuvaus);
-        // return this.kid + "|" + this.nimi + "|" + this.kuvaus;
     }
 
 
@@ -168,6 +174,17 @@ public class Kategoria {
     /**
      * Tulostetaan kategorian tiedot.
      * @param os tietovirta johon tulostetaan.
+     * @example
+     * <pre name="test">
+     * #import java.io.ByteArrayOutputStream;
+     * ByteArrayOutputStream out = new ByteArrayOutputStream(); 
+     * Kategoria kat1 = new Kategoria("2|Scifi|Scifi on...");
+     * Kategoria kat2 = new Kategoria();
+     * kat1.tulosta(out);
+     * out.toString() === "1|Scifi|Scifi on...";
+     * kat2.tulosta(out);
+     * out.toString === "0||";
+     * </pre>
      */
     public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));

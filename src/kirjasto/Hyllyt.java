@@ -28,6 +28,14 @@ public class Hyllyt {
      * Lisaa uuden alkion tietorakenteeseen.
      * @param alkio joka lisataan.
      * @throws TietoException jos taulukossa ei tilaa.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Hyllyt hyllyt = new Hyllyt();
+     *  Hylly h1 = new Hylly(), h2 = new Hylly(), h3 = new Hylly();
+     *  hyllyt.lisaa(h1); hyllyt.lisaa(h2); hyllyt.lisaa(h3);
+     *  hyllyt.getLkm() === 3;
+     * </pre>
      */
     public void lisaa(Hylly alkio) throws TietoException {
         if (lkm >= alkiot.length) {
@@ -48,8 +56,10 @@ public class Hyllyt {
      * <pre name="test">
      * #THROWS TietoException
      *  Hyllyt hyl = new Hyllyt();
-     *  hyl.lueTiedostosta("testFiles/Hyllyt.dat");
-     *  hyl.getLkm() === 4;
+     *  hyl.lisaa(new Hylly());
+     *  hyl.lisaa(new Hylly());
+     *  hyl.lisaa(new Hylly());
+     *  hyl.getLkm() === 3;
      *  hyl.tyhjenna();
      *  hyl.getLkm() === 0;
      *  hyl.anna(4); #THROWS IndexOutOfBoundsException
@@ -65,6 +75,15 @@ public class Hyllyt {
      * Lisaa taulukkoon uuden alkion, ja alustaa sen arvot syotetysta
      * merkkijonosta.
      * @param syote merkkijono, josta arvot alustetaan
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Hyllyt hyl = new Hyllyt();
+     *  hyl.lisaa("1|2|GWB|0"); hyl.lisaa("2|1|ABC|0");
+     *  hyl.getLkm() === 2;
+     *  hyl.anna(0).toString() === "1|2|GWB|0";
+     *  hyl.haeId(2).toString() === "2|1|ABC|0";
+     * </pre>
      */
     public void lisaa(String syote) {
         if (lkm >= alkiot.length) {
@@ -93,17 +112,13 @@ public class Hyllyt {
      * </pre>
      */
     public boolean equals(Hyllyt comp) {
-        String tama = "";
-        for (int i = 0; i < lkm; i++) {
-            tama += alkiot[i].toString();
+        if (this.getLkm() != comp.getLkm()) return false;
+        for (int i = 0; i < this.getLkm(); i++) {
+            if (this.anna(i).toString().equals(comp.anna(i).toString())) 
+                continue;
+            return false;
         }
-        String toinen = "";
-        for (int i = 0; i < comp.getLkm(); i++) {
-            toinen += comp.anna(i).toString();
-        }
-        if (tama.equals(toinen))
-            return true;
-        return false;
+        return true;
     }
 
 
@@ -116,11 +131,11 @@ public class Hyllyt {
      * #THROWS TietoException
      *  Hyllyt uusi = new Hyllyt();
      *  Hyllyt toka = new Hyllyt();
-     *  uusi.lueTiedostosta("testFiles/Hyllyt.dat");
-     *  uusi.tallenna("testFiles/HyllytUlos.dat");
-     *  toka.lueTiedostosta("testFiles/HyllytUlos.dat");
+     *  uusi.lueTiedostosta("testFiles/hyllyt.dat");
+     *  uusi.tallenna("testFiles/hyllytUlos.dat");
+     *  toka.lueTiedostosta("testFiles/hyllytUlos.dat");
      *  uusi.equals(toka) === true;
-     *  toka.lueTiedostosta("testFiles/HyllytEri.dat");
+     *  toka.lueTiedostosta("testFiles/hyllytEri.dat");
      *  System.out.println(uusi.equals(toka));
      *  uusi.equals(toka) === false;
      * </pre>
@@ -155,13 +170,11 @@ public class Hyllyt {
      *  #THROWS TietoException
      *  Hyllyt uusi = new Hyllyt();
      *  Hyllyt toka = new Hyllyt();
-     *  uusi.lueTiedostosta("testFiles/Hyllyt.dat");
-     *  toka.lueTiedostosta("testFiles/Hyllyt.dat");
+     *  uusi.lueTiedostosta("testFiles/hyllyt.dat");
+     *  toka.lueTiedostosta("testFiles/hyllyt.dat");
      *  uusi.equals(toka) === true;
-     *  toka.lueTiedostosta("testFiles/HyllytEri.dat");
+     *  toka.lueTiedostosta("testFiles/hyllytEri.dat");
      *  uusi.equals(toka) === false;
-     *  uusi.getLkm() === 4;
-     *  uusi.anna(0).toString() === "1|1|JAG|2";
      * </pre>
      */
     public void lueTiedostosta(String tiedNimi) throws TietoException {
@@ -242,7 +255,7 @@ public class Hyllyt {
 
         Hyllyt hyl = new Hyllyt();
         try {
-            hyl.lueTiedostosta("testFiles/Hyllyt.dat");
+            hyl.lueTiedostosta("testFiles/hyllyt.dat");
         } catch (TietoException e) {
             e.printStackTrace();
         }

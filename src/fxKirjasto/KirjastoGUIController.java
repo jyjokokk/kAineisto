@@ -189,9 +189,10 @@ public class KirjastoGUIController implements Initializable {
     /**
      * Hakee ja valitsee id:lla teoksen listasta, ja paivittaa listan.
      * Tarkoitettu ohjelman sisaiselle toiminalle, ei kayttajan kaytettavissa.
+     * @throws TietoException jos id:n avulla ei loydy teosta.
      */
     @SuppressWarnings("unused")
-    private void haeId(int id) {
+    private void haeId(int id) throws TietoException {
         hakuTulokset.clear();
         for (int i = 0; i < kirjasto.getTeosLkm(); i++) {
             Hylly kirja = kirjasto.anna(i);

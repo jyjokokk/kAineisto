@@ -11,7 +11,8 @@ import java.io.*;
  */
 public class Kategoriat implements Iterable<Kategoria> {
 
-    private static final ArrayList<Kategoria> alkiot = new ArrayList<Kategoria>(0);
+    private final ArrayList<Kategoria> alkiot = new ArrayList<Kategoria>(0);
+    
 
     /**
      * Perusmuodostaja
@@ -55,6 +56,18 @@ public class Kategoriat implements Iterable<Kategoria> {
      * Lisaa uuden kategorian tietokantaan, ja palauttaa sen kid:n.
      * @param k lisattava alkio
      * @return Lisatyn alkion id
+     * @example
+     * <pre name="test">
+     *  Kategoriat kategoriat = new Kategoriat();
+     *  Kategoria kat1 = new Kategoria(), kat2 = new Kategoria();
+     *  kat1.parse("2|Scifi|Kuvaus|"); kat2.parse("2|Scifi|Placeholder");
+     *  kategoriat.lisaa(kat1);
+     *  kat2 = kategoriat.lisaa(kat2);
+     *  kat2.equals(kat1);
+     *  Kategoria kat3 = new Kategoria();
+     *  kat3 = kategoriat.lisaa(new Kategoria("4|Kauhu|Kuvaus"));
+     *  kat3.equals(kat3) === true;
+     * </pre>
      */
     public Kategoria lisaa(Kategoria k) {
         Kategoria lisatty = tarkistaDuplikaatti(k);
@@ -68,6 +81,19 @@ public class Kategoriat implements Iterable<Kategoria> {
      * duplikaattitapauksessa.
      * @param syote Merkkijono, josta parsetaan.
      * @return Viite uuteen merkkijonoon, ja vanhaan duplikaatio tapauksessa.
+     * @example
+     * <pre name="test">
+     *  Kategoriat kategoriat = new Kategoriat();
+     *  kategoriat.tyhjenna();
+     *  Kategoria kat1 = new Kategoria(), kat2 = new Kategoria(), kat3 = new Kategoria();
+     *  kat1.parse("2|Scifi|Kuvaus|"); kat2.parse("2|Scifi|Placeholder");
+     *  kat1 = kategoriat.lisaa("1|Fantasia|Kuvaus");
+     *  kat2 = kategoriat.lisaa("2|Scifi|Placeholder");
+     *  kat3 = kategoriat.lisaa("3|Fantasia|Tarkempi kuvaus");
+     *  kat2.toString() === "2|Scifi|Placeholder";
+     *  kat1.toString() === "1|Fantasia|Tarkempi kuvaus";
+     *  kat3.toString() === "1|Fantasia|Tarkempi kuvaus";
+     * </pre>
      */
     public Kategoria lisaa(String syote) {
         return tarkistaDuplikaatti(new Kategoria(syote));
@@ -80,8 +106,9 @@ public class Kategoriat implements Iterable<Kategoria> {
      * <pre name="test">
      *  #THROWS TietoException
      *  Kategoriat kat = new Kategoriat();
-     *  kat.lueTiedostosta("testFiles/Kategoriat.dat");
-     *  kat.getLkm() === 5;
+     *  kat.tyhjenna();
+     *  kat.lueTiedostosta("testFiles/kategoriat.dat");
+     *  kat.getLkm() === 6;
      *  kat.tyhjenna();
      *  kat.getLkm() === 0;
      * </pre>
@@ -105,6 +132,19 @@ public class Kategoriat implements Iterable<Kategoria> {
      * @param i alkion indeksi
      * @throws IndexOutOfBoundsException jos indeksi ei alkioissa
      * @return viite alkioon
+     * @example
+     * <pre name="test">
+     *  Kategoriat kategoriat = new Kategoriat();
+     *  kategoriat.tyhjenna();
+     *  Kategoria kat1 = new Kategoria(), kat2 = new Kategoria();
+     *  Kategoria kat3 = new Kategoria();
+     *  kat1.parse("1|Fantasia|Kuvaus"); kat2.parse("2|Scifi|Placeholder");
+     *  kat3.parse("3|Kauhu|Descriptor");
+     *  kategoriat.lisaa(kat1); kategoriat.lisaa(kat2); kategoriat.lisaa(kat3); 
+     *  kategoriat.anna(0) === kat1;
+     *  kategoriat.anna(1) === kat2;
+     *  kategoriat.anna(2) === kat3;
+     * </pre>
      */
     public Kategoria anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || i >= alkiot.size())
@@ -115,12 +155,26 @@ public class Kategoriat implements Iterable<Kategoria> {
 
     /**
      * Hakee viitteen alkioon, jonka kategoria-id on i.
-     * @param i id jota haetaan
+     * @param id jota haetaan
      * @return Viite alkioon, jos loytyy. Null, jos ei.
+     * @example
+     * <pre name="test">
+     *  Kategoriat kategoriat = new Kategoriat();
+     *  kategoriat.tyhjenna();
+     *  Kategoria kat1 = new Kategoria(), kat2 = new Kategoria(), kat3 = new Kategoria();
+     *  kat1 = kategoriat.lisaa("1|Fantasia|Kuvaus");
+     *  kat2 = kategoriat.lisaa("2|Scifi|Placeholder");
+     *  kat3 = kategoriat.lisaa("3|Fantasia|Tarkempi kuvaus");
+     *  kategoriat.haeId(1) === kat1;
+     *  kategoriat.haeId(1) === kat3;
+     *  kategoriat.haeId(2) === kat2;
+     *  kategoriat.haeId(3) === null;
+     *  
+     * </pre>
      */
-    public Kategoria haeId(int i) {
+    public Kategoria haeId(int id) {
         for (var k : alkiot) {
-            if (k.getKid() == i)
+            if (k.getKid() == id)
                 return k;
         }
         return null;
@@ -136,12 +190,11 @@ public class Kategoriat implements Iterable<Kategoria> {
      * #THROWS TietoException
      *  Kategoriat uusi = new Kategoriat();
      *  Kategoriat toka = new Kategoriat();
-     *  uusi.lueTiedostosta("testFiles/Kategoriat.dat");
-     *  uusi.tallenna("testFiles/KategoriatUlos.dat");
-     *  toka.lueTiedostosta("testFiles/KategoriatUlos.dat");
-     *  uusi.equals(toka) === true;
-     *  toka.lueTiedostosta("testFiles/KategoriatEri.dat");
-     *  System.out.println(uusi.equals(toka));
+     *  uusi.lueTiedostosta("testFiles/kategoriat.dat");
+     *  toka.lueTiedostosta("testFiles/kategoriatEri.dat");
+     *  uusi.equals(toka) === false;
+     *  toka.tyhjenna();
+     *  toka.lueTiedostosta("testFiles/kategoriat.dat");
      *  uusi.equals(toka) === true;
      * </pre>
      */
@@ -168,17 +221,27 @@ public class Kategoriat implements Iterable<Kategoria> {
      * Vertaa onko taman olion tiedot samat, kuin verrattavan.
      * @param toinen olio johon verrataan
      * @return Onko sisalto sama.
+     * @example
+     * <pre name="test">
+     *  Kategoriat tama = new Kategoriat();
+     *  Kategoriat toinen = new Kategoriat();
+     *  tama.lisaa(new Kategoria());
+     *  toinen.lisaa("2|Scifi|Placeholder");
+     *  tama.equals(tama) === true;
+     *  tama.equals(toinen) === false;
+     *  toinen.tyhjenna(); tama.tyhjenna();
+     *  tama.equals(toinen) === true;
+     * </pre>
      */
     public boolean equals(Kategoriat toinen) {
-        String tama = "";
-        String toka = "";
+        if (this.getLkm() != toinen.getLkm())
+            return false;
         for (int i = 0; i < this.getLkm(); i++) {
-            tama += this.anna(i).toString();
+            if (this.anna(i).toString().equals(toinen.anna(i).toString()))
+                continue;
+            return false;
         }
-        for (int i = 0; i < toinen.getLkm(); i++) {
-            toka += toinen.anna(i).toString();
-        }
-        return tama.equals(toka);
+        return true;
     }
 
 
@@ -189,11 +252,11 @@ public class Kategoriat implements Iterable<Kategoria> {
      *  #THROWS TietoException
      *  Kategoriat uusi = new Kategoriat();
      *  Kategoriat toka = new Kategoriat();
-     *  uusi.lueTiedostosta("testFiles/Kategoriat.dat");
-     *  toka.lueTiedostosta("testFiles/Kategoriat.dat");
+     *  uusi.lueTiedostosta("testFiles/kategoriat.dat");
+     *  toka.lueTiedostosta("testFiles/kategoriat.dat");
      *  uusi.equals(toka) === true;
-     *  toka.lueTiedostosta("testFiles/KategoriatEri.dat");
-     *  uusi.equals(toka) === true;
+     *  toka.lueTiedostosta("testFiles/kategoriatEri.dat");
+     *  uusi.equals(toka) === false;
      * </pre>
      */
     public void lueTiedostosta(String tiedNimi) {
@@ -219,19 +282,16 @@ public class Kategoriat implements Iterable<Kategoria> {
     public static void main(String[] args) {
 
         Kategoriat kat = new Kategoriat();
-        kat.lueTiedostosta("testFiles/Kategoriat.dat");
-        for (var k : alkiot) {
-            System.out.println(k);
-        }
-        Kategoria hist = new Kategoria("0|Historia|Historiallinen...");
-        hist.rekisteroi();
-        kat.lisaa(hist);
-        System.out.println(alkiot.size());
+        kat.lueTiedostosta("testFiles/kategoriat.dat");
         System.out.println(kat.getLkm());
-        for (var k : alkiot) {
-            System.out.println(k);
+        Kategoriat tama = new Kategoriat();
+        Kategoriat toinen = new Kategoriat();
+        tama.lueTiedostosta("testFiles/kategoriat.dat");
+        toinen.lueTiedostosta("testFiles/kategoriat.dat");
+        for (int i = 0; i < tama.getLkm(); i++) {
+            System.out.println(tama.anna(i).toString().equals(toinen.anna(i).toString()));
         }
-
+//
     }
 
 }

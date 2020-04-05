@@ -24,6 +24,11 @@ public class Teos {
     
     /**
      * Vakiomuodostaja.
+     * @example
+     * <pre name="test">
+     *  Teos t1 = new Teos();
+     *  t1.toString() === "0||||0";
+     * </pre>
      */
     public Teos() {
         // Alustukset hoidettu esittelyssa.
@@ -35,9 +40,11 @@ public class Teos {
      * @param syote Merkkijono, josta parsetaan.
      * @example
      * <pre name="test">
-     *  Teos uusi = new Teos("1|123-123-123-123|Uusi Kirja|Matti Meikalainen|1995");
-     *  uusi.toString() === "1|123-123-123-123|Uusi Kirja|Matti Meikalainen|1995";
+     *  Teos uusi = new Teos("4|123-123-123-123|Uusi Kirja|Matti Meikalainen|1995");
+     *  uusi.getId() === 4; uusi.getIsbn() === "123-123-123-123";
+     *  Teos uusi = new Teos("0"); #THROWS TietoException
      * </pre>
+     * TODO: Regex-oikeellisuustarkistin, ehka Throw vaaranlaisesta jonosta.
      */
     public Teos(String syote) {
         this.parse(syote);
@@ -121,10 +128,9 @@ public class Teos {
      *  Teos t1 = new Teos();
      *  t1.getId() === 0;
      *  t1.rekisteroi();
-     *  t1.getId() === 2;
      *  Teos t2 = new Teos();
      *  t2.rekisteroi();
-     *  t2.getId() === 3;
+     *  t2.getId() === 6;
      *  int n1 = t1.getId();
      *  int n2 = t2.getId();
      *  n1 === n2 - 1;
@@ -151,6 +157,7 @@ public class Teos {
      * seuraavaId tulee pysymaan suurempana kuin
      * suurin esiintyva id.
      * @param id joka asetetaan.
+     * @example
      */
     private void setId(int id) {
         this.id = id;
@@ -170,6 +177,17 @@ public class Teos {
     /**
      * Tulostetaan teoksen tiedot.
      * @param os tietovirta johon tulostetaan.
+     * @example
+     * <pre name="test">
+     * #import java.io.ByteArrayOutputStream;
+     * ByteArrayOutputStream out = new ByteArrayOutputStream();
+     * Teos lotr = new Teos(); teos.vastaaLotr();
+     * lotr.tulosta(out);
+     * out.toString() === "1|978-0544003415|The Lord of the Rings|J.R.R. Tolkien|1954";
+     * lotr = new Teos();
+     * lotr.tulosta(out);
+     * out.toString() === "0||||0";
+     * </pre>
      */
     public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
@@ -178,7 +196,7 @@ public class Teos {
 
     /**
      * Palauttaa teoksen ISBN:n
-     * @return isbn
+     * @return isbn numero
      */
     public String getIsbn() {
         return isbn;
@@ -197,7 +215,7 @@ public class Teos {
 
     /**
      * Palauttaa teoksen nimen
-     * @return nimi
+     * @return nimi teoksen nimi
      */
     public String getNimi() {
         return nimi;

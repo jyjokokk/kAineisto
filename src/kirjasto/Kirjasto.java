@@ -138,8 +138,9 @@ public class Kirjasto {
      * Etsii teoksen sen id:n avulla, ja palauttaa sen nimen.
      * @param h Hyllypaikka
      * @return Teoksen nimi.
+     * @throws TietoException jos IDn avulla ei loydy yhtaan teosta
      */
-    public String getTeosNimi(Hylly h) {
+    public String getTeosNimi(Hylly h) throws TietoException {
         Teos t = teokset.haeId(h.getId());
         return t.getNimi();
     }
@@ -170,8 +171,9 @@ public class Kirjasto {
      * Antaa hyllypaikassa olevan teoksen kaikki tiedot.
      * @param h hyllypaikassa oleva paikka
      * @return Teoksen kaikki tiedot merkkijonona.
+     * @throws TietoException jos annetuilla arvoilla ei loydy teoksia.
      */
-    public String annaTiedot(Hylly h) {
+    public String annaTiedot(Hylly h) throws TietoException {
         StringBuilder sb = new StringBuilder();
         Teos t = teokset.haeId(h.getId());
         Kategoria kat = kategoriat.haeId(h.getKid());
@@ -186,8 +188,9 @@ public class Kirjasto {
      * Tulostaa kirjan tiedot annettuun tulostusvirtaan.
      * @param os tulostusvirta
      * @param h Hyllypaikka, jonka tiedot tulostetaan.
+     * @throws TietoException jos ongelmia teoksen loytymisessa.
      */
-    public void tulostaTiedot(PrintStream os, Hylly h) {
+    public void tulostaTiedot(PrintStream os, Hylly h) throws TietoException {
         os.println(annaTiedot(h));
     }
 
@@ -196,8 +199,9 @@ public class Kirjasto {
      * Tulostaa kaikkien hyllyssa olevien teosten tiedot annettuun
      * PrintStreamiin.
      * @param os PrintSteam, johon tulostetaan.
+     * @throws TietoException jos etsiminen epaonnistuu
      */
-    public void tulostaKaikki(PrintStream os) {
+    public void tulostaKaikki(PrintStream os) throws TietoException {
         os.println("============================================");
         os.println("Kaikkien aineistoon kuuluvien teosten tiedot");
         os.println("============================================\n");
@@ -207,7 +211,6 @@ public class Kirjasto {
             return;
         }
         for (int i = 0; i < this.getTeosLkm(); i++) {
-//            os.println(this.anna(i));
             tulostaTiedot(os, this.anna(i));
             os.println();
         }
