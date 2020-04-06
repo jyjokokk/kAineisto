@@ -139,14 +139,14 @@ public class Teokset implements Iterable<Teos> {
      * @throws TietoException jos tallentaminen epaonnistuu.
      */
     public void tallenna(String tiedNimi) throws TietoException {
-        File backupFile = new File("backup_" + tiedNimi);
-        File saveFile = new File(tiedNimi);
+        File backupFile = new File(tiedNimi + ".bak");
+        File saveFile = new File(tiedNimi + ".dat");
         backupFile.delete();
         saveFile.renameTo(backupFile);
 
-        try (PrintWriter fo = new PrintWriter(
-                new FileWriter(saveFile.getCanonicalPath()))) {
+        try (PrintWriter fo = new PrintWriter(new FileWriter(saveFile.getCanonicalPath()))) {
             fo.println("# Teosten tallenustiedosto");
+            fo.println("# Viimeiksi tallennettu: " + java.time.LocalTime.now());
             for (int i = 0; i < lkm; i++) {
                 Teos teos = alkiot[i];
                 fo.println(teos.toString());
@@ -191,16 +191,16 @@ public class Teokset implements Iterable<Teos> {
         }
     }
 
-//     * #THROWS TietoException
-//     *  Teokset tama = new Teokset();
-//     *  Teokset toinen = new Teokset();
-//     *  tama.lueTiedostosta("testFiles/teokset.dat");
-//     *  toinen.lueTiedostosta("testFiles/teoksetEri.dat");
-//     *  tama.equals(tama) === true;
-//     *  tama.equals(toinen) === false;
-//     *  toinen.tyhjenna();
-//     *  toinen.lueTiedostosta("testFiles/teokset.dat");
-//     *  tama.equals(toinen) === false;
+    //     * #THROWS TietoException
+    //     *  Teokset tama = new Teokset();
+    //     *  Teokset toinen = new Teokset();
+    //     *  tama.lueTiedostosta("testFiles/teokset.dat");
+    //     *  toinen.lueTiedostosta("testFiles/teoksetEri.dat");
+    //     *  tama.equals(tama) === true;
+    //     *  tama.equals(toinen) === false;
+    //     *  toinen.tyhjenna();
+    //     *  toinen.lueTiedostosta("testFiles/teokset.dat");
+    //     *  tama.equals(toinen) === false;
 
     /**
      * Vertaa, onko olion sisaltamat tiedot samat kuin verratavan.
@@ -298,7 +298,34 @@ public class Teokset implements Iterable<Teos> {
         return tulokset;
     }
 
+
     /**
+     * @param args ei kaytossa
+     */
+    public static void main(String[] args) {
+
+        Teokset luettelo = new Teokset();
+        Teokset tama = new Teokset();
+        Teokset toinen = new Teokset();
+        try {
+            tama.lueTiedostosta("testFiles/teokset.dat");
+            toinen.lueTiedostosta("testFiles/teoksetEri.dat");
+            System.out.println(tama.equals(tama));
+            System.out.println(tama.equals(toinen));
+            toinen.tyhjenna();
+            toinen.lueTiedostosta("testFiles/teokset.dat");
+            System.out.println(tama.equals(luettelo));
+            System.out.println(tama.equals(toinen));
+        } catch (TietoException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    /**
+     * Iteraattori Teokset-luokalle.
      * @author jyrki
      * @version Apr 4, 2020
      */
@@ -351,31 +378,6 @@ public class Teokset implements Iterable<Teos> {
     @Override
     public Iterator<Teos> iterator() {
         return new TeosIterator();
-    }
-
-
-    /**
-     * @param args ei kaytossa
-     */
-    public static void main(String[] args) {
-
-        Teokset luettelo = new Teokset();
-        Teokset tama = new Teokset();
-        Teokset toinen = new Teokset();
-        try {
-            tama.lueTiedostosta("testFiles/teokset.dat");
-            toinen.lueTiedostosta("testFiles/teoksetEri.dat");
-            System.out.println(tama.equals(tama));
-            System.out.println(tama.equals(toinen));
-            toinen.tyhjenna();
-            toinen.lueTiedostosta("testFiles/teokset.dat");
-            System.out.println(tama.equals(luettelo));
-            System.out.println(tama.equals(toinen));
-        } catch (TietoException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
 }

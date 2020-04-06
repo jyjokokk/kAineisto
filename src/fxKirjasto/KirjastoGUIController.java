@@ -142,6 +142,7 @@ public class KirjastoGUIController implements Initializable {
         saveStatus = true;
         tiedotPanel.getChildren().removeAll(tiedotGrid);
         tiedotPanel.getChildren().add(tiedotArea);
+        tiedotArea.setEditable(false);
         taytaLista();
         hakuTulokset.addSelectionListener(e -> naytaTeos());
     }
@@ -232,6 +233,7 @@ public class KirjastoGUIController implements Initializable {
     private void tallenna() {
         try {
             kirjasto.tallenna();
+            saveStatus = true;
         } catch (TietoException ex) {
             Dialogs.showMessageDialog(ex.getMessage());
         }
@@ -253,12 +255,13 @@ public class KirjastoGUIController implements Initializable {
         try {
             String s = TeosDialogController.kysyArvot(null, "Syota uuden kirjan tiedot");
             if (s == null) return;
-            kirjasto.lisaa(s);
+            int id = kirjasto.lisaa(s);
+            saveStatus = false;
+            taytaLista();
+            hakuTulokset.setSelectedIndex(id);
         } catch (TietoException e) {
             Dialogs.showMessageDialog(e.getMessage());
         }
-        saveStatus = false;
-        taytaLista();
     }
 
 

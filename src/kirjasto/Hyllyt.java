@@ -1,12 +1,9 @@
 package kirjasto;
 
 import java.io.*;
-//import fi.jyu.mit.ohj2.*;
 
 /**
  * Hyllyten kokoelma, jokaa osaa mm lisata ja poistaa teoksen.
- * TODO: Selvita onnistuisiko yksittaiset sailomisluokat joka tyypille korvata <TYPE> tyylisella ratkaisulla.
- * TODO: Toimisi varmaan todella paljon paremmin listalla toteutettuna.
  * @author jyrki
  * @version Mar 25, 2020
  */
@@ -141,13 +138,15 @@ public class Hyllyt {
      * </pre>
      */
     public void tallenna(String tiedNimi) throws TietoException {
-        File backupFile = new File("backup_" + tiedNimi);
-        File saveFile = new File(tiedNimi);
+        File backupFile = new File(tiedNimi + ".bak");
+        File saveFile = new File(tiedNimi + ".dat");
         backupFile.delete();
         saveFile.renameTo(backupFile);
-        
+ 
+
         try (PrintWriter fo = new PrintWriter(new FileWriter(saveFile.getCanonicalPath())) ) {
             fo.println("# Teosten tallenustiedosto");
+            fo.println("# Viimeksi tallennettu: " + java.time.LocalTime.now());
             for (int i = 0; i < lkm; i++) {
                 Hylly hylly = alkiot[i];
                 fo.println(hylly.toString());
@@ -208,7 +207,7 @@ public class Hyllyt {
      * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
      */
     public Hylly anna(int i) throws IndexOutOfBoundsException {
-        if (i < 0 || lkm < i)
+        if (i < 0)
             throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
         return alkiot[i];
     }
@@ -230,6 +229,21 @@ public class Hyllyt {
         throw new TietoException(
                 String.format("Hyllypaikkaa id:lla '%d' ei loydy!", id));
     }
+    
+    
+    /**
+     * Etsii ja palauttaa olion indeksin tietorakenteessa
+     * id:n avulla
+     * @param id mita etsitaan
+     * @return paikka tietorakenteessa.
+     */
+    public int haeIx(int id) {
+        for (int i = 0; i < lkm; i++) {
+            if (alkiot[i].getId() == id) return i;
+        }
+        return id;
+        
+    }
 
 
     /**
@@ -239,7 +253,7 @@ public class Hyllyt {
 
         Hyllyt hyl = new Hyllyt();
         try {
-            hyl.lueTiedostosta("testFiles/hyllyt.dat");
+            hyl.lueTiedostosta("testFiles/hyllyt");
         } catch (TietoException e) {
             e.printStackTrace();
         }

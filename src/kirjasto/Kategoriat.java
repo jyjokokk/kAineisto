@@ -7,9 +7,9 @@ import java.io.*;
  * Luokka kategorioille.
  * @author jyrki
  * @version Mar 25, 2020
- * TODO: Yleisen toiminallisuuden kannalta, TreeMap voisi olla parempi tietorakenne ArrayList.
  */
 public class Kategoriat implements Iterable<Kategoria> {
+
 
     private final ArrayList<Kategoria> alkiot = new ArrayList<Kategoria>(0);
     
@@ -199,13 +199,14 @@ public class Kategoriat implements Iterable<Kategoria> {
      * </pre>
      */
     public void tallenna(String tiedNimi) throws TietoException {
-        File backupFile = new File("backup_" + tiedNimi);
-        File saveFile = new File(tiedNimi);
-        backupFile.delete();
+        File backupFile = new File(tiedNimi + ".bak");
+        File saveFile = new File(tiedNimi + ".dat");
+        backupFile.delete(); // IDEA: Move all .bak files to their own directory.
         saveFile.renameTo(backupFile);
         
         try (PrintWriter fo = new PrintWriter(new FileWriter(saveFile.getCanonicalPath())) ) {
             fo.println("# Kategorioiden tallenustiedosto");
+            fo.println("# Viimeiksi tallennettu: " + java.time.LocalTime.now());
             for (var kat : alkiot) {
                 fo.println(kat.toString());
             }

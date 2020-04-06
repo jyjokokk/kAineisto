@@ -1,17 +1,17 @@
 package fxKirjasto;
 
 import java.net.URL;
-import java.util.EventListener;
+//import java.util.EventListener;
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.*;
-import javafx.beans.value.ChangeListener;
+//import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import kirjasto.Kirjasto;
+//import kirjasto.Kirjasto;
 
 /**
  * Controller dialogi-ikkunalle, jolla lisataan uutta aineistoa

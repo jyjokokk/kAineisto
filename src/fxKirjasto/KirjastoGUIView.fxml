@@ -100,11 +100,11 @@
                         <Label text="ISBN:" GridPane.rowIndex="2" />
                         <Label text="Status:" GridPane.rowIndex="3" />
                         <Label text="Sijainti:" GridPane.rowIndex="4" />
-                        <TextField fx:id="tietoTeos" GridPane.columnIndex="1" />
-                        <TextField fx:id="tietoTekija" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="tietoISBN" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="tietoStatus" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField fx:id="tietoSijainti" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="tietoTeos" editable="false" GridPane.columnIndex="1" />
+                        <TextField fx:id="tietoTekija" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="tietoISBN" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="tietoStatus" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="tietoSijainti" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

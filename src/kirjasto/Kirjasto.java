@@ -19,9 +19,10 @@ public class Kirjasto {
     /**
      * Lisaa aineiston kokoelmaan, parseamalla sen merkkijonosta.
      * @param s merkkijono joka annetaan.
+     * @return Onnistuneesti lisatyn aineiston id.
      * @throws TietoException jos ilmenee ongelma lisatessa
      */
-    public void lisaa(String s) throws TietoException {
+    public int lisaa(String s) throws TietoException {
         StringBuilder sb = new StringBuilder(s);
         String teosInfo = Mjonot.erota(sb, '#');
         String katInfo = Mjonot.erota(sb, '#');
@@ -32,6 +33,7 @@ public class Kirjasto {
         Hylly paikka = new Hylly(hyllyInfo);
         teokset.lisaa(teos);
         hyllyt.lisaa(paikka);
+        return hyllyt.haeIx(paikka.getId());
     }
 
 
@@ -78,9 +80,9 @@ public class Kirjasto {
      * @throws TietoException jos ongelmia 
      */
     public void tallenna() throws TietoException {
-        kategoriat.tallenna("aineisto/kategoriat.dat");
-        teokset.tallenna("aineisto/teokset.dat");
-        hyllyt.tallenna("aineisto/hyllyt.dat");
+        kategoriat.tallenna("aineisto/kategoriat");
+        teokset.tallenna("aineisto/teokset");
+        hyllyt.tallenna("aineisto/hyllyt");
     }
 
 
@@ -150,6 +152,13 @@ public class Kirjasto {
      * Hakee hyllypaikkojen tietorakenteen indeksissa i olevan viitteen 
      * @param i indeksi
      * @return indeksissa i oleva teos
+     * @example
+     * <pre name="test">
+     *   Kirjasto kirjasto = new Kirjasto();
+     *   kirjasto.lisaa("1|1|SDD|0"); kirjasto.lisaa("2|1|ELO|2");
+     *   kirjasto.lisaa("3|2|EFG|1"); kirjasto.lisaa("4|3|ITA|4");
+     *   
+     * </pre>
      */
     public Hylly anna(int i) {
         return hyllyt.anna(i);
