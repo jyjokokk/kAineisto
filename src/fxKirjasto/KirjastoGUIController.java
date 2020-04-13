@@ -10,8 +10,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
+import java.awt.Desktop;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
@@ -76,12 +80,12 @@ public class KirjastoGUIController implements Initializable {
     private Button teosPeruuta;
     @FXML
     private Button toesLisaa;
-
     // Valia-aikainen TextField tulostukselle.
     @FXML
     private AnchorPane tiedotPanel;
     @FXML
     private GridPane tiedotGrid;
+
 
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
@@ -266,10 +270,18 @@ public class KirjastoGUIController implements Initializable {
 
 
     /**
-     * Nayttaa tiedot ohjelmasta ja haettavasta tietokannasta.
+     * Avaa tiedoston suunnitelman kayttojarjestelman maarittamassa selaimessa.
      */
     private void help() {
-        eiToimi();
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            URI uri = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2020k/ht/jyjokokk");
+            desktop.browse(uri);
+        } catch (URISyntaxException e) {
+            Dialogs.showMessageDialog("Ongelma URLssa! " + e.getMessage());
+        } catch (IOException e) {
+            Dialogs.showMessageDialog("Ongelma tyopoytaymparistossa! " + e.getMessage());
+        }
     }
 
 
