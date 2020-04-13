@@ -28,38 +28,61 @@ import kirjasto.*;
 public class KirjastoGUIController implements Initializable {
 
     // Hakukentant elementit
-    @FXML private TextField hakuNimi;
-    @FXML private TextField hakuTekija;
-    @FXML private TextField hakuISBN;
-    @FXML private Button hakuButton;
-    @FXML private ListChooser<Teos> hakuTulokset;
+    @FXML
+    private TextField hakuNimi;
+    @FXML
+    private TextField hakuTekija;
+    @FXML
+    private TextField hakuISBN;
+    @FXML
+    private Button hakuButton;
+    @FXML
+    private ListChooser<Teos> hakuTulokset;
     // Paanakyman elementit
-    @FXML private TextField tietoTeos;
-    @FXML private TextField tietoTekija;
-    @FXML private TextField tietoISBN;
-    @FXML private TextField tietoStatus;
-    @FXML private TextField tietoSijainti;
+    @FXML
+    private TextField tietoTeos;
+    @FXML
+    private TextField tietoTekija;
+    @FXML
+    private TextField tietoISBN;
+    @FXML
+    private TextField tietoStatus;
+    @FXML
+    private TextField tietoSijainti;
     // Buttonbarin elementit
-    @FXML private Button bottomLisaa;
-    @FXML private Button bottomMuokkaa;
-    @FXML private Button bottomPoista;
+    @FXML
+    private Button bottomLisaa;
+    @FXML
+    private Button bottomMuokkaa;
+    @FXML
+    private Button bottomPoista;
     // Navbarin elementit
-    @FXML private MenuItem navClose;
-    @FXML private MenuItem navPrint;
-    @FXML private MenuItem navSave;
-    @FXML private MenuItem navDelete;
-    @FXML private MenuItem navMuokkaa;
-    @FXML private MenuItem navHelp;
-    @FXML private MenuItem navTietoa;
+    @FXML
+    private MenuItem navClose;
+    @FXML
+    private MenuItem navPrint;
+    @FXML
+    private MenuItem navSave;
+    @FXML
+    private MenuItem navDelete;
+    @FXML
+    private MenuItem navMuokkaa;
+    @FXML
+    private MenuItem navHelp;
+    @FXML
+    private MenuItem navTietoa;
     // Lisaysdialogin elementit
-    @FXML private Button teosPeruuta;
-    @FXML private Button toesLisaa;
-    
+    @FXML
+    private Button teosPeruuta;
+    @FXML
+    private Button toesLisaa;
+
     // Valia-aikainen TextField tulostukselle.
-    @FXML private AnchorPane tiedotPanel;
-    @FXML private GridPane tiedotGrid;
-    
-    
+    @FXML
+    private AnchorPane tiedotPanel;
+    @FXML
+    private GridPane tiedotGrid;
+
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         alusta();
@@ -100,13 +123,13 @@ public class KirjastoGUIController implements Initializable {
     private void handlePoistu() {
         poistu();
     }
-    
+
 
     @FXML
     private void handleTallenna() {
         tallenna();
     }
-    
+
 
     @FXML
     private void handleTulosta() {
@@ -116,14 +139,15 @@ public class KirjastoGUIController implements Initializable {
 
     @FXML
     private void handleTietoa() {
-        ModalController.showModal(KirjastoGUIController.class.getResource("AboutView.fxml"), "Kirjasto", null, "");
+        ModalController.showModal(
+                KirjastoGUIController.class.getResource("AboutView.fxml"),
+                "Kirjasto", null, "");
     }
 
     // ===============================================================
     // Alapuolella ei kayttomliittymaan suoraan liittyvia metodeja tai
     // funktioita
     // ===============================================================
-
 
     private Kirjasto kirjasto;
     private Teos kirjaKohdalla;
@@ -157,14 +181,15 @@ public class KirjastoGUIController implements Initializable {
         if (kirjaKohdalla == null)
             return;
         tiedotArea.setText("");
-        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tiedotArea)) {
+        try (PrintStream os = TextAreaOutputStream
+                .getTextPrintStream(tiedotArea)) {
             kirjasto.tulostaTiedot(os, kirjasto.haeId(kirjaKohdalla.getId()));
         } catch (TietoException e) {
             Dialogs.showMessageDialog(e.getMessage());
         }
     }
 
-    
+
     /**
      * Populoi hakutulokset tietorakenteista.
      */
@@ -176,7 +201,7 @@ public class KirjastoGUIController implements Initializable {
         }
         hakuTulokset.setSelectedIndex(0);
     }
-    
+
 
     /**
      * Lisaa uuden kirjan kokoelmaan, ja paivittaa listan.
@@ -225,8 +250,8 @@ public class KirjastoGUIController implements Initializable {
         }
         hakuTulokset.setSelectedIndex(0);
     }
-    
-    
+
+
     /**
      * Tallentaa muutokset tiedostoihin.
      */
@@ -253,8 +278,10 @@ public class KirjastoGUIController implements Initializable {
      */
     private void lisaa() {
         try {
-            String s = TeosDialogController.kysyArvot(null, "Syota uuden kirjan tiedot");
-            if (s == null) return;
+            String s = TeosDialogController.kysyArvot(null,
+                    "Syota uuden kirjan tiedot");
+            if (s == null)
+                return;
             int id = kirjasto.lisaa(s);
             saveStatus = false;
             taytaLista();
@@ -269,7 +296,20 @@ public class KirjastoGUIController implements Initializable {
      * Muokkaa valitun teoksen tietoja ja tallentaa muutokset tietokantaan.
      */
     private void muokkaa() {
-        eiToimi();
+        if (kirjaKohdalla == null)
+            return;
+        try {
+            String s;
+            s = TeosDialogController.naytaTiedot(null, "Paivita tiedot kenttiin, tai paina Cancel", kirjasto.annaTiedot(kirjaKohdalla.getId()));
+            if (s == null)
+                return;
+            int id = kirjasto.muutaTaiLisaa(s);
+            saveStatus = false;
+            taytaLista();
+            hakuTulokset.setSelectedIndex(id - 1);
+        } catch (TietoException ex) {
+            Dialogs.showMessageDialog(ex.getMessage());
+        }
     }
 
 
@@ -289,23 +329,23 @@ public class KirjastoGUIController implements Initializable {
             if (tallennusDialog()) {
                 tallenna();
                 Platform.exit();
-            } Platform.exit();
+            }
+            Platform.exit();
         }
         Platform.exit();
     }
-    
-    
+
+
     /**
      * Avaa dialogin, joka tarkistaa haluatko tallentaa tehdyt muutokset tiedostoon.
      * @return true jos kylla, false jos ei
      */
     private boolean tallennusDialog() {
         return Dialogs.showQuestionDialog("Tallentamattomia muutoksia!",
-                "Tallennetaanko tehdyt muutokset?",
-                "Tallenna",
+                "Tallennetaanko tehdyt muutokset?", "Tallenna",
                 "Jatka tallentamatta");
     }
-    
+
 
     /**
      * Kaynnistaa ikkunanakyman tulostuksen mahdollisuudelle.

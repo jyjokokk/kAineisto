@@ -1,17 +1,16 @@
 package fxKirjasto;
 
 import java.net.URL;
-//import java.util.EventListener;
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.*;
-//import javafx.beans.value.ChangeListener;
+import fi.jyu.mit.ohj2.Mjonot;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-//import kirjasto.Kirjasto;
 
 /**
  * Controller dialogi-ikkunalle, jolla lisataan uutta aineistoa
@@ -41,6 +40,8 @@ public class TeosDialogController
     private TextField editMaara;
     @FXML
     private Label labelVirhe;
+    @FXML
+    private Button buttonOK;
 
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
@@ -74,6 +75,8 @@ public class TeosDialogController
     // ===============================================================
 
     private String palaute = "";
+    private int id;
+    private int kid;
     private TextField arvot[];
 
     @Override
@@ -119,11 +122,27 @@ public class TeosDialogController
      * Yhdistaa eri tekstikentissa olleet arvot yhdeksi parsettavaksi merkkijonoksi.
      */
     private void concat() {
-        palaute = String.format("0|%s|%s|%s|%s#0|%s|%s#%s|%s",
+        palaute = String.format("%d|%s|%s|%s|%s#%d|%s|%s#%s|%s", this.id,
                 editISBN.getText(), editNimi.getText(), editTekija.getText(),
-                editJulkaisuvuosi.getText(), editKategoria.getText(),
+                editJulkaisuvuosi.getText(), this.kid, editKategoria.getText(),
                 editKuvaus.getText(), editHyllypaikka.getText(),
                 editMaara.getText());
+    }
+
+
+    private void asetaKentat(String s) {
+        StringBuilder sb = new StringBuilder(s);
+        id = Mjonot.erota(sb, '|', 0);
+        editISBN.setText(Mjonot.erota(sb, '|'));
+        editNimi.setText(Mjonot.erota(sb, '|'));
+        editTekija.setText(Mjonot.erota(sb, '|'));
+        editJulkaisuvuosi.setText(Mjonot.erota(sb, '|'));
+        kid = Mjonot.erota(sb, '|', 0);
+        editKategoria.setText(Mjonot.erota(sb, '|'));
+        editKuvaus.setText(Mjonot.erota(sb, '|'));
+        editHyllypaikka.setText(Mjonot.erota(sb, '|'));
+        editMaara.setText(sb.toString());
+        buttonOK.setText("Muokkaa");
     }
 
 
@@ -139,8 +158,25 @@ public class TeosDialogController
                 TeosDialogController.class.getResource("TeosDialogView.fxml"),
                 "Lisaa teos", modalityStage, oletus);
     }
-    
-    
+
+
+    /**
+     * Luodaan kyselydialogi uudelle teokselle, ja alustetaan kenttien arvoksi merkkijonona
+     * annetut arvot, ja palauttaa joko muutet tiedot merkkijonona, tai null.
+     * @param modalityStage Mille ollaan modaalisia.
+     * @param oletus mika viesti annetaan oletuksena
+     * @param arvot merkkijono josta parsetaan arvot
+     * @return null jos Canccel, muuten muutetut arvot merkkijonona.
+     */
+    public static String naytaTiedot(Stage modalityStage, String oletus,
+            String arvot) {
+        return ModalController.<String, TeosDialogController> showModal(
+                TeosDialogController.class.getResource("TeosDialogView.fxml"),
+                "Muokataan teosta", modalityStage, oletus,
+                ctrl -> ctrl.asetaKentat(arvot));
+    }
+
+
     /**
      * @param args ei kaytossa
      */

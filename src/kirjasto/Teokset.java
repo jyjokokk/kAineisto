@@ -113,6 +113,25 @@ public class Teokset implements Iterable<Teos> {
         alkiot[lkm] = new Teos(syote);
         lkm++;
     }
+    
+    
+    /**
+     * Korvaa id:lla loydetyn alkion tietorakenteesta.
+     * Lisaa uuden alkion, jos vastaavaa alkiota ei loydy.
+     * @param teos jota etsitaan
+     * @return viite muutettuun tai lisattyyn alkioon
+     * @throws TietoException jos lisaamisessa ilmenee ongelma.
+     */
+    public Teos lisaaTaiMuuta(Teos teos) throws TietoException {
+        for (int i=0; i < lkm; i++) {
+            if (alkiot[i].getId() == teos.getId()) {
+                alkiot[i] = teos;
+                return teos;
+            }
+        }
+        lisaa(teos);
+        return teos;
+    }
 
 
     /**
@@ -192,17 +211,6 @@ public class Teokset implements Iterable<Teos> {
                     "Ongelma tiedoston " + tiedNimi + "avaamisessa.");
         }
     }
-
-    // * #THROWS TietoException
-    // * Teokset tama = new Teokset();
-    // * Teokset toinen = new Teokset();
-    // * tama.lueTiedostosta("testFiles/teokset.dat");
-    // * toinen.lueTiedostosta("testFiles/teoksetEri.dat");
-    // * tama.equals(tama) === true;
-    // * tama.equals(toinen) === false;
-    // * toinen.tyhjenna();
-    // * toinen.lueTiedostosta("testFiles/teokset.dat");
-    // * tama.equals(toinen) === false;
 
 
     /**
@@ -292,6 +300,7 @@ public class Teokset implements Iterable<Teos> {
      * @param ISBN teoksen ISBN
      * @param tekija teoksen tekija
      * @return Kaikki teokset, jotka vastaavat hakuehtoa.
+     * TODO: Kirjoita testit (kayta apuna fixture-tiedostoja)
      */
     public ArrayList<Teos> hae(String nimi, String ISBN, String tekija) {
         ArrayList<Teos> tulokset = new ArrayList<Teos>();

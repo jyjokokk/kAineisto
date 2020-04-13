@@ -35,8 +35,29 @@ public class Kirjasto {
         hyllyt.lisaa(paikka);
         return hyllyt.haeIx(paikka.getId());
     }
-
-
+    
+    
+    /**
+     * Korvaa id:lla loydetyt alkiot tietorakenteissa.
+     * Jos id:lla ei loydy alkioita, lisataan uusi alkio.
+     * @param s teoksen tiedot merkkijonona.
+     * @return muutetun tai lisatyn teoksen id
+     * @throws TietoException jos lisaamisessa ilmenee ongelmia
+     */
+    public int muutaTaiLisaa(String s) throws TietoException {
+        StringBuilder sb = new StringBuilder(s);
+        String teosInfo = Mjonot.erota(sb, '#');
+        String katInfo = Mjonot.erota(sb, '#');
+        Teos teos = teokset.lisaaTaiMuuta(new Teos(teosInfo)); // TODO: lisaaTaiMuuta(String s);
+        Kategoria kat = kategoriat.lisaa(katInfo);
+        String hyllyInfo = String.format("%d|%d|%s", teos.getId(), kat.getKid(),
+                sb.toString());
+        Hylly paikka = new Hylly(hyllyInfo);
+        return hyllyt.lisaaTaiMuuta(paikka).getId();
+//        return hyllyt.haeIx(paikka.getId());
+    }
+    
+    
     /**
      * Tyhjentaa kaikki tietorakenteet, poistaen kaiken aineiston
      * nykyisessa sessiossa.
@@ -199,10 +220,22 @@ public class Kirjasto {
         StringBuilder sb = new StringBuilder();
         Teos t = teokset.haeId(h.getId());
         Kategoria kat = kategoriat.haeId(h.getKid());
-        sb.append(t.toString() + "\n");
-        sb.append(kat.getTiedot() + "\n");
+        sb.append(t.toString() + "|");
+        sb.append(kat.getTiedot() + "|");
         sb.append(h.getTiedot());
         return sb.toString();
+    }
+    
+    
+    /**
+     * Hakee teokset tiedot id:n avulla.
+     * @param id teoksen id
+     * @return Teoksen tiedot
+     * @throws TietoException jos annetulla id:lla ei loydy teosta.
+     */
+    public String annaTiedot(int id) throws TietoException {
+        Hylly h = hyllyt.haeId(id);
+        return annaTiedot(h);
     }
 
 

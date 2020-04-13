@@ -45,6 +45,25 @@ public class Hyllyt {
         alkiot[lkm] = alkio;
         lkm++;
     }
+    
+    
+    /**
+     * Etsii alkion tietorakenteesta id:n perusteella, ja korvaa sen.
+     * Jos alkiota ei loydy, lisataan se tietorakenteeseen.
+     * @param alkio jota lisataan
+     * @return viiteo muutettuun tai lisattyyn alkioon
+     * @throws TietoException jos lisaamisessa on ongelmia.
+     */
+    public Hylly lisaaTaiMuuta(Hylly alkio) throws TietoException {
+        for (int i=0; i <= lkm; i++) {
+            if (alkiot[i].getId() == alkio.getId()) {
+                alkiot[i] = alkio;
+                return alkiot[i];
+            }
+        }
+        lisaa(alkio);
+        return alkio;
+    }
 
 
     /**

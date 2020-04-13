@@ -59,7 +59,7 @@
             <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
               <buttons>
                 <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleCancel" text="Peruuta" />
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleOK" text="Lisaa" />
+                  <Button fx:id="buttonOK" alignment="CENTER" mnemonicParsing="false" onAction="#handleOK" text="Lisaa" />
               </buttons>
             </ButtonBar>
             <Pane prefHeight="200.0" prefWidth="200.0" />
