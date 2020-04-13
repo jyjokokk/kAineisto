@@ -50,11 +50,13 @@ public class Kirjasto {
 
     /**
      * Hakee kaikki teokset jotka vastaavat hakutermia.
-     * @param ehto Hakuehto, jolla haetaan.
+     * @param nimi haettava nimi
+     * @param ISBN haettava ISBN
+     * @param tekija haettava tekija
      * @return Lista kaikista teoksista, jotka vastaavat hakutermia.
      */
-    public ArrayList<Teos> hae(String ehto) {
-        return teokset.hae(ehto);
+    public ArrayList<Teos> hae(String nimi, String ISBN, String tekija) {
+        return teokset.hae(nimi, ISBN, tekija);
     }
 
 
@@ -121,6 +123,16 @@ public class Kirjasto {
      * Antaa teokset indeksissa i olevassa paikassa
      * @param i indeksi
      * @return teos indeksissa i
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException;
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  String s0 = "0|123-123-123-123|Neuromancer|William Gibson|1984#4|Scifi|Tieteiskirjallisuus on...#WGA|4";
+     *  String s1 = "0|666-666-666-666|Filth|Irvin Welsh|1995#3|Modernismi|Modernismin piirteita....#WEL|2";
+     *  String s2 = "0|021-6532-231-34|Mona Lisa Overdrive|William Gibson|1984#4|Scifi|Muuttunut kuvaus#WGA|4";
+     *  kirjasto.lisaa(s0); kirjasto.lisaa(s1); kirjasto.lisaa(s2);
+     *  kirjasto.getTeos(1).toString() === "1|1|WGA|4";
+     * </pre>
      */
     public Teos getTeos(int i) {
         return teokset.anna(i);
@@ -154,10 +166,8 @@ public class Kirjasto {
      * @return indeksissa i oleva teos
      * @example
      * <pre name="test">
+     *  #THROWS TietoException
      *   Kirjasto kirjasto = new Kirjasto();
-     *   kirjasto.lisaa("1|1|SDD|0"); kirjasto.lisaa("2|1|ELO|2");
-     *   kirjasto.lisaa("3|2|EFG|1"); kirjasto.lisaa("4|3|ITA|4");
-     *   
      * </pre>
      */
     public Hylly anna(int i) {
@@ -170,6 +180,9 @@ public class Kirjasto {
      * @param id Id, jota haetaan.
      * @return viite hyllypaikkaan, null jos ei loydy.
      * @throws TietoException jos hyllypaikkaa ei loydy
+     * @example
+     * <pre name="test">
+     * </pre>
      */
     public Hylly haeId(int id) throws TietoException {
         return hyllyt.haeId(id);
@@ -231,9 +244,7 @@ public class Kirjasto {
      */
     public static void main(String[] args) {
 
-        String s = "3|123-123-123-123|Neuromancer|William Gibson|1984#";
-        s += "4|Scifi|Tieteiskirjallisuus on...#";
-        s += "WGA|4";
+        String s = "3|123-123-123-123|Neuromancer|William Gibson|1984#4|Scifi|Tieteiskirjallisuus on...#WGA|4";
         String s1 = "5|666-666-666-666|Filth|Irvin Welsh|1995#3|Modernismi|Modernismin piirteita....#WEL|2";
         String s2 = "2|021-6532-231-34|Mona Lisa Overdrive|William Gibson|1984#4|Scifi|Muuttunut kuvaus#WGA|4";
 

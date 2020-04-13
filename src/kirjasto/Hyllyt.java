@@ -59,7 +59,6 @@ public class Hyllyt {
      *  hyl.getLkm() === 3;
      *  hyl.tyhjenna();
      *  hyl.getLkm() === 0;
-     *  hyl.anna(4); #THROWS IndexOutOfBoundsException
      * </pre>
      */
     public void tyhjenna() {
@@ -133,7 +132,6 @@ public class Hyllyt {
      *  toka.lueTiedostosta("testFiles/hyllytUlos.dat");
      *  uusi.equals(toka) === true;
      *  toka.lueTiedostosta("testFiles/hyllytEri.dat");
-     *  System.out.println(uusi.equals(toka));
      *  uusi.equals(toka) === false;
      * </pre>
      */

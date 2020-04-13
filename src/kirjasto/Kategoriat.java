@@ -81,6 +81,7 @@ public class Kategoriat implements Iterable<Kategoria> {
      * duplikaattitapauksessa.
      * @param syote Merkkijono, josta parsetaan.
      * @return Viite uuteen merkkijonoon, ja vanhaan duplikaatio tapauksessa.
+     * @throws TietoException jos lisaaminen epaonnistuu
      * @example
      * <pre name="test">
      *  Kategoriat kategoriat = new Kategoriat();
@@ -95,7 +96,7 @@ public class Kategoriat implements Iterable<Kategoria> {
      *  kat3.toString() === "1|Fantasia|Tarkempi kuvaus";
      * </pre>
      */
-    public Kategoria lisaa(String syote) {
+    public Kategoria lisaa(String syote) throws TietoException {
         return tarkistaDuplikaatti(new Kategoria(syote));
     }
 
@@ -273,6 +274,8 @@ public class Kategoriat implements Iterable<Kategoria> {
             }
         } catch (FileNotFoundException ex) {
             System.err.println("Ongelma tiedostoa avatessa!" + ex.getMessage());
+        } catch (TietoException ex) {
+            System.err.println("Ongelma tiedostoa lukiessa! " + ex.getMessage());
         }
     }
 

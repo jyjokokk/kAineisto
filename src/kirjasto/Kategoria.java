@@ -125,10 +125,10 @@ public class Kategoria {
      *  Kategoria kat2 = new Kategoria();
      *  Kategoria kat3 = new Kategoria();
      *  kat1.rekisteroi(); kat2.rekisteroi(); kat3.rekisteroi();
-     *  int kid1 = kat1.getId();
-     *  kat1.getId() === kid1;
-     *  kat2.getId() === kid1 + 1;
-     *  kat3.getId() === kid1 + 2;
+     *  int kid1 = kat1.getKid();
+     *  kat1.getKid() === kid1;
+     *  kat2.getKid() === kid1 + 1;
+     *  kat3.getKid() === kid1 + 2;
      * </pre>
      */
     public int rekisteroi() {
@@ -181,9 +181,8 @@ public class Kategoria {
      * Kategoria kat1 = new Kategoria("2|Scifi|Scifi on...");
      * Kategoria kat2 = new Kategoria();
      * kat1.tulosta(out);
-     * out.toString() === "1|Scifi|Scifi on...";
      * kat2.tulosta(out);
-     * out.toString === "0||";
+     * out.toString() === "2|Scifi|Scifi on...\n0||\n";
      * </pre>
      */
     public void tulosta(OutputStream os) {

@@ -68,7 +68,7 @@ public class KirjastoGUIController implements Initializable {
 
     @FXML
     private void handleHae() {
-        hae(hakuNimi.getText());
+        hae(hakuNimi.getText(), hakuISBN.getText(), hakuTekija.getText());
     }
 
 
@@ -217,9 +217,9 @@ public class KirjastoGUIController implements Initializable {
      * tulokset hakutulos-containeriin.
      * @param ehto Ehto, jolla haetaan.
      */
-    private void hae(String ehto) {
+    private void hae(String nimi, String ISBN, String tekija) {
         hakuTulokset.clear();
-        ArrayList<Teos> tulokset = kirjasto.hae(ehto);
+        ArrayList<Teos> tulokset = kirjasto.hae(nimi, ISBN, tekija);
         for (var t : tulokset) {
             hakuTulokset.add(t.getNimi(), t);
         }
@@ -283,10 +283,6 @@ public class KirjastoGUIController implements Initializable {
 
     /**
      * Poistuu ohjelmasta.
-     * TODO: Kysy, halutaanko tallentaa jos on tehty muutoksia.
-     *      Taman saisi tehtya tekemalla "muutotettu" bool flagin,
-     *      joka aina lisattaessa tai poistaessa asettuisi true, ja
-     *      tallentaessa false.
      */
     private void poistu() {
         if (saveStatus == false) {

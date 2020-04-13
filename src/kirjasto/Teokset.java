@@ -144,7 +144,8 @@ public class Teokset implements Iterable<Teos> {
         backupFile.delete();
         saveFile.renameTo(backupFile);
 
-        try (PrintWriter fo = new PrintWriter(new FileWriter(saveFile.getCanonicalPath()))) {
+        try (PrintWriter fo = new PrintWriter(
+                new FileWriter(saveFile.getCanonicalPath()))) {
             fo.println("# Teosten tallenustiedosto");
             fo.println("# Viimeiksi tallennettu: " + java.time.LocalTime.now());
             for (int i = 0; i < lkm; i++) {
@@ -187,20 +188,22 @@ public class Teokset implements Iterable<Teos> {
                 this.lisaa(t);
             }
         } catch (FileNotFoundException ex) {
-            throw new TietoException("Ongelma tiedoston " + tiedNimi + "avaamisessa.");
+            throw new TietoException(
+                    "Ongelma tiedoston " + tiedNimi + "avaamisessa.");
         }
     }
 
-    //     * #THROWS TietoException
-    //     *  Teokset tama = new Teokset();
-    //     *  Teokset toinen = new Teokset();
-    //     *  tama.lueTiedostosta("testFiles/teokset.dat");
-    //     *  toinen.lueTiedostosta("testFiles/teoksetEri.dat");
-    //     *  tama.equals(tama) === true;
-    //     *  tama.equals(toinen) === false;
-    //     *  toinen.tyhjenna();
-    //     *  toinen.lueTiedostosta("testFiles/teokset.dat");
-    //     *  tama.equals(toinen) === false;
+    // * #THROWS TietoException
+    // * Teokset tama = new Teokset();
+    // * Teokset toinen = new Teokset();
+    // * tama.lueTiedostosta("testFiles/teokset.dat");
+    // * toinen.lueTiedostosta("testFiles/teoksetEri.dat");
+    // * tama.equals(tama) === true;
+    // * tama.equals(toinen) === false;
+    // * toinen.tyhjenna();
+    // * toinen.lueTiedostosta("testFiles/teokset.dat");
+    // * tama.equals(toinen) === false;
+
 
     /**
      * Vertaa, onko olion sisaltamat tiedot samat kuin verratavan.
@@ -285,14 +288,18 @@ public class Teokset implements Iterable<Teos> {
 
     /**
      * Hakee kaikki teoksen, jotka tayttavat hakuehdon.
-     * @param ehto Ehto, jolla haetaan
-     * @return Teos joka vastaa hakuehtoa.
+     * @param nimi teoksen nimi
+     * @param ISBN teoksen ISBN
+     * @param tekija teoksen tekija
+     * @return Kaikki teokset, jotka vastaavat hakuehtoa.
      */
-    public ArrayList<Teos> hae(String ehto) {
+    public ArrayList<Teos> hae(String nimi, String ISBN, String tekija) {
         ArrayList<Teos> tulokset = new ArrayList<Teos>();
         for (int i = 0; i < lkm; i++) {
             Teos temp = alkiot[i];
-            if (temp.getTekija().contains(ehto))
+            if (temp.getTekija().contains(tekija)
+                    && temp.getIsbn().contains(ISBN)
+                    && temp.getNimi().contains(nimi))
                 tulokset.add(temp);
         }
         return tulokset;
@@ -320,9 +327,7 @@ public class Teokset implements Iterable<Teos> {
             e.printStackTrace();
         }
 
-
     }
-
 
     /**
      * Iteraattori Teokset-luokalle.
