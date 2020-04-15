@@ -253,11 +253,11 @@ public class Kirjasto {
 
     /**
      * Tulostaa kirjan tiedot ihmisluettavassa muodossa.
-     * @param os mihin tulostetaan
      * @param id jolla haetaan
+     * @return Teoksen tiedot merkkijonona, tulostusta varten formatoituna.
      * @throws TietoException jos ei loydy.
      */
-    public void tulostaTiedot(PrintStream os, int id) throws TietoException {
+    public String tulostusMuoto(int id) throws TietoException {
         Hylly hylly = new Hylly();
         Teos teos = new Teos();
         Kategoria kat = new Kategoria();
@@ -273,8 +273,22 @@ public class Kirjasto {
         sb.append("\nHyllypaikka     " + hylly.getPaikka());
         sb.append("\nMaara           " + hylly.getMaara());
         sb.append("\n-------------------------------------\n");
-        os.println(sb.toString());
-
+        return sb.toString();
+    }
+    
+    
+    /**
+     * Palauttaa annetun id-listan teosten tulostusmuodot merkkijonoolistana.
+     * @param idt lista teod-ideista
+     * @return Lista teosten tiedoista tulostusmuodossa.
+     * @throws TietoException jos teosta ei loydy jollain annetulla id:lla.
+     */
+    public String teoksetTulosteeksi(ArrayList<Integer> idt) throws TietoException {
+        StringBuilder sb = new StringBuilder();
+        for (int i : idt) {
+            sb.append(tulostusMuoto(i));
+        }
+        return sb.toString();
     }
 
 
@@ -318,7 +332,11 @@ public class Kirjasto {
             kirjasto.lisaa(s1);
             kirjasto.lisaa(s);
             kirjasto.lisaa(s2);
-            kirjasto.tulostaTiedot(System.out, 3);
+            ArrayList<Integer> ids = new ArrayList<Integer>();
+            ids.add(1);
+            ids.add(2);
+            String tuloste = kirjasto.teoksetTulosteeksi(ids);
+            System.out.println(tuloste);
             // kirjasto.tyhjenna();
 //            kirjasto.tulostaKaikki(System.out);
 //            kirjasto.tallenna();
