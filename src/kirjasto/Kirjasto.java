@@ -3,6 +3,7 @@ package kirjasto;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import fi.jyu.mit.ohj2.Mjonot;
 
@@ -265,14 +266,13 @@ public class Kirjasto {
         hylly = hyllyt.haeId(id);
         teos = teokset.haeId(hylly.getId());
         kat = kategoriat.haeId(hylly.getKid());
-        sb.append("------------------------------------");
         sb.append("\nTeoksen nimi    " + teos.getNimi());
         sb.append("\nKirjailija      " + teos.getTekija());
         sb.append("\nISBN            " + teos.getIsbn());
         sb.append("\nKategoria       " + kat.getNimi());
         sb.append("\nHyllypaikka     " + hylly.getPaikka());
         sb.append("\nMaara           " + hylly.getMaara());
-        sb.append("\n-------------------------------------\n");
+        sb.append("\n----------------------------------");
         return sb.toString();
     }
     
@@ -282,13 +282,26 @@ public class Kirjasto {
      * @param idt lista teod-ideista
      * @return Lista teosten tiedoista tulostusmuodossa.
      * @throws TietoException jos teosta ei loydy jollain annetulla id:lla.
+     * TODO: Koita streameilla.
      */
-    public String teoksetTulosteeksi(ArrayList<Integer> idt) throws TietoException {
+    public String teoksetTulosteeksi(List<Integer> idt) throws TietoException {
         StringBuilder sb = new StringBuilder();
         for (int i : idt) {
             sb.append(tulostusMuoto(i));
         }
         return sb.toString();
+    }
+    
+    
+    /**
+     * Tulostaa annetun id-listan teokset tulostusvirtaan.
+     * @param os tulostusvirta
+     * @param idt Lista teoksien id-numeroita
+     * @throws TietoException jos joukossa on virheellinen id.
+     */
+    public void tulostaTeokset(PrintStream os, List<Integer> idt) throws TietoException {
+        String tuloste = teoksetTulosteeksi(idt);
+        os.println(tuloste);
     }
 
 
@@ -337,9 +350,6 @@ public class Kirjasto {
             ids.add(2);
             String tuloste = kirjasto.teoksetTulosteeksi(ids);
             System.out.println(tuloste);
-            // kirjasto.tyhjenna();
-//            kirjasto.tulostaKaikki(System.out);
-//            kirjasto.tallenna();
         } catch (TietoException e) {
             System.err.println(e.getMessage());
         } catch (FileNotFoundException e) {

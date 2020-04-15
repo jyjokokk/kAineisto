@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane prefHeight="275.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+<BorderPane prefHeight="275.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxKirjasto.TulostusController">
    <center>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -22,7 +21,10 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <TextArea fx:id="areaPrint" editable="false" prefHeight="200.0" prefWidth="200.0" />
+            <TextArea fx:id="areaPrint" editable="false" prefHeight="200.0" prefWidth="200.0">
+               <font>
+                  <Font name="Monospaced Regular" size="13.0" />
+               </font></TextArea>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -32,8 +34,8 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-            <Button fx:id="buttonPrint" mnemonicParsing="false" onAction="#handlePrint" text="Tulosta" />
-          <Button fx:id="buttonCancel" mnemonicParsing="false" onAction="#handleClose" text="Peruuta" />
+            <Button mnemonicParsing="false" onAction="#handlePrint" text="Tulosta" />
+          <Button mnemonicParsing="false" onAction="#handleClose" text="Peruuta" />
         </buttons>
          <BorderPane.margin>
             <Insets />

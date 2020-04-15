@@ -1,10 +1,12 @@
 package fxKirjasto;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -18,10 +20,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
+import fi.jyu.mit.fxgui.StringAndObject;
 import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import kirjasto.*;
 
@@ -248,7 +252,7 @@ public class KirjastoGUIController implements Initializable {
      */
     private void hae(String nimi, String ISBN, String tekija) {
         hakuTulokset.clear();
-        ArrayList<Teos> tulokset = kirjasto.hae(nimi, ISBN, tekija);
+        List<Teos> tulokset = kirjasto.hae(nimi, ISBN, tekija);
         for (var t : tulokset) {
             hakuTulokset.add(t.getNimi(), t);
         }
@@ -315,7 +319,9 @@ public class KirjastoGUIController implements Initializable {
             return;
         try {
             String s;
-            s = TeosDialogController.naytaTiedot(null, "Paivita tiedot kenttiin, tai paina Cancel", kirjasto.annaTiedot(kirjaKohdalla.getId()));
+            s = TeosDialogController.naytaTiedot(null,
+                    "Paivita tiedot kenttiin ja Muokkaa, tai paina Peruuuta",
+                    kirjasto.annaTiedot(kirjaKohdalla.getId()));
             if (s == null)
                 return;
             int id = kirjasto.muutaTaiLisaa(s);
@@ -364,9 +370,20 @@ public class KirjastoGUIController implements Initializable {
 
     /**
      * Kaynnistaa ikkunanakyman tulostuksen mahdollisuudelle.
+     * TODO: Monivalinta manuaalisesti.
      */
     private void tulosta() {
-        eiToimi();
+        List<Teos> teosList = hakuTulokset.getObjects();
+        List<Integer> idList = teosList.stream().map(
+                t -> t.getId())
+                .collect(Collectors.toList());
+        try {
+            String s;
+            s = kirjasto.teoksetTulosteeksi(idList);
+            fxKirjasto.TulostusController.tulosta(s);
+        } catch (TietoException e) {
+            Dialogs.showMessageDialog("Ongelma tietoja hakiessa!" + e.getMessage());
+        }
     }
 
 
@@ -377,12 +394,5 @@ public class KirjastoGUIController implements Initializable {
         Dialogs.showMessageDialog("Ei toimi viela!");
     }
 
-    public static void main(String[] args) {
-        Desktop desk = Desktop.getDesktop();
-        try {
-            desk.browse(new URI("https://www.google.fi/"));
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
+
 }
