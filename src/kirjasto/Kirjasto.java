@@ -35,8 +35,8 @@ public class Kirjasto {
         hyllyt.lisaa(paikka);
         return hyllyt.haeIx(paikka.getId());
     }
-    
-    
+
+
     /**
      * Korvaa id:lla loydetyt alkiot tietorakenteissa.
      * Jos id:lla ei loydy alkioita, lisataan uusi alkio.
@@ -48,16 +48,17 @@ public class Kirjasto {
         StringBuilder sb = new StringBuilder(s);
         String teosInfo = Mjonot.erota(sb, '#');
         String katInfo = Mjonot.erota(sb, '#');
-        Teos teos = teokset.lisaaTaiMuuta(new Teos(teosInfo)); // TODO: lisaaTaiMuuta(String s);
+        Teos teos = teokset.lisaaTaiMuuta(new Teos(teosInfo)); // TODO:
+                                                               // lisaaTaiMuuta(String
+                                                               // s);
         Kategoria kat = kategoriat.lisaa(katInfo);
         String hyllyInfo = String.format("%d|%d|%s", teos.getId(), kat.getKid(),
                 sb.toString());
         Hylly paikka = new Hylly(hyllyInfo);
         return hyllyt.lisaaTaiMuuta(paikka).getId();
-//        return hyllyt.haeIx(paikka.getId());
     }
-    
-    
+
+
     /**
      * Tyhjentaa kaikki tietorakenteet, poistaen kaiken aineiston
      * nykyisessa sessiossa.
@@ -115,9 +116,9 @@ public class Kirjasto {
      * @throws TietoException jos ongelmia
      */
     public void lueTiedostosta() throws FileNotFoundException, TietoException {
-            kategoriat.lueTiedostosta("aineisto/kategoriat.dat");
-            teokset.lueTiedostosta("aineisto/teokset.dat");
-            hyllyt.lueTiedostosta("aineisto/hyllyt.dat");
+        kategoriat.lueTiedostosta("aineisto/kategoriat.dat");
+        teokset.lueTiedostosta("aineisto/teokset.dat");
+        hyllyt.lueTiedostosta("aineisto/hyllyt.dat");
     }
 
 
@@ -225,8 +226,8 @@ public class Kirjasto {
         sb.append(h.getTiedot());
         return sb.toString();
     }
-    
-    
+
+
     /**
      * Hakee teokset tiedot id:n avulla.
      * @param id teoksen id
@@ -247,6 +248,33 @@ public class Kirjasto {
      */
     public void tulostaTiedot(PrintStream os, Hylly h) throws TietoException {
         os.println(annaTiedot(h));
+    }
+
+
+    /**
+     * Tulostaa kirjan tiedot ihmisluettavassa muodossa.
+     * @param os mihin tulostetaan
+     * @param id jolla haetaan
+     * @throws TietoException jos ei loydy.
+     */
+    public void tulostaTiedot(PrintStream os, int id) throws TietoException {
+        Hylly hylly = new Hylly();
+        Teos teos = new Teos();
+        Kategoria kat = new Kategoria();
+        StringBuilder sb = new StringBuilder();
+        hylly = hyllyt.haeId(id);
+        teos = teokset.haeId(hylly.getId());
+        kat = kategoriat.haeId(hylly.getKid());
+        sb.append("------------------------------------");
+        sb.append("\nTeoksen nimi    " + teos.getNimi());
+        sb.append("\nKirjailija      " + teos.getTekija());
+        sb.append("\nISBN            " + teos.getIsbn());
+        sb.append("\nKategoria       " + kat.getNimi());
+        sb.append("\nHyllypaikka     " + hylly.getPaikka());
+        sb.append("\nMaara           " + hylly.getMaara());
+        sb.append("\n-------------------------------------\n");
+        os.println(sb.toString());
+
     }
 
 
@@ -290,9 +318,10 @@ public class Kirjasto {
             kirjasto.lisaa(s1);
             kirjasto.lisaa(s);
             kirjasto.lisaa(s2);
+            kirjasto.tulostaTiedot(System.out, 3);
             // kirjasto.tyhjenna();
-            kirjasto.tulostaKaikki(System.out);
-            kirjasto.tallenna();
+//            kirjasto.tulostaKaikki(System.out);
+//            kirjasto.tallenna();
         } catch (TietoException e) {
             System.err.println(e.getMessage());
         } catch (FileNotFoundException e) {

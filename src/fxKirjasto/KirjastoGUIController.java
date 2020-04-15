@@ -101,7 +101,7 @@ public class KirjastoGUIController implements Initializable {
 
     @FXML
     private void handleHelp() {
-        help();
+        apua();
     }
 
 
@@ -271,17 +271,20 @@ public class KirjastoGUIController implements Initializable {
 
     /**
      * Avaa tiedoston suunnitelman kayttojarjestelman maarittamassa selaimessa.
+     * NOTE: Selaimen kaynnistys ei onnistu linuxilla GUIn kautta.
      */
-    private void help() {
-        Desktop desktop = Desktop.getDesktop();
-        try {
-            URI uri = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2020k/ht/jyjokokk");
-            desktop.browse(uri);
-        } catch (URISyntaxException e) {
-            Dialogs.showMessageDialog("Ongelma URLssa! " + e.getMessage());
-        } catch (IOException e) {
-            Dialogs.showMessageDialog("Ongelma tyopoytaymparistossa! " + e.getMessage());
-        }
+    private void apua() {
+        // Desktop desk = Desktop.getDesktop();
+        // try {
+        //     URI suunnitelma = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2020k/ht/jyjokokk");
+        //     desk.browse(suunnitelma);
+        //     return;
+        // } catch (IOException | URISyntaxException e) {
+        //     e.printStackTrace();
+        // }
+        ModalController.showModal(
+                KirjastoGUIController.class.getResource("HelpView.fxml"),
+                "Kirjasto", null, "");
     }
 
 
@@ -374,4 +377,12 @@ public class KirjastoGUIController implements Initializable {
         Dialogs.showMessageDialog("Ei toimi viela!");
     }
 
+    public static void main(String[] args) {
+        Desktop desk = Desktop.getDesktop();
+        try {
+            desk.browse(new URI("https://www.google.fi/"));
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 }

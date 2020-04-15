@@ -76,6 +76,7 @@ public class Teokset implements Iterable<Teos> {
      * Hakee ja palauttaa viitteen teokseen jolla on haettu id.
      * @param id jota haetaan
      * @return Teos, jolla on vastaava id, null jos ei loydy.
+     * @throws TietoException jos teosta annetulla id:lla ei loydy.
      * @example
      * <pre name="test">
      * #THROWS TietoException
@@ -88,13 +89,13 @@ public class Teokset implements Iterable<Teos> {
      *  teokset.haeId(idLotr1 + 2) == lotr2 === true;
      * </pre>
      */
-    public Teos haeId(int id) {
+    public Teos haeId(int id) throws TietoException {
         for (int i = 0; i < this.getLkm(); i++) {
             Teos temp = alkiot[i];
             if (temp.getId() == id)
                 return temp;
         }
-        return null;
+        throw new TietoException("Tietokannasta ei loydy teosta jonka id: " + id);
     }
 
 
