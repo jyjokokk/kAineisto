@@ -134,6 +134,24 @@ public class Teokset implements Iterable<Teos> {
         return teos;
     }
 
+    
+    /**
+     * Poistaa teoksen haetun id:n perusteella.
+     * @param id joka haetaan
+     * @return true tai false, loytymisen mukaan.
+     * TODO: testit
+     */
+    public boolean poista(int id) {
+        int ind = annaIndeksi(id);
+        if (ind < 0) return false;
+        lkm--;
+        for (int i = ind; i < lkm; i++) {
+            alkiot[ind] = alkiot[ind + 1];
+        }
+        alkiot[lkm] = null;
+        return true;
+    }
+    
 
     /**
      * Tyhjentaa tietorakenteen.
@@ -251,15 +269,19 @@ public class Teokset implements Iterable<Teos> {
 
 
     /**
-     * Palalauttaa viitteen i:teen teosluettelon olioon.
-     * @param i monennenko alkion viite halutaan
-     * @return viite alkioon, jonka indeksi on i
-     * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
+     * Palalauttaa id:lla haetun teoksen paikan taulukossa.
+     * @param id mita teosta haetaan
+     * @return teoksen indeksi alkiossa, -1 jos ei loydy
+     * @throws IndexOutOfBoundsException jos id ei ole sallitulla alueella
+     * TODO: Testit
      */
-    public Teos anna(int i) throws IndexOutOfBoundsException {
-        if (i < 0 || i > lkm)
-            throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
-        return alkiot[i];
+    public int annaIndeksi(int id) throws IndexOutOfBoundsException {
+        if (id < 0 || id > lkm)
+            throw new IndexOutOfBoundsException("Laiton indeksi: " + id);
+        for (int i = 0; i < lkm; i++) {
+            if (id == alkiot[i].getId()) return i;
+        }
+        return -1;
     }
 
 
@@ -333,11 +355,24 @@ public class Teokset implements Iterable<Teos> {
             toinen.lueTiedostosta("testFiles/teokset.dat");
             System.out.println(tama.equals(luettelo));
             System.out.println(tama.equals(toinen));
+            System.out.println(tama.getLkm());
+            tama.poista(1);
+            System.out.println(tama.getLkm());
         } catch (TietoException e) {
             e.printStackTrace();
         }
 
     }
+
+
+        /**
+         * Palauttaa viitteen teokseen indeksissa i.
+         * @param i indeksi josta katsotaan.
+         * @return viite teokseen.
+         */
+        public Teos anna(int i) {
+            return alkiot[i];
+        }
 
     /**
      * Iteraattori Teokset-luokalle.

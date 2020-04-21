@@ -172,9 +172,9 @@ public class KirjastoGUIController implements Initializable {
             Dialogs.showMessageDialog(ex.getMessage());
         }
         saveStatus = true;
-        tiedotPanel.getChildren().removeAll(tiedotGrid);
-        tiedotPanel.getChildren().add(tiedotArea);
-        tiedotArea.setEditable(false);
+//        tiedotPanel.getChildren().removeAll(tiedotGrid);
+//        tiedotPanel.getChildren().add(tiedotArea);
+//        tiedotArea.setEditable(false);
         taytaLista();
         hakuTulokset.addSelectionListener(e -> naytaTeos());
     }

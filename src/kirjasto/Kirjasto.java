@@ -59,6 +59,16 @@ public class Kirjasto {
         return hyllyt.lisaaTaiMuuta(paikka).getId();
     }
 
+    
+    /**
+     * Hakee teoksen annetun id:n perusteella, ja poistaa sen tietorakenteista.
+     * @param id jolla haetaan
+     */
+    public void poista(int id) {
+        System.out.println(id);
+        return;
+    }
+    
 
     /**
      * Tyhjentaa kaikki tietorakenteet, poistaen kaiken aineiston
@@ -120,16 +130,6 @@ public class Kirjasto {
         kategoriat.lueTiedostosta("aineisto/kategoriat.dat");
         teokset.lueTiedostosta("aineisto/teokset.dat");
         hyllyt.lueTiedostosta("aineisto/hyllyt.dat");
-    }
-
-
-    /**
-     * Poistaa aineistosta ne teokset joiden id vastaa nro.
-     * @param nro Numero, jota vastaavaa id:ta etsitaan
-     * @return Boolean onnistuiko
-     */
-    public Boolean poista(@SuppressWarnings("unused") int nro) {
-        return false;
     }
 
 
