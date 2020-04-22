@@ -159,7 +159,8 @@ public class KirjastoGUIController implements Initializable {
 
     private Kirjasto kirjasto;
     private Teos kirjaKohdalla;
-    private TextArea tiedotArea = new TextArea();
+    // TODO: Poista kun ei tarvita:
+//    private TextArea tiedotArea = new TextArea();
     private boolean saveStatus;
 
     private void alusta() {
@@ -188,13 +189,23 @@ public class KirjastoGUIController implements Initializable {
         kirjaKohdalla = hakuTulokset.getSelectedObject();
         if (kirjaKohdalla == null)
             return;
-        tiedotArea.setText("");
-        try (PrintStream os = TextAreaOutputStream
-                .getTextPrintStream(tiedotArea)) {
-            kirjasto.tulostaTiedot(os, kirjasto.haeId(kirjaKohdalla.getId()));
+        try {
+            tietoTeos.setText(kirjaKohdalla.getNimi());
+            tietoTekija.setText(kirjaKohdalla.getTekija());
+            tietoISBN.setText(kirjaKohdalla.getIsbn());
+            tietoStatus.setText(kirjasto.getTeosMaara(kirjaKohdalla.getId()));
+            tietoSijainti.setText(kirjasto.getTeosPaikka(kirjaKohdalla.getId()));
         } catch (TietoException e) {
-            Dialogs.showMessageDialog(e.getMessage());
+            e.printStackTrace();
+//            Dialogs.showMessageDialog("Ongelma tietojen hakemisessa: " + e.getMessage());
         }
+//        tiedotArea.setText("");
+//        try (PrintStream os = TextAreaOutputStream
+//                .getTextPrintStream(tiedotArea)) {
+//            kirjasto.tulostaTiedot(os, kirjasto.haeId(kirjaKohdalla.getId()));
+//        } catch (TietoException e) {
+//            Dialogs.showMessageDialog(e.getMessage());
+//        }
     }
 
 
@@ -307,6 +318,7 @@ public class KirjastoGUIController implements Initializable {
             hakuTulokset.setSelectedIndex(id);
         } catch (TietoException e) {
             Dialogs.showMessageDialog(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -338,7 +350,13 @@ public class KirjastoGUIController implements Initializable {
      * Poistaa valitun teoksen tietokannasta.
      */
     private void poista() {
-        eiToimi();
+        if (kirjaKohdalla == null) return;
+        try {
+            kirjasto.poista(kirjaKohdalla.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        taytaLista();
     }
 
 

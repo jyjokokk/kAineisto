@@ -59,16 +59,17 @@ public class Kirjasto {
         return hyllyt.lisaaTaiMuuta(paikka).getId();
     }
 
-    
+
     /**
      * Hakee teoksen annetun id:n perusteella, ja poistaa sen tietorakenteista.
      * @param id jolla haetaan
+     * @throws TietoException jos ongelmia
      */
-    public void poista(int id) {
-        System.out.println(id);
-        return;
+    public void poista(int id) throws TietoException {
+        teokset.poista(id);
+        hyllyt.poista(id);
     }
-    
+
 
     /**
      * Tyhjentaa kaikki tietorakenteet, poistaen kaiken aineiston
@@ -184,6 +185,30 @@ public class Kirjasto {
 
 
     /**
+     * Hakee teoksen hyllypaikan id:n avulla
+     * @param id jolla haetaan
+     * @return teoksen hyllypaikka
+     * @throws TietoException jos ei loydy.
+     */
+    public String getTeosPaikka(int id) throws TietoException {
+        String s = hyllyt.haeId(id).getPaikka();
+        return s;
+    }
+
+
+    /**
+     * Hakee teosten maaran hyllyssa.
+     * @param id jolla haetaan
+     * @return teosten maara hyllysa
+     * @throws TietoException jos ei id:lla ei loydy.
+     */
+    public String getTeosMaara(int id) throws TietoException {
+        String s = String.valueOf(hyllyt.haeId(id).getMaara());
+        return s;
+    }
+
+
+    /**
      * Hakee hyllypaikkojen tietorakenteen indeksissa i olevan viitteen 
      * @param i indeksi
      * @return indeksissa i oleva teos
@@ -275,8 +300,8 @@ public class Kirjasto {
         sb.append("\n----------------------------------");
         return sb.toString();
     }
-    
-    
+
+
     /**
      * Palauttaa annetun id-listan teosten tulostusmuodot merkkijonoolistana.
      * @param idt lista teod-ideista
@@ -291,15 +316,16 @@ public class Kirjasto {
         }
         return sb.toString();
     }
-    
-    
+
+
     /**
      * Tulostaa annetun id-listan teokset tulostusvirtaan.
      * @param os tulostusvirta
      * @param idt Lista teoksien id-numeroita
      * @throws TietoException jos joukossa on virheellinen id.
      */
-    public void tulostaTeokset(PrintStream os, List<Integer> idt) throws TietoException {
+    public void tulostaTeokset(PrintStream os, List<Integer> idt)
+            throws TietoException {
         String tuloste = teoksetTulosteeksi(idt);
         os.println(tuloste);
     }

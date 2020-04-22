@@ -53,6 +53,16 @@ public class Hyllyt {
      * @param alkio jota lisataan
      * @return viiteo muutettuun tai lisattyyn alkioon
      * @throws TietoException jos lisaamisessa on ongelmia.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Hyllyt hyllyt = new Hyllyt();
+     *  Hylly uusi = new Hylly(1, 4, "UUU", 0);
+     *  hyllyt.lueTiedostosta("testFiles/hyllyt.dat"); 
+     *  Hylly viite = hyllyt.lisaaTaiMuuta(uusi);
+     *  viite.toString() === "1|4|UUU|0";
+     *  hyllyt.haeId(1).equals(uusi) === true;
+     * </pre>
      */
     public Hylly lisaaTaiMuuta(Hylly alkio) throws TietoException {
         for (int i=0; i <= lkm; i++) {
@@ -211,6 +221,15 @@ public class Hyllyt {
     /**
      * Palauttaa teosten lukumaaran.
      * @return Hyllyten lukumaara.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Hyllyt hyllyt = new Hyllyt();
+     *  hyllyt.getLkm() === 0;
+     *  hyllyt.lisaa(new Hylly());
+     *  hyllyt.lisaa(new Hylly());
+     *  hyllyt.getLkm() === 2;
+     * </pre>
      */
     public int getLkm() {
         return this.lkm;
@@ -222,6 +241,15 @@ public class Hyllyt {
      * @param i monennenko alkion viite halutaan
      * @return viite alkioon, jonka indeksi on i
      * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
+     * @example
+     * <pre name="test">
+     *  #THROWS TietoException
+     *  Hyllyt hyllyt = new Hyllyt();
+     *  Hylly uusi = new Hylly();
+     *  hyllyt.lisaa(uusi);
+     *  hyllyt.anna(0).equals(uusi) === true;
+     *  hyllyt.anna(-5).toString() === "error"; #THROWS IndexOutOfBoundsException
+     * </pre>
      */
     public Hylly anna(int i) throws IndexOutOfBoundsException {
         if (i < 0)
@@ -236,6 +264,15 @@ public class Hyllyt {
      * @param id Id, jota haetaan.
      * @return viite hyllypaikkaan, null jos ei loydy.
      * @throws TietoException jos ei loydy
+     * @example
+     * <pre name="test">
+     *  #THROWS TietoException
+     *  Hyllyt hyllyt = new Hyllyt();
+     *  hyllyt.lueTiedostosta("testFiles/hyllyt.dat");
+     *  Hylly haku = hyllyt.haeId(1);
+     *  haku.toString() === "1|1|JAG|0";
+     *  hyllyt.haeId(64).toString() === ""; #THROWS TietoException
+     * </pre>
      */
     public Hylly haeId(int id) throws TietoException {
         for (int i = 0; i < lkm; i++) {
@@ -248,18 +285,54 @@ public class Hyllyt {
     }
     
     
+    
     /**
      * Etsii ja palauttaa olion indeksin tietorakenteessa
      * id:n avulla
      * @param id mita etsitaan
-     * @return paikka tietorakenteessa.
+     * @return Paikan indeksi, -1 jos ei loydy.
+     * @example
+     * <pre name="test">
+     *  #THROWS TietoException
+     *  Hyllyt hyllyt = new Hyllyt();
+     *  hyllyt.lisaa("2|1|HAE|0");
+     *  hyllyt.lisaa("4|2|JAA|2");
+     *  hyllyt.haeIx(2) === 0;
+     *  hyllyt.haeIx(4) === 1;
+     *  hyllyt.haeIx(8) === -1;
+     * </pre>
      */
     public int haeIx(int id) {
         for (int i = 0; i < lkm; i++) {
             if (alkiot[i].getId() == id) return i;
         }
-        return id;
+        return -1;
         
+    }
+    
+    
+    /**
+     * Poistaa id:lla haetun alkion tietorakenteesta.
+     * @param id jota haetaan.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Hyllyt hyllyt = new Hyllyt();
+     *  hyllyt.lueTiedostosta("testFiles/hyllyt.dat");
+     *  hyllyt.getLkm() === 9;
+     *  hyllyt.poista(1);
+     *  hyllyt.poista(5);
+     *  hyllyt.getLkm() === 7;
+     * </pre>
+     */
+    public void poista(int id) {
+        if (id < 0 || id > lkm) return;
+        int ind = haeIx(id);
+        lkm--;
+        for (int i = ind; i < lkm; i++) {
+            alkiot[i] = alkiot[i + 1];
+        }
+        alkiot[lkm] = null;
     }
 
 

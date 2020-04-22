@@ -3,6 +3,7 @@ package kirjasto;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -26,7 +27,7 @@ import java.util.Scanner;
  *      9|978-951-0-09875-2|Sinuhe|Mika Waltari|1945
  * 
  * @author Jyrki Kokkola
- * @version Apr 5, 2020
+ * @version Apr 22, 2020
  * 
  */
 public class Teokset implements Iterable<Teos> {
@@ -95,13 +96,22 @@ public class Teokset implements Iterable<Teos> {
             if (temp.getId() == id)
                 return temp;
         }
-        throw new TietoException("Tietokannasta ei loydy teosta jonka id: " + id);
+        throw new TietoException(
+                "Tietokannasta ei loydy teosta jonka id: " + id);
     }
 
 
     /**
      * Lisaa uuden alkion taulukkoon, alustaen sen arvot annetusta merkkijonosta.
      * @param syote Merkkijono, josta arvot alustetaan
+     * @example
+     * <pre name="test">
+     *  Teokset teokset = new Teokset();
+     *  teokset.lisaa("1|123-123-123-123|Uusi Kirja|Matti Meikalainen|1990");
+     *  teokset.getLkm() === 1;
+     *  teokset.lisaa("2|222-333-444-555|Toinen Kirja|Matti Meikalainen|1990");
+     *  teokset.hae(2).toString() === "2|222-333-444-555|Toinen Kirja|Matti Meikalainen|1990";
+     * </pre>
      */
     public void lisaa(String syote) {
         if (lkm >= alkiot.length) {
@@ -114,17 +124,26 @@ public class Teokset implements Iterable<Teos> {
         alkiot[lkm] = new Teos(syote);
         lkm++;
     }
-    
-    
+
+
     /**
      * Korvaa id:lla loydetyn alkion tietorakenteesta.
      * Lisaa uuden alkion, jos vastaavaa alkiota ei loydy.
      * @param teos jota etsitaan
      * @return viite muutettuun tai lisattyyn alkioon
      * @throws TietoException jos lisaamisessa ilmenee ongelma.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Teokset teokset = new Teokset();
+     *  teokset.lueTiedostosta("testFiles/teokset.dat");
+     *  Teos kirja = new Teos("1|000-000-000-000|Muutettu Kirja|Matti Meikalainen|1990");
+     *  teokset.lisaaTaiMuuta(kirja);
+     *  teokset.hae(1).toString() === "1|000-000-000-000|Muutettu Kirja|Matti Meikalainen|1990";
+     * </pre>
      */
     public Teos lisaaTaiMuuta(Teos teos) throws TietoException {
-        for (int i=0; i < lkm; i++) {
+        for (int i = 0; i < lkm; i++) {
             if (alkiot[i].getId() == teos.getId()) {
                 alkiot[i] = teos;
                 return teos;
@@ -134,24 +153,34 @@ public class Teokset implements Iterable<Teos> {
         return teos;
     }
 
-    
+
     /**
      * Poistaa teoksen haetun id:n perusteella.
      * @param id joka haetaan
      * @return true tai false, loytymisen mukaan.
-     * TODO: testit
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Teokset teokset = new Teokset();
+     *  teokset.lueTiedostosta("testFiles/teokset.dat");
+     *  teokset.getLkm() === 9;
+     *  teokset.poista(1);
+     *  teokset.poista(2);
+     *  teokset.getLkm() === 7;
+     * </pre>
      */
     public boolean poista(int id) {
         int ind = annaIndeksi(id);
-        if (ind < 0) return false;
+        if (ind < 0)
+            return false;
         lkm--;
         for (int i = ind; i < lkm; i++) {
-            alkiot[ind] = alkiot[ind + 1];
+            alkiot[i] = alkiot[i + 1];
         }
         alkiot[lkm] = null;
         return true;
     }
-    
+
 
     /**
      * Tyhjentaa tietorakenteen.
@@ -160,9 +189,9 @@ public class Teokset implements Iterable<Teos> {
      * #THROWS TietoException
      *  Teokset uusi = new Teokset();
      *  uusi.lueTiedostosta("testFiles/teokset.dat");
+     *  uusi.getLkm() === 9;
      *  uusi.tyhjenna();
      *  uusi.getLkm() === 0;
-     *  uusi.anna(2).getNimi() === "Markus"; #THROWS IndexOutOfBoundsException 
      * </pre>
      */
     public void tyhjenna() {
@@ -175,6 +204,17 @@ public class Teokset implements Iterable<Teos> {
      * Tallentaa teosluettelon tiedostoon.
      * @param tiedNimi Tiedosto, johon tallenetaan
      * @throws TietoException jos tallentaminen epaonnistuu.
+     * @example
+     * <pre name="test">
+     *  #THROWS TietoException
+     *  Teokset teokset = new Teokset();
+     *  teokset.lueTiedostosta("testFiles/teokset.dat");
+     *  teokset.tallenna("testFiles/teokset.bak");
+     *  Teokset toka = new Teokset();
+     *  toka.lueTiedostosta("testFiles/teokset.bak");
+     *  toka.hae(1).toString() === teokset.hae(1).toString();
+     *  teokset.equals(toka) === true;
+     * </pre>
      */
     public void tallenna(String tiedNimi) throws TietoException {
         File backupFile = new File(tiedNimi + ".bak");
@@ -262,6 +302,14 @@ public class Teokset implements Iterable<Teos> {
     /**
      * Palauttaa teosten lukumaaran.
      * @return Teosten lukumaara.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Teokset tama = new Teokset();
+     *  tama.getLkm() === 0;
+     *  tama.lueTiedostosta("testFiles/teokset.dat");
+     *  tama.getLkm() === 9;
+     * </pre>
      */
     public int getLkm() {
         return this.lkm;
@@ -272,14 +320,19 @@ public class Teokset implements Iterable<Teos> {
      * Palalauttaa id:lla haetun teoksen paikan taulukossa.
      * @param id mita teosta haetaan
      * @return teoksen indeksi alkiossa, -1 jos ei loydy
-     * @throws IndexOutOfBoundsException jos id ei ole sallitulla alueella
-     * TODO: Testit
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Teokset teokset = new Teokset();
+     *  teokset.lueTiedostosta("testFiles/teokset.dat");
+     *  teokset.annaIndeksi(1) === 0;
+     *  teokset.annaIndeksi(50) === -1;
+     * </pre>
      */
-    public int annaIndeksi(int id) throws IndexOutOfBoundsException {
-        if (id < 0 || id > lkm)
-            throw new IndexOutOfBoundsException("Laiton indeksi: " + id);
+    public int annaIndeksi(int id) {
         for (int i = 0; i < lkm; i++) {
-            if (id == alkiot[i].getId()) return i;
+            if (id == alkiot[i].getId())
+                return i;
         }
         return -1;
     }
@@ -318,12 +371,38 @@ public class Teokset implements Iterable<Teos> {
 
 
     /**
+     * Palauttaa viitteen teokseen indeksissa i.
+     * @param i indeksi josta katsotaan.
+     * @return viite teokseen.
+     * @example
+     * <pre name="test">
+     *  #THROWS TietoException
+     *  Teokset teokset = new Teokset();
+     *  Teos kirja = new Teos();
+     *  teokset.lisaa(kirja);
+     *  teokset.anna(0).equals(kirja) === true;
+     * </pre>
+     */
+    public Teos anna(int i) {
+        return alkiot[i];
+    }
+
+
+    /**
      * Hakee kaikki teoksen, jotka tayttavat hakuehdon.
      * @param nimi teoksen nimi
      * @param ISBN teoksen ISBN
      * @param tekija teoksen tekija
      * @return Kaikki teokset, jotka vastaavat hakuehtoa.
-     * TODO: Kirjoita testit (kayta apuna fixture-tiedostoja)
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     * #import java.util.*;
+     *  Teokset teokset = new Teokset();
+     *  teokset.lueTiedostosta("testFiles/teokset.dat");
+     *  List<Teos> tulokset = teokset.hae("", "", "William");
+     *  tulokset.get(0).toString() === "6|0-441-56956-0|Neuromancer|William Gibson|1984"
+     * </pre>
      */
     public ArrayList<Teos> hae(String nimi, String ISBN, String tekija) {
         ArrayList<Teos> tulokset = new ArrayList<Teos>();
@@ -356,23 +435,22 @@ public class Teokset implements Iterable<Teos> {
             System.out.println(tama.equals(luettelo));
             System.out.println(tama.equals(toinen));
             System.out.println(tama.getLkm());
-            tama.poista(1);
+            Teos kirja = new Teos(
+                    "1|000-000-000-000|Muutettu Kirja|Matti Meikalainen|1990");
+            tama.lisaaTaiMuuta(kirja);
+//            tama.poista(1);
+//            tama.poista(3);
+            for (var v : tama) {
+                System.out.println(v);
+            }
             System.out.println(tama.getLkm());
+            List<Teos> tulokset = tama.hae("", "", "William");
+            System.out.println(tulokset.get(0));
         } catch (TietoException e) {
             e.printStackTrace();
         }
 
     }
-
-
-        /**
-         * Palauttaa viitteen teokseen indeksissa i.
-         * @param i indeksi josta katsotaan.
-         * @return viite teokseen.
-         */
-        public Teos anna(int i) {
-            return alkiot[i];
-        }
 
     /**
      * Iteraattori Teokset-luokalle.
