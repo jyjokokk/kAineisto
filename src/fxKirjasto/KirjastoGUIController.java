@@ -223,22 +223,6 @@ public class KirjastoGUIController implements Initializable {
 
 
     /**
-     * Lisaa uuden kirjan kokoelmaan, ja paivittaa listan.
-     * Lisaa toistaiseksi vain Lotrin.
-     */
-    @SuppressWarnings("unused")
-    private void uusiKirja() {
-        try {
-            kirjasto.lisaaLotr();
-        } catch (TietoException e) {
-            Dialogs.showMessageDialog(e.getMessage());
-        }
-        taytaLista();
-        hakuTulokset.setSelectedIndex(0);
-    }
-
-
-    /**
      * Hakee ja valitsee id:lla teoksen listasta, ja paivittaa listan.
      * Tarkoitettu ohjelman sisaiselle toiminalle, ei kayttajan kaytettavissa.
      * @throws TietoException jos id:n avulla ei loydy teosta.

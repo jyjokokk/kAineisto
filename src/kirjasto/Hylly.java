@@ -5,6 +5,7 @@ import java.io.*;
 import fi.jyu.mit.ohj2.Mjonot;
 
 /**
+ * Luokka Hylly olioille, joka osaa muuttaa maaraansa ja asettaa myos paikkansa.
  * @author jyrki
  * @version Mar 26, 2020
  */
@@ -18,6 +19,11 @@ public class Hylly {
     
     /**
      * Vakiomuodostaja.
+     * @example
+     * <pre name="test">
+     *  Hylly h = new Hylly();
+     *  h.toString() === "0|0||0";
+     * </pre>
      */
     public Hylly() {
         this.id = 0;
@@ -127,6 +133,12 @@ public class Hylly {
 
     /**
      * @param paikka to set
+     * @example
+     * <pre name="test">
+     *  Hylly h = new Hylly("1|2|ABC|3");
+     *  h.setPaikka("BBB");
+     *  h.getPaikka() === "BBB";
+     * </pre>
      */
     public void setPaikka(String paikka) {
         this.paikka = paikka;
@@ -142,6 +154,12 @@ public class Hylly {
 
     /**
      * @param maara to set
+     * @example
+     * <pre name="test">
+     *  Hylly h = new Hylly("1|2|ABC|3");
+     *  h.setMaara(5);
+     *  h.getMaara() === 5;
+     * </pre>
      */
     public void setMaara(int maara) {
         this.maara = maara;
@@ -151,6 +169,11 @@ public class Hylly {
     /**
      * Palauttaa hyllypaikassa olevan teoksen id:n.
      * @return Teoksen id.
+     * @example
+     * <pre name="test">
+     *  Hylly h = new Hylly("1|2|ABC|3");
+     *  h.getId() === 1;
+     * </pre>
      */
     public int getId() {
         return this.id;
@@ -159,6 +182,11 @@ public class Hylly {
 
     /** Palauttaa hylypaikka olevan teoksen kategorian id:n.
      * @return Kategorian id.
+     * @example
+     * <pre name="test">
+     *  Hylly h = new Hylly("1|2|ABC|3");
+     *  h.getKid() === 2;
+     * </pre>
      */
     public int getKid() {
         return this.kid;

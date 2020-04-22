@@ -22,8 +22,17 @@ public class Kirjasto {
      * @param s merkkijono joka annetaan.
      * @return Onnistuneesti lisatyn aineiston id.
      * @throws TietoException jos ilmenee ongelma lisatessa
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lisaa("1|000000|Kirja|Tekija|1900#1|Kategoria|Kuvaus#ABC|10");
+     *  kirjasto.getTeosLkm() === 1;
+     *  kirjasto.lisaa("") === 0; #THROWS TietoException
+     * </pre>
      */
     public int lisaa(String s) throws TietoException {
+        if (s.length() == 0) throw new TietoException("Vika annetussa merkkijonossa.");
         StringBuilder sb = new StringBuilder(s);
         String teosInfo = Mjonot.erota(sb, '#');
         String katInfo = Mjonot.erota(sb, '#');
@@ -44,6 +53,13 @@ public class Kirjasto {
      * @param s teoksen tiedot merkkijonona.
      * @return muutetun tai lisatyn teoksen id
      * @throws TietoException jos lisaamisessa ilmenee ongelmia
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lisaa("1|000000|Kirja|Tekija|1900#1|Kategoria|Kuvaus#ABC|10");
+     *  kirjasto.muutaTaiLisaa("1|000000|MuutettuKirja|MuutettuTekija|1900#1|Kategoria|Kuvaus#ABC|10");
+     *  kirjasto.annaTiedot(1) === "1|000000|MuutettuKirja|MuutettuTekija|1900|1|Kategoria|Kuvaus|1|1|ABC|10";
+     *  kirjasto.muutaTaiLisaa("2|11111|ToinenKirja|Tekija|1900#1|Kategoria|Kuvaus#ABC|10");
+     *  kirjasto.annaTiedot(2) === "2|11111|ToinenKirja|Tekija|1900|1|Kategoria|Kuvaus|2|1|ABC|10";
      */
     public int muutaTaiLisaa(String s) throws TietoException {
         StringBuilder sb = new StringBuilder(s);
@@ -64,6 +80,15 @@ public class Kirjasto {
      * Hakee teoksen annetun id:n perusteella, ja poistaa sen tietorakenteista.
      * @param id jolla haetaan
      * @throws TietoException jos ongelmia
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  kirjasto.getTeosLkm() === 9;
+     *  kirjasto.poista(4);
+     *  kirjasto.poista(3);
+     *  kirjasto.getTeosLkm() === 7;
+     * </pre>
      */
     public void poista(int id) throws TietoException {
         teokset.poista(id);
@@ -74,6 +99,15 @@ public class Kirjasto {
     /**
      * Tyhjentaa kaikki tietorakenteet, poistaen kaiken aineiston
      * nykyisessa sessiossa.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  kirjasto.getTeosLkm() === 9;
+     *  kirjasto.tyhjenna();
+     *  kirjasto.getTeosLkm() === 0;
+     * </pre>
      */
     public void tyhjenna() {
         teokset.tyhjenna();
@@ -88,6 +122,15 @@ public class Kirjasto {
      * @param ISBN haettava ISBN
      * @param tekija haettava tekija
      * @return Lista kaikista teoksista, jotka vastaavat hakutermia.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     * #import java.util.*;
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  List<Teos> tulokset = kirjasto.hae("", "", "William");
+     *  tulokset.get(0).toString() === "6|0-441-56956-0|Neuromancer|William Gibson|1984"
+     * </pre>
      */
     public ArrayList<Teos> hae(String nimi, String ISBN, String tekija) {
         return teokset.hae(nimi, ISBN, tekija);
@@ -95,25 +138,9 @@ public class Kirjasto {
 
 
     /**
-     * Lisaa uuden aineiston kokoelmaan.
-     * @throws TietoException jos ilmenee ongelmia
-     */
-    public void lisaaLotr() throws TietoException {
-        Teos teos = new Teos();
-        Kategoria kat = new Kategoria();
-        Hylly paikka;
-        teos.vastaaLotrRand();
-        kat.vastaaFantasiaRek();
-        kat = kategoriat.lisaa(kat);
-        paikka = new Hylly(teos.getId(), kat.getKid(), "JAG", 0);
-        teokset.lisaa(teos);
-        hyllyt.lisaa(paikka);
-    }
-
-
-    /**
      * Tallentaa tietorakenteet tiedostoihinsa.
      * @throws TietoException jos ongelmia 
+     * TODO: Toteuta string-parametrilla
      */
     public void tallenna() throws TietoException {
         kategoriat.tallenna("aineisto/kategoriat");
@@ -126,17 +153,44 @@ public class Kirjasto {
      * Lukee tietorakenteet tiedostoistaan
      * @throws FileNotFoundException Jos tiedostoa ei loydy.
      * @throws TietoException jos ongelmia
+     * TODO: Toteuta string-parametrilla
      */
     public void lueTiedostosta() throws FileNotFoundException, TietoException {
         kategoriat.lueTiedostosta("aineisto/kategoriat.dat");
         teokset.lueTiedostosta("aineisto/teokset.dat");
         hyllyt.lueTiedostosta("aineisto/hyllyt.dat");
     }
+    
+    
+    /**
+     * Testauksen apuna kaytetty metodi, joka lukee fixturetiedostot tietorakenteisiin.
+     * @throws TietoException jos lukemisessa ongelmia.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  kirjasto.getTeosLkm() === 9;
+     * </pre>
+     */
+    public void lueTiedostostaTest() throws TietoException {
+        kategoriat.lueTiedostosta("testFiles/kategoriat.dat");
+        teokset.lueTiedostosta("testFiles/teokset.dat");
+        hyllyt.lueTiedostosta("testFiles/hyllyt.dat");
+    }
 
+    
 
     /**
      * Palauttaa teosten maaran tietokannassa
      * @return kokoelman koko
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  kirjasto.getTeosLkm() === 9;
+     * </pre>
      */
     public int getTeosLkm() {
         return teokset.getLkm();
@@ -149,13 +203,11 @@ public class Kirjasto {
      * @return teos indeksissa i
      * @example
      * <pre name="test">
-     * #THROWS TietoException;
+     * #THROWS TietoException
      *  Kirjasto kirjasto = new Kirjasto();
-     *  String s0 = "0|123-123-123-123|Neuromancer|William Gibson|1984#4|Scifi|Tieteiskirjallisuus on...#WGA|4";
-     *  String s1 = "0|666-666-666-666|Filth|Irvin Welsh|1995#3|Modernismi|Modernismin piirteita....#WEL|2";
-     *  String s2 = "0|021-6532-231-34|Mona Lisa Overdrive|William Gibson|1984#4|Scifi|Muuttunut kuvaus#WGA|4";
-     *  kirjasto.lisaa(s0); kirjasto.lisaa(s1); kirjasto.lisaa(s2);
-     *  kirjasto.getTeos(1).toString() === "1|1|WGA|4";
+     *  kirjasto.lueTiedostostaTest();
+     *  Teos tulos = kirjasto.getTeos(0);
+     *  tulos.toString() === "1|31-29-6561398-999432-6|The Lord of the Rings|J.R.R. Tolkien|1954";
      * </pre>
      */
     public Teos getTeos(int i) {
@@ -166,6 +218,13 @@ public class Kirjasto {
     /**
      * Palauttaa hyllyssa olevien teosten maaran tietokannassa.
      * @return hyllyssa olevien teosten lkm
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  kirjasto.getHyllyLkm() === 9;
+     * </pre>
      */
     public int getHyllyLkm() {
         return hyllyt.getLkm();
@@ -177,6 +236,12 @@ public class Kirjasto {
      * @param h Hyllypaikka
      * @return Teoksen nimi.
      * @throws TietoException jos IDn avulla ei loydy yhtaan teosta
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     * </pre>
      */
     public String getTeosNimi(Hylly h) throws TietoException {
         Teos t = teokset.haeId(h.getId());
@@ -189,6 +254,14 @@ public class Kirjasto {
      * @param id jolla haetaan
      * @return teoksen hyllypaikka
      * @throws TietoException jos ei loydy.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  kirjasto.getTeosPaikka(1) === "JAG";
+     *  kirjasto.getTeosPaikka(25) === "ERR"; #THROWS TietoException
+     * </pre>
      */
     public String getTeosPaikka(int id) throws TietoException {
         String s = hyllyt.haeId(id).getPaikka();
@@ -197,10 +270,19 @@ public class Kirjasto {
 
 
     /**
-     * Hakee teosten maaran hyllyssa.
+     * Hakee teosten maaran hyllyssa merkkijonona ilmaistuna.
      * @param id jolla haetaan
-     * @return teosten maara hyllysa
+     * @return teosten maara hyllyssa, merkkijonona
      * @throws TietoException jos ei id:lla ei loydy.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  kirjasto.getTeosMaara(1) === "0";
+     *  kirjasto.getTeosMaara(3) === "2";
+     *  kirjasto.getTeosMaara(25) === "ERR"; #THROWS TietoException
+     * </pre>
      */
     public String getTeosMaara(int id) throws TietoException {
         String s = String.valueOf(hyllyt.haeId(id).getMaara());
@@ -214,8 +296,11 @@ public class Kirjasto {
      * @return indeksissa i oleva teos
      * @example
      * <pre name="test">
-     *  #THROWS TietoException
-     *   Kirjasto kirjasto = new Kirjasto();
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  Hylly tulos = kirjasto.anna(0);
+     *  tulos.toString() === "1|1|JAG|0";
      * </pre>
      */
     public Hylly anna(int i) {
@@ -230,6 +315,12 @@ public class Kirjasto {
      * @throws TietoException jos hyllypaikkaa ei loydy
      * @example
      * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  Hylly tulos = kirjasto.haeId(1);
+     *  tulos.toString() === "1|1|JAG|0";
+     *  kirjasto.haeId(64).toString() === "ERR"; #THROWS TietoException
      * </pre>
      */
     public Hylly haeId(int id) throws TietoException {
@@ -242,6 +333,15 @@ public class Kirjasto {
      * @param h hyllypaikassa oleva paikka
      * @return Teoksen kaikki tiedot merkkijonona.
      * @throws TietoException jos annetuilla arvoilla ei loydy teoksia.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  Hylly h = kirjasto.haeId(1);
+     *  String tulos = kirjasto.annaTiedot(h);
+     *  tulos === "1|31-29-6561398-999432-6|The Lord of the Rings|J.R.R. Tolkien|1954|1|Fantasia|Fantasiakirjallisuus on kirjallisuuden...|JAG|0";
+     * </pre>
      */
     public String annaTiedot(Hylly h) throws TietoException {
         StringBuilder sb = new StringBuilder();
@@ -259,6 +359,15 @@ public class Kirjasto {
      * @param id teoksen id
      * @return Teoksen tiedot
      * @throws TietoException jos annetulla id:lla ei loydy teosta.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  String tulos = kirjasto.annaTiedot(1);
+     *  tulos === "1|31-29-6561398-999432-6|The Lord of the Rings|J.R.R. Tolkien|1954|1|Fantasia|Fantasiakirjallisuus on kirjallisuuden...|JAG|0";
+     *  kirjasto.annaTiedot(64) === "ERR"; #THROWS TietoException
+     * </pre>
      */
     public String annaTiedot(int id) throws TietoException {
         Hylly h = hyllyt.haeId(id);
@@ -282,6 +391,14 @@ public class Kirjasto {
      * @param id jolla haetaan
      * @return Teoksen tiedot merkkijonona, tulostusta varten formatoituna.
      * @throws TietoException jos ei loydy.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  String s = kirjasto.tulostusMuoto(1);
+     *  s === "\nTeoksen nimi    The Lord of the Rings\nKirjailija      J.R.R. Tolkien\nISBN            31-29-6561398-999432-6\nKategoria       Fantasia\nHyllypaikka     JAG\nMaara           0\n----------------------------------";
+     * </pre>
      */
     public String tulostusMuoto(int id) throws TietoException {
         Hylly hylly = new Hylly();
@@ -307,7 +424,16 @@ public class Kirjasto {
      * @param idt lista teod-ideista
      * @return Lista teosten tiedoista tulostusmuodossa.
      * @throws TietoException jos teosta ei loydy jollain annetulla id:lla.
-     * TODO: Koita streameilla.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     * #import java.util.ArrayList;
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  ArrayList<Integer> idt = new ArrayList<Integer>();
+     *  idt.add(65);
+     *  kirjasto.teoksetTulosteeksi(idt) === "ERR"; #THROWS TietoException
+     * </pre>
      */
     public String teoksetTulosteeksi(List<Integer> idt) throws TietoException {
         StringBuilder sb = new StringBuilder();
@@ -323,6 +449,16 @@ public class Kirjasto {
      * @param os tulostusvirta
      * @param idt Lista teoksien id-numeroita
      * @throws TietoException jos joukossa on virheellinen id.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     * #import java.util.ArrayList;
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostostaTest();
+     *  ArrayList<Integer> idt = new ArrayList<Integer>();
+     *  idt.add(65);
+     *  kirjasto.tulostaTeokset(System.out, idt); #THROWS TietoException
+     * </pre>
      */
     public void tulostaTeokset(PrintStream os, List<Integer> idt)
             throws TietoException {
@@ -363,11 +499,10 @@ public class Kirjasto {
         String s2 = "2|021-6532-231-34|Mona Lisa Overdrive|William Gibson|1984#4|Scifi|Muuttunut kuvaus#WGA|4";
 
         Kirjasto kirjasto = new Kirjasto();
+        Kirjasto testKirjasto = new Kirjasto();
 
         try {
             kirjasto.lueTiedostosta();
-            kirjasto.lisaaLotr();
-            kirjasto.lisaaLotr();
             kirjasto.lisaa(s1);
             kirjasto.lisaa(s);
             kirjasto.lisaa(s2);
@@ -376,6 +511,12 @@ public class Kirjasto {
             ids.add(2);
             String tuloste = kirjasto.teoksetTulosteeksi(ids);
             System.out.println(tuloste);
+            System.out.println("========\ntestKirjasto\n=========");
+            testKirjasto.lueTiedostostaTest();
+            System.out.println(testKirjasto.getTeosLkm());
+            System.out.println(testKirjasto.getTeos(0));
+            System.out.println(testKirjasto.annaTiedot(1));
+            System.out.println(testKirjasto.tulostusMuoto(1));
         } catch (TietoException e) {
             System.err.println(e.getMessage());
         } catch (FileNotFoundException e) {

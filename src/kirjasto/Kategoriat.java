@@ -16,6 +16,11 @@ public class Kategoriat implements Iterable<Kategoria> {
 
     /**
      * Perusmuodostaja
+     * @example
+     * <pre name="test">
+     * Kategoriat kat = new Kategoriat();
+     * kat.getLkm() === 0;
+     * </pre>
      */
     public Kategoriat() {
         // Alustuu esittelyssa.
@@ -84,6 +89,7 @@ public class Kategoriat implements Iterable<Kategoria> {
      * @throws TietoException jos lisaaminen epaonnistuu
      * @example
      * <pre name="test">
+     * #THROWS TietoException
      *  Kategoriat kategoriat = new Kategoriat();
      *  kategoriat.tyhjenna();
      *  Kategoria kat1 = new Kategoria(), kat2 = new Kategoria(), kat3 = new Kategoria();
@@ -122,6 +128,13 @@ public class Kategoriat implements Iterable<Kategoria> {
     /**
      * Palauttaa alkoiden lukumaaran kokoelmassa.
      * @return alkoiden lukumaara.
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException
+     *  Kategoriat kat = new Kategoriat(); 
+     *  kat.lueTiedostosta("testFiles/kategoriat.dat");
+     *  kat.getLkm() === 6;
+     * </pre>
      */
     public int getLkm() {
         return alkiot.size();
@@ -135,6 +148,7 @@ public class Kategoriat implements Iterable<Kategoria> {
      * @return viite alkioon
      * @example
      * <pre name="test">
+     * #THROWS TietoException
      *  Kategoriat kategoriat = new Kategoriat();
      *  kategoriat.tyhjenna();
      *  Kategoria kat1 = new Kategoria(), kat2 = new Kategoria();
@@ -160,6 +174,7 @@ public class Kategoriat implements Iterable<Kategoria> {
      * @return Viite alkioon, jos loytyy. Null, jos ei.
      * @example
      * <pre name="test">
+     * #THROWS TietoException
      *  Kategoriat kategoriat = new Kategoriat();
      *  kategoriat.tyhjenna();
      *  Kategoria kat1 = new Kategoria(), kat2 = new Kategoria(), kat3 = new Kategoria();
@@ -170,7 +185,6 @@ public class Kategoriat implements Iterable<Kategoria> {
      *  kategoriat.haeId(1) === kat3;
      *  kategoriat.haeId(2) === kat2;
      *  kategoriat.haeId(3) === null;
-     *  
      * </pre>
      */
     public Kategoria haeId(int id) {
@@ -225,6 +239,7 @@ public class Kategoriat implements Iterable<Kategoria> {
      * @return Onko sisalto sama.
      * @example
      * <pre name="test">
+     * #THROWS TietoException
      *  Kategoriat tama = new Kategoriat();
      *  Kategoriat toinen = new Kategoriat();
      *  tama.lisaa(new Kategoria());
@@ -295,7 +310,6 @@ public class Kategoriat implements Iterable<Kategoria> {
         for (int i = 0; i < tama.getLkm(); i++) {
             System.out.println(tama.anna(i).toString().equals(toinen.anna(i).toString()));
         }
-//
     }
 
 }

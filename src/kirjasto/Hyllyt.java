@@ -15,6 +15,11 @@ public class Hyllyt {
 
     /**
      * Vakiomuodostaja.
+     * @example
+     * <pre name="test">
+     *  Hyllyt hyllyt = new Hyllyt();
+     *  hyllyt.getLkm() === 0;
+     * </pre>
      */
     public Hyllyt() {
         // Alustettu esittelyssa.
