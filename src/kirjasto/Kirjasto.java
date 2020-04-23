@@ -129,7 +129,7 @@ public class Kirjasto {
      *  Kirjasto kirjasto = new Kirjasto();
      *  kirjasto.lueTiedostostaTest();
      *  List<Teos> tulokset = kirjasto.hae("", "", "William");
-     *  tulokset.get(0).toString() === "6|0-441-56956-0|Neuromancer|William Gibson|1984"
+     *  tulokset.get(0).toString() === "7|0-575-03696-6|Count Zero|William Gibson|1987";
      * </pre>
      */
     public ArrayList<Teos> hae(String nimi, String ISBN, String tekija) {
@@ -139,26 +139,43 @@ public class Kirjasto {
 
     /**
      * Tallentaa tietorakenteet tiedostoihinsa.
+     * @param dir hakemisto, johon tiedostot tallenetaan
      * @throws TietoException jos ongelmia 
-     * TODO: Toteuta string-parametrilla
+     * @example
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException 
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostosta("testFiles");
+     *  kirjasto.tallenna("testFiles");
+     *  Kirjasto kirjasto2 = new Kirjasto();
+     *  kirjasto2.lueTiedostosta("testFiles");
+     *  kirjasto2.getTeosLkm() === 9;
+     * </pre>
      */
-    public void tallenna() throws TietoException {
-        kategoriat.tallenna("aineisto/kategoriat");
-        teokset.tallenna("aineisto/teokset");
-        hyllyt.tallenna("aineisto/hyllyt");
+    public void tallenna(String dir) throws TietoException {
+        kategoriat.tallenna(dir + "/kategoriat");
+        teokset.tallenna(dir + "/teokset");
+        hyllyt.tallenna(dir + "/hyllyt");
     }
 
 
     /**
      * Lukee tietorakenteet tiedostoistaan
-     * @throws FileNotFoundException Jos tiedostoa ei loydy.
+     * @param dir hakemisto, josta tiedostot luetaan
      * @throws TietoException jos ongelmia
-     * TODO: Toteuta string-parametrilla
+     * @example
+     * <pre name="test">
+     * #THROWS TietoException 
+     *  Kirjasto kirjasto = new Kirjasto();
+     *  kirjasto.lueTiedostosta("testFiles");
+     *  kirjasto.getTeosLkm() === 9;
+     * </pre>
      */
-    public void lueTiedostosta() throws FileNotFoundException, TietoException {
-        kategoriat.lueTiedostosta("aineisto/kategoriat.dat");
-        teokset.lueTiedostosta("aineisto/teokset.dat");
-        hyllyt.lueTiedostosta("aineisto/hyllyt.dat");
+    public void lueTiedostosta(String dir) throws TietoException {
+        kategoriat.lueTiedostosta(dir + "/kategoriat.dat");
+        teokset.lueTiedostosta(dir + "/teokset.dat");
+        hyllyt.lueTiedostosta(dir + "/hyllyt.dat");
     }
     
     
@@ -502,7 +519,7 @@ public class Kirjasto {
         Kirjasto testKirjasto = new Kirjasto();
 
         try {
-            kirjasto.lueTiedostosta();
+            kirjasto.lueTiedostosta("aineisto");
             kirjasto.lisaa(s1);
             kirjasto.lisaa(s);
             kirjasto.lisaa(s2);
@@ -519,10 +536,7 @@ public class Kirjasto {
             System.out.println(testKirjasto.tulostusMuoto(1));
         } catch (TietoException e) {
             System.err.println(e.getMessage());
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
-        }
-
+        } 
     }
 
 }

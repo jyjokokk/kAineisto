@@ -165,9 +165,7 @@ public class KirjastoGUIController implements Initializable {
     private void alusta() {
         kirjasto = new Kirjasto();
         try {
-            kirjasto.lueTiedostosta();
-        } catch (FileNotFoundException ex) {
-            Dialogs.showMessageDialog(ex.getMessage());
+            kirjasto.lueTiedostosta("aineisto");
         } catch (TietoException ex) {
             Dialogs.showMessageDialog(ex.getMessage());
         }
@@ -251,7 +249,7 @@ public class KirjastoGUIController implements Initializable {
      */
     private void tallenna() {
         try {
-            kirjasto.tallenna();
+            kirjasto.tallenna("aineisto");
             saveStatus = true;
         } catch (TietoException ex) {
             Dialogs.showMessageDialog(ex.getMessage());
@@ -366,7 +364,6 @@ public class KirjastoGUIController implements Initializable {
 
     /**
      * Kaynnistaa ikkunanakyman tulostuksen mahdollisuudelle.
-     * TODO: Monivalinta manuaalisesti.
      */
     private void tulosta() {
         List<Teos> teosList = hakuTulokset.getObjects();
@@ -380,14 +377,6 @@ public class KirjastoGUIController implements Initializable {
             Dialogs.showMessageDialog(
                     "Ongelma tietoja hakiessa!" + e.getMessage());
         }
-    }
-
-
-    /**
-     * Placeholder toiminalle.
-     */
-    private void eiToimi() {
-        Dialogs.showMessageDialog("Ei toimi viela!");
     }
 
 }
