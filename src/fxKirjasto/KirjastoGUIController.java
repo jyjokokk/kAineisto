@@ -90,7 +90,6 @@ public class KirjastoGUIController implements Initializable {
     @FXML
     private GridPane tiedotGrid;
 
-
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         alusta();
@@ -160,7 +159,7 @@ public class KirjastoGUIController implements Initializable {
     private Kirjasto kirjasto;
     private Teos kirjaKohdalla;
     // TODO: Poista kun ei tarvita:
-//    private TextArea tiedotArea = new TextArea();
+    // private TextArea tiedotArea = new TextArea();
     private boolean saveStatus;
 
     private void alusta() {
@@ -173,9 +172,6 @@ public class KirjastoGUIController implements Initializable {
             Dialogs.showMessageDialog(ex.getMessage());
         }
         saveStatus = true;
-//        tiedotPanel.getChildren().removeAll(tiedotGrid);
-//        tiedotPanel.getChildren().add(tiedotArea);
-//        tiedotArea.setEditable(false);
         taytaLista();
         hakuTulokset.addSelectionListener(e -> naytaTeos());
     }
@@ -194,18 +190,12 @@ public class KirjastoGUIController implements Initializable {
             tietoTekija.setText(kirjaKohdalla.getTekija());
             tietoISBN.setText(kirjaKohdalla.getIsbn());
             tietoStatus.setText(kirjasto.getTeosMaara(kirjaKohdalla.getId()));
-            tietoSijainti.setText(kirjasto.getTeosPaikka(kirjaKohdalla.getId()));
+            tietoSijainti
+                    .setText(kirjasto.getTeosPaikka(kirjaKohdalla.getId()));
         } catch (TietoException e) {
-            e.printStackTrace();
-//            Dialogs.showMessageDialog("Ongelma tietojen hakemisessa: " + e.getMessage());
+            Dialogs.showMessageDialog(
+                    "Ongelma tietojen hakemisessa: " + e.getMessage());
         }
-//        tiedotArea.setText("");
-//        try (PrintStream os = TextAreaOutputStream
-//                .getTextPrintStream(tiedotArea)) {
-//            kirjasto.tulostaTiedot(os, kirjasto.haeId(kirjaKohdalla.getId()));
-//        } catch (TietoException e) {
-//            Dialogs.showMessageDialog(e.getMessage());
-//        }
     }
 
 
@@ -214,10 +204,11 @@ public class KirjastoGUIController implements Initializable {
      */
     private void taytaLista() {
         hakuTulokset.clear();
-        for (int i = 0; i < kirjasto.getHyllyLkm(); i++) {
-            Teos temp = kirjasto.getTeos(i);
-            hakuTulokset.add(temp.getNimi(), temp);
-        }
+        // for (int i = 0; i < kirjasto.getHyllyLkm(); i++) {
+        // Teos temp = kirjasto.getTeos(i);
+        // hakuTulokset.add(temp.getNimi(), temp);
+        // }
+        hae("", "", "");
         hakuTulokset.setSelectedIndex(0);
     }
 
@@ -275,11 +266,12 @@ public class KirjastoGUIController implements Initializable {
     private void apua() {
         // Desktop desk = Desktop.getDesktop();
         // try {
-        //     URI suunnitelma = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2020k/ht/jyjokokk");
-        //     desk.browse(suunnitelma);
-        //     return;
+        // URI suunnitelma = new
+        // URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2020k/ht/jyjokokk");
+        // desk.browse(suunnitelma);
+        // return;
         // } catch (IOException | URISyntaxException e) {
-        //     e.printStackTrace();
+        // e.printStackTrace();
         // }
         ModalController.showModal(
                 KirjastoGUIController.class.getResource("HelpView.fxml"),
@@ -334,9 +326,11 @@ public class KirjastoGUIController implements Initializable {
      * Poistaa valitun teoksen tietokannasta.
      */
     private void poista() {
-        if (kirjaKohdalla == null) return;
+        if (kirjaKohdalla == null)
+            return;
         try {
             kirjasto.poista(kirjaKohdalla.getId());
+            saveStatus = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -376,15 +370,15 @@ public class KirjastoGUIController implements Initializable {
      */
     private void tulosta() {
         List<Teos> teosList = hakuTulokset.getObjects();
-        List<Integer> idList = teosList.stream().map(
-                t -> t.getId())
+        List<Integer> idList = teosList.stream().map(t -> t.getId())
                 .collect(Collectors.toList());
         try {
             String s;
             s = kirjasto.teoksetTulosteeksi(idList);
             fxKirjasto.TulostusController.tulosta(s);
         } catch (TietoException e) {
-            Dialogs.showMessageDialog("Ongelma tietoja hakiessa!" + e.getMessage());
+            Dialogs.showMessageDialog(
+                    "Ongelma tietoja hakiessa!" + e.getMessage());
         }
     }
 
@@ -395,6 +389,5 @@ public class KirjastoGUIController implements Initializable {
     private void eiToimi() {
         Dialogs.showMessageDialog("Ei toimi viela!");
     }
-
 
 }

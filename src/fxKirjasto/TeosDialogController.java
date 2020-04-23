@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import isbn.ISBNTarkistus;
+
 /**
  * Controller dialogi-ikkunalle, jolla lisataan uutta aineistoa
  * tietokantaan kysymalla kayttajalle nakyvat attribuutit tekstikenttien
@@ -51,6 +53,11 @@ public class TeosDialogController
 
     @FXML
     private void handleOK() {
+        if (ISBNTarkistus.tarkistaIsbn(editISBN.getText()) == false) {
+            setVirhe("Virheellinen ISBN!");
+            editISBN.setStyle("-fx-border-color:RED");
+            return;
+        }
         for (var t : arvot) {
             if (t.getText().trim().equals("") && t != editKuvaus) {
                 t.setStyle("-fx-border-color:RED");

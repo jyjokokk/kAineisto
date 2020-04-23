@@ -11,7 +11,7 @@ import isbn.ISBNTarkistus;
  * @author jyrki
  * @version Mar 4, 2020
  */
-public class Teos {
+public class Teos implements Comparable<Teos> {
     
     private int id = 0;
     private String isbn = "";
@@ -264,6 +264,12 @@ public class Teos {
      */
     public void setJulkaisuVuosi(int julkaisuVuosi) {
         this.julkaisuVuosi = julkaisuVuosi;
+    }
+
+
+    @Override
+    public int compareTo(Teos t) {
+        return this.nimi.compareTo(t.getNimi());
     }
     
 

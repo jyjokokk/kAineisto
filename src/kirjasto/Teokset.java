@@ -2,6 +2,7 @@ package kirjasto;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -413,6 +414,7 @@ public class Teokset implements Iterable<Teos> {
                     && temp.getNimi().contains(nimi))
                 tulokset.add(temp);
         }
+        Collections.sort(tulokset);
         return tulokset;
     }
 

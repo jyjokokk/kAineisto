@@ -1,5 +1,7 @@
 package isbn;
 
+import java.util.regex.*;
+
 /**
  * Luokka, jolla voidaan luoda satunnainen ISBN numbero, ja tarkistaa
  * ISBN numeron oikeellisuus.
@@ -12,9 +14,11 @@ public class ISBNTarkistus {
      * @param args ei kaytossa.
      */
     public static void main(String[] args) {
-        String s = arvoIsbn();
-        System.out.println(s);
-    
+//        String s = arvoIsbn();
+//        System.out.println(s);
+        String is = "23231233-42-12354-64322-2";
+        if (tarkistaIsbn(is)) System.out.println("Toimii!");
+        else System.out.println("Ei toimi");
     }
     
     /**
@@ -29,6 +33,26 @@ public class ISBNTarkistus {
         sb.append(rand(1, 999999) + "-");
         sb.append(rand(1, 9));
         return sb.toString();
+    }
+    
+    
+    /**
+     * Tarkistaa vastaako ISBN oiekaa formaattia.
+     * @param isbn joka tarkisteaan
+     * @return true tai false.
+     * @example
+     * <pre name="test">
+     *  String is1 = "2-31-64533-432343-7";
+     *  String is2 = "22132-31-64533-432343-7";
+     *  tarkistaIsbn(is1) === true;
+     *  tarkistaIsbn(is2) === false;
+     * </pre>
+     */
+    public static boolean tarkistaIsbn(String isbn) {
+        String pattern = "\\d{1,3}-\\d{1,2}-\\d{1,7}-\\d{1,6}-\\d{1}";
+//        Pattern re = Pattern.compile(pattern);
+        if (Pattern.matches(pattern, isbn)) return true;
+        return false;
     }
     
     /**
